@@ -1,0 +1,78 @@
+using System.Collections;
+using UnityEngine;
+
+public class Crop : MonoBehaviour, IDamageable, ISaveable
+{
+    private CropData _data;
+    private CropStage _stage = CropStage.Seed;
+    private int _currentHP;
+    private SpriteRenderer _spriteRenderer;
+    private Coroutine _growthCoroutine;
+
+    public bool IsDead => _currentHP <= 0;
+    public bool IsMature => _stage == CropStage.Mature;
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void Init(CropData data)
+    {
+        _data = data;
+        _currentHP = data.maxHP;
+        _stage = CropStage.Seed;
+        UpdateSprite();
+        _growthCoroutine = StartCoroutine(GrowthCoroutine());
+    }
+
+    private IEnumerator GrowthCoroutine()
+    {
+        float timePerStage = _data.growthTime / 3f;
+        yield return new WaitForSeconds(timePerStage);
+        SetStage(CropStage.Sprout);
+        yield return new WaitForSeconds(timePerStage);
+        SetStage(CropStage.Growing);
+        yield return new WaitForSeconds(timePerStage);
+        SetStage(CropStage.Mature);
+    }
+
+    private void SetStage(CropStage stage)
+    {
+        _stage = stage;
+        UpdateSprite();
+    }
+
+    private void UpdateSprite()
+    {
+        if (_data?.stageSprites == null) return;
+        int idx = (int)_stage;
+        if (idx < _data.stageSprites.Length)
+            _spriteRenderer.sprite = _data.stageSprites[idx];
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (IsDead) return;
+        _currentHP -= damage;
+        if (IsDead) OnDestroyed();
+    }
+
+    private void OnDestroyed()
+    {
+        if (_growthCoroutine != null) StopCoroutine(_growthCoroutine);
+        Destroy(gameObject);
+    }
+
+    public void Harvest(PlayerStats stats)
+    {
+        if (!IsMature) return;
+        stats.AddGold(_data.sellPrice);
+        stats.AddXP(_data.xpReward);
+        AudioManager.Instance?.PlaySFX("sfx_harvest");
+        Destroy(gameObject);
+    }
+
+    public object GetSaveData() => new { stage = (int)_stage, hp = _currentHP };
+    public void LoadSaveData(object data) { }
+}
