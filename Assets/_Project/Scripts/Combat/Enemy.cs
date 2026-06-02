@@ -83,7 +83,7 @@ public abstract class Enemy : Entity
     {
         _state = EnemyState.Dead;
         _animator?.SetBool(AnimIsDead, true);
-        _rb.linearVelocity = Vector2.zero;
+        _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
         GetComponent<Collider2D>().enabled = false;
         GameEvents.RaiseEnemyDied(this);

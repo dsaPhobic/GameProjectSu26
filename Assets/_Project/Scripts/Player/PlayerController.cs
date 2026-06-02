@@ -68,7 +68,7 @@ public class PlayerController : Entity
         Vector2 dir = _input.MovementInput == Vector2.zero ? _input.AimDirection : _input.MovementInput;
         _rb.AddForce(dir * _dashForce, ForceMode2D.Impulse);
         yield return new WaitForSeconds(_dashDuration);
-        _rb.linearVelocity = Vector2.zero;
+        _rb.velocity = Vector2.zero;
         _isDashing = false;
     }
 

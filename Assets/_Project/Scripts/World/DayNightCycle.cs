@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -9,7 +8,7 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private float _duskDuration = 15f;
     [SerializeField] private float _nightDuration = 120f;
 
-    [SerializeField] private Light2D _globalLight;
+    [SerializeField] private Light _globalLight;
     [SerializeField] private Color _dawnColor = new Color(1f, 0.8f, 0.6f);
     [SerializeField] private Color _dayColor = Color.white;
     [SerializeField] private Color _duskColor = new Color(1f, 0.5f, 0.2f);
