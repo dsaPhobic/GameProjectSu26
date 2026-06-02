@@ -288,10 +288,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 325595339c71c7c45b8cd875e86986a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dawnDuration: 15
-  _dayDuration: 90
-  _duskDuration: 15
-  _nightDuration: 120
+  _dawnDuration: 2
+  _dayDuration: 5
+  _duskDuration: 2
+  _nightDuration: 30
   _globalLight: {fileID: 0}
   _dawnColor: {r: 1, g: 0.8, b: 0.6, a: 1}
   _dayColor: {r: 1, g: 1, b: 1, a: 1}
@@ -517,9 +517,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb40c2dc38f046f44a92616e57557735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waveDataList: []
-  _spawnPoints: []
-  _enemyPrefabs: []
+  _waveDataList:
+  - {fileID: 11400000, guid: f0ad68c3b7d942818dedb103379540ff, type: 2}
+  - {fileID: 11400000, guid: a9d79d1bdfd64f21bf0be148de3ad723, type: 2}
+  - {fileID: 11400000, guid: 48605903c3fa48c498cb8817b63bbc07, type: 2}
+  - {fileID: 11400000, guid: 1ede2a1dbcaf41d9a2d1dbcde6e90cbf, type: 2}
+  - {fileID: 11400000, guid: 8cc4b3c812764bd29b3e51a366381744, type: 2}
+  _spawnPoints:
+  - {fileID: 49917109}
+  - {fileID: 1969368809}
+  - {fileID: 616224118}
+  - {fileID: 687520424}
+  - {fileID: 140323585}
+  - {fileID: 1814843790}
+  - {fileID: 516894721}
+  - {fileID: 1662881533}
+  _enemyPrefabs:
+  - {fileID: 2000001, guid: 9dad6803582a36b4b8089b88c4897182, type: 3}
+  - {fileID: 1000001, guid: 54e63f3e5f9d39e43947a7e1c9c3ea7b, type: 3}
+  - {fileID: 3000001, guid: 5e7e395d6d974e9c94f3ac1f880c0969, type: 3}
+  - {fileID: 4000001, guid: 4ce1c31b4cde4518a9619bc3ce8d5758, type: 3}
   _hpScalePerDay: 1.1
   _countScalePerDay: 1.2
 --- !u!4 &965517924
@@ -549,6 +566,7 @@ GameObject:
   - component: {fileID: 1206277060}
   - component: {fileID: 1206277059}
   - component: {fileID: 1206277062}
+  - component: {fileID: 1206277063}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -642,6 +660,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbafbd75f43914342abb80008dc1dc70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1206277063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206277058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cd41b2d05fe2494a9daa87f5336088a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 1422499616}
+  _smoothSpeed: 5
 --- !u!1001 &1422499615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -699,6 +731,72 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+--- !u!4 &1422499616 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4126873119756540907, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+  m_PrefabInstance: {fileID: 1422499615}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1581123690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1581123692}
+  - component: {fileID: 1581123691}
+  m_Layer: 0
+  m_Name: 'EnemyPool '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1581123691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581123690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2495653c72490434982442e1c62f6c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entries:
+  - type: 0
+    prefab: {fileID: 2000001, guid: 9dad6803582a36b4b8089b88c4897182, type: 3}
+    defaultCapacity: 10
+    maxSize: 20
+  - type: 1
+    prefab: {fileID: 1000001, guid: 54e63f3e5f9d39e43947a7e1c9c3ea7b, type: 3}
+    defaultCapacity: 5
+    maxSize: 10
+  - type: 2
+    prefab: {fileID: 3000001, guid: 5e7e395d6d974e9c94f3ac1f880c0969, type: 3}
+    defaultCapacity: 5
+    maxSize: 10
+  - type: 3
+    prefab: {fileID: 4000001, guid: 4ce1c31b4cde4518a9619bc3ce8d5758, type: 3}
+    defaultCapacity: 1
+    maxSize: 2
+--- !u!4 &1581123692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581123690}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13886489, y: 0.32129008, z: 0.040173456}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1662881532
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,7 +1058,7 @@ Transform:
   m_GameObject: {fileID: 1969368808}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.02, y: -0.01, z: 0.040173456}
+  m_LocalPosition: {x: -1.91, y: -0.05, z: 0.040173456}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -987,3 +1085,4 @@ SceneRoots:
   - {fileID: 687520425}
   - {fileID: 616224119}
   - {fileID: 1969368810}
+  - {fileID: 1581123692}
