@@ -13,17 +13,24 @@ public class GameOverScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnDayChanged += d => _daysSurvived = d;
-        GameEvents.OnGoldChanged += g => _goldEarned = g;
-        GameEvents.OnEnemyDied += _ => _enemiesKilled++;
+        GameEvents.OnDayChanged += OnDayChanged;
+        GameEvents.OnGoldChanged += OnGoldChanged;
+        GameEvents.OnEnemyDied += OnEnemyDied;
+        _daysSurvived = 0;
+        _goldEarned = 0;
+        _enemiesKilled = 0;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnDayChanged -= d => _daysSurvived = d;
-        GameEvents.OnGoldChanged -= g => _goldEarned = g;
-        GameEvents.OnEnemyDied -= _ => _enemiesKilled++;
+        GameEvents.OnDayChanged -= OnDayChanged;
+        GameEvents.OnGoldChanged -= OnGoldChanged;
+        GameEvents.OnEnemyDied -= OnEnemyDied;
     }
+
+    private void OnDayChanged(int d) => _daysSurvived = d;
+    private void OnGoldChanged(int g) => _goldEarned = g;
+    private void OnEnemyDied(Enemy _) => _enemiesKilled++;
 
     public void ShowResults()
     {
