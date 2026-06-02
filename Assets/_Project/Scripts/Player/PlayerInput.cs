@@ -5,6 +5,7 @@ public class PlayerInput : MonoBehaviour
     public Vector2 MovementInput { get; private set; }
     public Vector2 AimDirection { get; private set; }
     public bool AttackPressed { get; private set; }
+    public bool ToolUsePressed { get; private set; }
     public bool DashPressed { get; private set; }
     public int ToolSwitchInput { get; private set; }
 
@@ -20,6 +21,7 @@ public class PlayerInput : MonoBehaviour
         MovementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         AimDirection = ReadAimDirection();
         AttackPressed = Input.GetMouseButtonDown(0);
+        ToolUsePressed = Input.GetMouseButtonDown(1);
         DashPressed = Input.GetKeyDown(KeyCode.Space);
         ToolSwitchInput = ReadToolSwitch();
     }
