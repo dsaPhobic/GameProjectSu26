@@ -14,10 +14,17 @@ public class GameOverDetector : MonoBehaviour
         GameEvents.OnAllCropsDestroyed -= TriggerGameOver;
     }
 
+    private bool _cropsEverPlanted = false;
+
     private void Update()
     {
         var farmManager = ServiceLocator.Get<FarmManager>();
-        if (farmManager != null && farmManager.CountLivingCrops() == 0)
+        if (farmManager == null) return;
+
+        if (!_cropsEverPlanted && farmManager.CountLivingCrops() > 0)
+            _cropsEverPlanted = true;
+
+        if (_cropsEverPlanted && farmManager.CountLivingCrops() == 0)
             GameEvents.RaiseAllCropsDestroyed();
     }
 

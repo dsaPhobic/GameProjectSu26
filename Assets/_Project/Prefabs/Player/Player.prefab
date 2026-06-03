@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 4059975653942975734}
   - component: {fileID: 1525177834822927579}
   - component: {fileID: 8091157981554513219}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.9937832, y: -0.090149745, z: 0.0791014}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -67,7 +67,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &3202949170659643946
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -148,6 +148,7 @@ MonoBehaviour:
   _dashForce: 12
   _dashCooldown: 1
   _dashDuration: 0.15
+  _bulletPrefab: {fileID: 1604439286018291457, guid: d58f13a5fdfc7614abc591f22f7d9fc4, type: 3}
 --- !u!95 &8183572142451476933
 Animator:
   serializedVersion: 5
