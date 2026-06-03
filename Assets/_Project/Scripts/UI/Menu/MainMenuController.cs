@@ -25,7 +25,9 @@ public class MainMenuController : MonoBehaviour
 
     public void OnQuitPressed()
     {
-        Application.Quit();
+        // Application.Quit();
+
+        UnityEditor.EditorApplication.isPlaying = false;
     }
 
     private void Start()
