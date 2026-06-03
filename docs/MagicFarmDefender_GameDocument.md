@@ -2,7 +2,7 @@
 
 ## Game Design Document & Team Workflow
 
-**Môn học:** PRU213 \- Game Programming with C\# **Thời gian:** 10 tuần **Engine:** Unity 2022.3.62f1 LTS **Team:** 4 người **Ngôn ngữ:** C\# (OOP)
+**Môn học:** PRU213 \- Game Programming with C\# **Thời gian:** 10 tuần **Engine:** Unity 2022.3.62f3 LTS **Team:** 4 người **Ngôn ngữ:** C\# (OOP)
 
 ---
 
@@ -24,15 +24,15 @@ Người chơi là một **pháp sư nông dân** sống ở vùng đất ma thu
 
 ## 1.2 Target Player Experience
 
-- **Cảm giác progression:** Mỗi đêm sống sót → mạnh hơn, farm lớn hơn  
-- **Tension cycle:** Yên bình ngày → căng thẳng đêm → thỏa mãn sáng hôm sau  
+- **Cảm giác progression:** Mỗi đêm sống sót → mạnh hơn, farm lớn hơn
+- **Tension cycle:** Yên bình ngày → căng thẳng đêm → thỏa mãn sáng hôm sau
 - **Strategic depth:** Cân nhắc trồng cây nào, nâng cấp gì, ưu tiên defense hay offense
 
 ## 1.3 Unique Selling Points
 
-1. **Day/Night cycle** với 2 gameplay khác biệt  
-2. **Magic theme** \- cây phát sáng, đạn phép, companion  
-3. **Upgrade tree** với nhiều build khác nhau  
+1. **Day/Night cycle** với 2 gameplay khác biệt
+2. **Magic theme** \- cây phát sáng, đạn phép, companion
+3. **Upgrade tree** với nhiều build khác nhau
 4. **Boss fight** kết thúc ấn tượng
 
 ---
@@ -43,33 +43,33 @@ Người chơi là một **pháp sư nông dân** sống ở vùng đất ma thu
 
 ### Stats cơ bản (Level 1):
 
-| Stat | Giá trị | Mô tả |
-| :---- | :---- | :---- |
-| Max HP | 100 | Máu tối đa |
-| Move Speed | 5 | Tốc độ di chuyển |
-| Attack Damage | 10 | Sát thương cơ bản |
-| Attack Speed | 2/s | Số phát bắn mỗi giây |
-| Dash Cooldown | 3s | Hồi chiêu lướt |
-| Pickup Range | 1.5 | Bán kính nhặt vật phẩm |
+| Stat          | Giá trị | Mô tả                  |
+| :------------ | :------ | :--------------------- |
+| Max HP        | 100     | Máu tối đa             |
+| Move Speed    | 5       | Tốc độ di chuyển       |
+| Attack Damage | 10      | Sát thương cơ bản      |
+| Attack Speed  | 2/s     | Số phát bắn mỗi giây   |
+| Dash Cooldown | 3s      | Hồi chiêu lướt         |
+| Pickup Range  | 1.5     | Bán kính nhặt vật phẩm |
 
 ### Controls:
 
-| Key | Action |
-| :---- | :---- |
-| W A S D | Di chuyển |
-| Mouse | Hướng aim |
-| Left Click | Tấn công (bắn đạn phép) |
+| Key         | Action                         |
+| :---------- | :----------------------------- |
+| W A S D     | Di chuyển                      |
+| Mouse       | Hướng aim                      |
+| Left Click  | Tấn công (bắn đạn phép)        |
 | Right Click | Sử dụng tool (Hoe/Water/Sword) |
-| 1, 2, 3 | Chuyển tool |
-| Space | Dash (lướt nhanh) |
-| E | Tương tác (NPC, portal) |
-| Esc | Pause menu |
-| I | Mở inventory |
+| 1, 2, 3     | Chuyển tool                    |
+| Space       | Dash (lướt nhanh)              |
+| E           | Tương tác (NPC, portal)        |
+| Esc         | Pause menu                     |
+| I           | Mở inventory                   |
 
 ### Tools:
 
-1. **Hoe (Cuốc)** \- Cày đất Empty → Tilled  
-2. **Watering Can (Bình tưới)** \- Tưới đất Tilled hoặc cây đang lớn  
+1. **Hoe (Cuốc)** \- Cày đất Empty → Tilled
+2. **Watering Can (Bình tưới)** \- Tưới đất Tilled hoặc cây đang lớn
 3. **Sword (Kiếm)** \- Thu hoạch cây Mature, đánh enemy cận chiến
 
 ## 2.2 Farming System
@@ -86,24 +86,24 @@ Empty (đất hoang) → \[Hoe\] → Tilled (đã cày) →
 
 #### 🌾 Wheat (Lúa mì)
 
-- Thời gian lớn: **20 giây**  
-- HP: 25  
-- Giá bán: 10 gold  
+- Thời gian lớn: **20 giây**
+- HP: 25
+- Giá bán: 10 gold
 - XP: 5
 
 #### 🎃 Pumpkin (Bí ngô)
 
-- Thời gian lớn: **40 giây**  
-- HP: 45  
-- Giá bán: 25 gold  
+- Thời gian lớn: **40 giây**
+- HP: 45
+- Giá bán: 25 gold
 - XP: 15
 
 #### 🌿 Magic Herb (Thảo dược ma thuật)
 
-- Thời gian lớn: **60 giây**  
-- HP: 15 (dễ bị phá hủy\!)  
-- Giá bán: 50 gold  
-- XP: 30  
+- Thời gian lớn: **60 giây**
+- HP: 15 (dễ bị phá hủy\!)
+- Giá bán: 50 gold
+- XP: 30
 - Phát sáng tím
 
 ### Grid size: 10x10 (100 ô đất)
@@ -114,48 +114,48 @@ Empty (đất hoang) → \[Hoe\] → Tilled (đã cày) →
 
 #### 🟢 Slime (Cấp 1 \- đơn giản nhất)
 
-- HP: 30  
-- Damage: 8  
-- Speed: Chậm (2.0)  
-- AI: Đi thẳng tới crop gần nhất, đánh melee  
-- XP drop: 5  
+- HP: 30
+- Damage: 8
+- Speed: Chậm (2.0)
+- AI: Đi thẳng tới crop gần nhất, đánh melee
+- XP drop: 5
 - Gold drop: 3
 
 #### 🏹 Goblin Archer (Cấp 2 \- tầm xa)
 
-- HP: 40  
-- Damage: 12 (đạn tầm xa)  
-- Speed: Trung bình (3.0)  
-- Range: 7 unit  
-- AI: Giữ khoảng cách với player, bắn arrow  
-- XP drop: 10  
+- HP: 40
+- Damage: 12 (đạn tầm xa)
+- Speed: Trung bình (3.0)
+- Range: 7 unit
+- AI: Giữ khoảng cách với player, bắn arrow
+- XP drop: 10
 - Gold drop: 8
 
 #### 🐺 Beast (Cấp 3 \- tank)
 
-- HP: 80  
-- Damage: 20  
-- Speed: Nhanh (4.0)  
-- AI: Charge tới player, melee mạnh  
-- XP drop: 20  
+- HP: 80
+- Damage: 20
+- Speed: Nhanh (4.0)
+- AI: Charge tới player, melee mạnh
+- XP drop: 20
 - Gold drop: 15
 
 #### 👹 Demon Boss (Boss cuối)
 
-- HP: 500  
-- 3 phases (100%, 50%, 20% HP)  
-- Phase 1: Đánh melee mạnh  
-- Phase 2: Triệu hồi minion \+ đánh xa  
+- HP: 500
+- 3 phases (100%, 50%, 20% HP)
+- Phase 1: Đánh melee mạnh
+- Phase 2: Triệu hồi minion \+ đánh xa
 - Phase 3: Berserk \- tốc độ x2, damage x1.5
 
 ## 2.4 Day/Night Cycle
 
-| Phase | Thời gian | Hoạt động |
-| :---- | :---- | :---- |
-| 🌅 Dawn | 15s | Hiển thị "Day X", chuẩn bị, không enemy |
-| 🌞 Day | 90s | Farming time \- trồng, tưới, thu hoạch |
-| 🌆 Dusk | 15s | Cảnh báo "Night incoming\!", buff trước combat |
-| 🌙 Night | 120s | Combat \- enemy spawn theo wave |
+| Phase    | Thời gian | Hoạt động                                      |
+| :------- | :-------- | :--------------------------------------------- |
+| 🌅 Dawn  | 15s       | Hiển thị "Day X", chuẩn bị, không enemy        |
+| 🌞 Day   | 90s       | Farming time \- trồng, tưới, thu hoạch         |
+| 🌆 Dusk  | 15s       | Cảnh báo "Night incoming\!", buff trước combat |
+| 🌙 Night | 120s      | Combat \- enemy spawn theo wave                |
 
 **Tổng 1 ngày \= 4 phút**
 
@@ -165,47 +165,47 @@ Khi level up, chọn 1 trong 3 perk ngẫu nhiên từ pool:
 
 ### Combat Upgrades:
 
-- **\+20% Damage** (Tăng sát thương)  
-- **\+15% Attack Speed** (Bắn nhanh hơn)  
-- **\+10% Critical Chance** (Tỷ lệ chí mạng)  
-- **Piercing Shot** (Đạn xuyên 2 enemy)  
-- **Multi Shot** (Bắn 3 viên hình nón)  
-- **Flame Bullets** (Đạn gây Burn 5s)  
+- **\+20% Damage** (Tăng sát thương)
+- **\+15% Attack Speed** (Bắn nhanh hơn)
+- **\+10% Critical Chance** (Tỷ lệ chí mạng)
+- **Piercing Shot** (Đạn xuyên 2 enemy)
+- **Multi Shot** (Bắn 3 viên hình nón)
+- **Flame Bullets** (Đạn gây Burn 5s)
 - **Frost Bullets** (Đạn làm chậm 30%)
 
 ### Defense Upgrades:
 
-- **\+25 Max HP** (Tăng máu)  
-- **\+5 HP Regen/s** (Hồi máu mỗi giây)  
-- **Dragon Armor** (Đổi sprite player → \+50% max HP)  
+- **\+25 Max HP** (Tăng máu)
+- **\+5 HP Regen/s** (Hồi máu mỗi giây)
+- **Dragon Armor** (Đổi sprite player → \+50% max HP)
 - **Shield Burst** (Bất tử 2s khi dưới 25% HP)
 
 ### Utility Upgrades:
 
-- **\+15% Move Speed** (Đi nhanh hơn)  
-- **Reduced Dash Cooldown** (Lướt nhiều hơn)  
-- **\+1 Pickup Range** (Hút item từ xa)  
-- **Lucky Farmer** (Cây ra \+50% gold)  
+- **\+15% Move Speed** (Đi nhanh hơn)
+- **Reduced Dash Cooldown** (Lướt nhiều hơn)
+- **\+1 Pickup Range** (Hút item từ xa)
+- **Lucky Farmer** (Cây ra \+50% gold)
 - **Green Thumb** (Cây lớn nhanh hơn 20%)
 
 ### Special Upgrades:
 
-- **Summon Drone** (Triệu hồi drone bay theo, tự bắn) ⭐ Yêu cầu 13  
-- **Scarecrow** (Đặt bù nhìn bảo vệ farm)  
+- **Summon Drone** (Triệu hồi drone bay theo, tự bắn) ⭐ Yêu cầu 13
+- **Scarecrow** (Đặt bù nhìn bảo vệ farm)
 - **Magic Wall** (Tạo tường ma thuật quanh farm)
 
 ## 2.6 Power-ups (Buff tạm thời)
 
 Drop ngẫu nhiên từ enemy hoặc rơi dù xuống:
 
-| Power-up | Hiệu ứng | Thời gian |
-| :---- | :---- | :---- |
-| ⚡ Speed Boost | \+50% Move Speed | 20s |
-| 🔥 Double Damage | x2 Damage | 15s |
-| 🛡️ Shield | Bất tử | 10s |
-| 💚 Health Restore | Hồi 30 HP | Instant |
-| 🌱 Growth Magic | Cây lớn x3 tốc độ | 30s |
-| 🧲 Magnet | Tự động hút loot trong 5m | 15s |
+| Power-up          | Hiệu ứng                  | Thời gian |
+| :---------------- | :------------------------ | :-------- |
+| ⚡ Speed Boost    | \+50% Move Speed          | 20s       |
+| 🔥 Double Damage  | x2 Damage                 | 15s       |
+| 🛡️ Shield         | Bất tử                    | 10s       |
+| 💚 Health Restore | Hồi 30 HP                 | Instant   |
+| 🌱 Growth Magic   | Cây lớn x3 tốc độ         | 30s       |
+| 🧲 Magnet         | Tự động hút loot trong 5m | 15s       |
 
 ---
 
@@ -213,9 +213,9 @@ Drop ngẫu nhiên từ enemy hoặc rơi dù xuống:
 
 ## 3.1 Art Style
 
-- **Pixel art 16x16** hoặc **32x32**  
-- **Top-down 2D**  
-- **Color palette:** Tươi sáng cho ngày, tối/tím cho đêm  
+- **Pixel art 16x16** hoặc **32x32**
+- **Top-down 2D**
+- **Color palette:** Tươi sáng cho ngày, tối/tím cho đêm
 - **Magic theme:** Hiệu ứng phát sáng, particle
 
 ## 3.2 Asset Packs (MIỄN PHÍ, đã chọn sẵn)
@@ -260,123 +260,123 @@ File Assets: [PRU213-Project-Group3](https://drive.google.com/drive/folders/1WB6
 
 Assets/
 
-├── \_Project/                    ← TẤT CẢ code/asset team đặt ở đây
+├── \_Project/ ← TẤT CẢ code/asset team đặt ở đây
 
-│   ├── Animations/              ← AnimationController, Animation files
+│ ├── Animations/ ← AnimationController, Animation files
 
-│   ├── Audio/                   ← BGM, SFX files
+│ ├── Audio/ ← BGM, SFX files
 
-│   ├── Data/                    ← ScriptableObject files
+│ ├── Data/ ← ScriptableObject files
 
-│   │   ├── Crops/
+│ │ ├── Crops/
 
-│   │   ├── Enemies/
+│ │ ├── Enemies/
 
-│   │   ├── Waves/
+│ │ ├── Waves/
 
-│   │   └── Upgrades/
+│ │ └── Upgrades/
 
-│   ├── Prefabs/                 ← Player, Enemy, Crop, UI prefabs
+│ ├── Prefabs/ ← Player, Enemy, Crop, UI prefabs
 
-│   ├── Scenes/
+│ ├── Scenes/
 
-│   │   ├── MainMenu.unity
+│ │ ├── MainMenu.unity
 
-│   │   ├── GameScene.unity
+│ │ ├── GameScene.unity
 
-│   │   └── GameOver.unity
+│ │ └── GameOver.unity
 
-│   ├── Scripts/
+│ ├── Scripts/
 
-│   │   ├── Core/                ← Người 1 phụ trách
+│ │ ├── Core/ ← Người 1 phụ trách
 
-│   │   │   ├── Interfaces/
+│ │ │ ├── Interfaces/
 
-│   │   │   ├── Enums/
+│ │ │ ├── Enums/
 
-│   │   │   ├── GameEvents.cs
+│ │ │ ├── GameEvents.cs
 
-│   │   │   ├── ServiceLocator.cs
+│ │ │ ├── ServiceLocator.cs
 
-│   │   │   ├── GameManager.cs
+│ │ │ ├── GameManager.cs
 
-│   │   │   ├── SaveSystem.cs
+│ │ │ ├── SaveSystem.cs
 
-│   │   │   └── Entity.cs
+│ │ │ └── Entity.cs
 
-│   │   ├── Player/              ← Người 2 phụ trách
+│ │ ├── Player/ ← Người 2 phụ trách
 
-│   │   │   ├── PlayerController.cs
+│ │ │ ├── PlayerController.cs
 
-│   │   │   ├── PlayerInput.cs
+│ │ │ ├── PlayerInput.cs
 
-│   │   │   ├── PlayerStats.cs
+│ │ │ ├── PlayerStats.cs
 
-│   │   │   ├── PlayerAnimator.cs
+│ │ │ ├── PlayerAnimator.cs
 
-│   │   │   └── Bullet.cs
+│ │ │ └── Bullet.cs
 
-│   │   ├── Farming/             ← Người 3 phụ trách
+│ │ ├── Farming/ ← Người 3 phụ trách
 
-│   │   │   ├── CropData.cs
+│ │ │ ├── CropData.cs
 
-│   │   │   ├── Crop.cs
+│ │ │ ├── Crop.cs
 
-│   │   │   ├── FarmTile.cs
+│ │ │ ├── FarmTile.cs
 
-│   │   │   └── FarmManager.cs
+│ │ │ └── FarmManager.cs
 
-│   │   ├── Combat/              ← Người 2 phụ trách
+│ │ ├── Combat/ ← Người 2 phụ trách
 
-│   │   │   ├── Enemy.cs
+│ │ │ ├── Enemy.cs
 
-│   │   │   ├── Slime.cs
+│ │ │ ├── Slime.cs
 
-│   │   │   ├── GoblinArcher.cs
+│ │ │ ├── GoblinArcher.cs
 
-│   │   │   ├── Beast.cs
+│ │ │ ├── Beast.cs
 
-│   │   │   ├── DemonBoss.cs
+│ │ │ ├── DemonBoss.cs
 
-│   │   │   └── EnemyPool.cs
+│ │ │ └── EnemyPool.cs
 
-│   │   ├── World/               ← Người 3 phụ trách
+│ │ ├── World/ ← Người 3 phụ trách
 
-│   │   │   ├── DayNightCycle.cs
+│ │ │ ├── DayNightCycle.cs
 
-│   │   │   ├── WaveManager.cs
+│ │ │ ├── WaveManager.cs
 
-│   │   │   └── PowerUp.cs
+│ │ │ └── PowerUp.cs
 
-│   │   ├── Upgrade/             ← Người 4 phụ trách
+│ │ ├── Upgrade/ ← Người 4 phụ trách
 
-│   │   │   ├── UpgradeData.cs
+│ │ │ ├── UpgradeData.cs
 
-│   │   │   ├── UpgradeManager.cs
+│ │ │ ├── UpgradeManager.cs
 
-│   │   │   └── PerkSystem.cs
+│ │ │ └── PerkSystem.cs
 
-│   │   ├── Companion/           ← Người 4 phụ trách
+│ │ ├── Companion/ ← Người 4 phụ trách
 
-│   │   │   ├── Drone.cs
+│ │ │ ├── Drone.cs
 
-│   │   │   └── Scarecrow.cs
+│ │ │ └── Scarecrow.cs
 
-│   │   ├── UI/                  ← Người 4 phụ trách
+│ │ ├── UI/ ← Người 4 phụ trách
 
-│   │   │   ├── HUD/
+│ │ │ ├── HUD/
 
-│   │   │   ├── Menu/
+│ │ │ ├── Menu/
 
-│   │   │   └── UpgradeUI/
+│ │ │ └── UpgradeUI/
 
-│   │   └── Audio/               ← Người 4 phụ trách
+│ │ └── Audio/ ← Người 4 phụ trách
 
-│   │       └── AudioManager.cs
+│ │ └── AudioManager.cs
 
-│   └── Materials/
+│ └── Materials/
 
-└── ThirdParty/                  ← Asset Store packages
+└── ThirdParty/ ← Asset Store packages
 
 ## 4.2 Architecture Patterns (BẮT BUỘC dùng)
 
@@ -384,11 +384,11 @@ Assets/
 
 // Thay vì gọi trực tiếp:
 
-uiManager.UpdateGold(100);  // ❌ Coupling cao
+uiManager.UpdateGold(100); // ❌ Coupling cao
 
 // Dùng event bus:
 
-GameEvents.RaiseGoldChanged(100);  // ✅ UI tự subscribe
+GameEvents.RaiseGoldChanged(100); // ✅ UI tự subscribe
 
 ### Pattern 2: ScriptableObject (Data-driven)
 
@@ -470,12 +470,12 @@ public class playercontroller : MonoBehaviour
 
 ### Naming Rules:
 
-- **Class:** `PascalCase` → `PlayerController`  
-- **Public Method:** `PascalCase` → `TakeDamage()`  
-- **Private Method:** `PascalCase` → `Die()`  
-- **Public Field:** `PascalCase` → `MaxHP` (tránh, dùng property)  
-- **Private Field:** `_camelCase` → `_moveSpeed`  
-- **Local Variable:** `camelCase` → `currentHealth`  
+- **Class:** `PascalCase` → `PlayerController`
+- **Public Method:** `PascalCase` → `TakeDamage()`
+- **Private Method:** `PascalCase` → `Die()`
+- **Public Field:** `PascalCase` → `MaxHP` (tránh, dùng property)
+- **Private Field:** `_camelCase` → `_moveSpeed`
+- **Local Variable:** `camelCase` → `currentHealth`
 - **Constant:** `UPPER_SNAKE_CASE` → `MAX_LEVEL`
 
 ---
@@ -484,12 +484,12 @@ public class playercontroller : MonoBehaviour
 
 ## Vai trò Tổng quan
 
-| Người | Vai trò | Module chính |
-| :---- | :---- | :---- |
-| **Người 1** | Tech Lead | Core Systems, Architecture, Git workflow |
-| **Người 2** | Combat Programmer | Player, Combat, Enemy AI |
-| **Người 3** | World Programmer | Farming, Day/Night, Waves, Spawning |
-| **Người 4** | UI/UX \+ Designer | UI, Upgrades, Companion, Audio, Polish |
+| Người       | Vai trò           | Module chính                             |
+| :---------- | :---------------- | :--------------------------------------- |
+| **Người 1** | Tech Lead         | Core Systems, Architecture, Git workflow |
+| **Người 2** | Combat Programmer | Player, Combat, Enemy AI                 |
+| **Người 3** | World Programmer  | Farming, Day/Night, Waves, Spawning      |
+| **Người 4** | UI/UX \+ Designer | UI, Upgrades, Companion, Audio, Polish   |
 
 ---
 
@@ -497,38 +497,38 @@ public class playercontroller : MonoBehaviour
 
 ### Trách nhiệm chính:
 
-- **Setup project, Git workflow**  
-- **Code Core architecture** (mọi người dùng)  
-- **Code review** Pull Requests  
-- **Save/Load system**  
-- **Scene transitions**  
+- **Setup project, Git workflow**
+- **Code Core architecture** (mọi người dùng)
+- **Code review** Pull Requests
+- **Save/Load system**
+- **Scene transitions**
 - **Build & Release**
 
 ### Files phụ trách:
 
 #### Core/Interfaces/
 
-- `IDamageable.cs`  
-- `IInteractable.cs`  
-- `IUpgradable.cs`  
+- `IDamageable.cs`
+- `IInteractable.cs`
+- `IUpgradable.cs`
 - `ISaveable.cs`
 
 #### Core/Enums/
 
-- `DayPhase.cs`  
-- `GameOverReason.cs`  
-- `CropType.cs`  
-- `EnemyType.cs`  
-- `ToolType.cs`  
+- `DayPhase.cs`
+- `GameOverReason.cs`
+- `CropType.cs`
+- `EnemyType.cs`
+- `ToolType.cs`
 - `UpgradeCategory.cs`
 
 #### Core/
 
-- `GameEvents.cs` \- Event bus  
-- `ServiceLocator.cs` \- DI container  
-- `GameManager.cs` \- Game state machine  
-- `SaveSystem.cs` \- JSON save/load  
-- `SceneLoader.cs` \- Scene transitions  
+- `GameEvents.cs` \- Event bus
+- `ServiceLocator.cs` \- DI container
+- `GameManager.cs` \- Game state machine
+- `SaveSystem.cs` \- JSON save/load
+- `SceneLoader.cs` \- Scene transitions
 - `Entity.cs` \- Base class cho mọi entity
 
 ### Timeline:
@@ -537,10 +537,10 @@ public class playercontroller : MonoBehaviour
 
 ### Deliverables:
 
-- ✅ Folder structure setup hoàn chỉnh  
-- ✅ Git repo \+ .gitignore \+ branch protection  
-- ✅ Core architecture chạy được  
-- ✅ Save/Load test pass  
+- ✅ Folder structure setup hoàn chỉnh
+- ✅ Git repo \+ .gitignore \+ branch protection
+- ✅ Core architecture chạy được
+- ✅ Save/Load test pass
 - ✅ Build .exe cuối kỳ
 
 ---
@@ -549,31 +549,31 @@ public class playercontroller : MonoBehaviour
 
 ### Trách nhiệm chính:
 
-- **Player Controller hoàn chỉnh**  
-- **Combat system** (damage, projectile, hit detection)  
-- **Enemy AI** (3 loại \+ 1 boss)  
+- **Player Controller hoàn chỉnh**
+- **Combat system** (damage, projectile, hit detection)
+- **Enemy AI** (3 loại \+ 1 boss)
 - **Bullet/Projectile system**
 
 ### Files phụ trách:
 
 #### Player/
 
-- `PlayerController.cs` \- Main controller, kế thừa Entity  
-- `PlayerInput.cs` \- Input handling (WASD, mouse, keys)  
-- `PlayerStats.cs` \- HP, Speed, Damage, Level, XP  
-- `PlayerAnimator.cs` \- Animation state management  
-- `Bullet.cs` \- Projectile logic  
+- `PlayerController.cs` \- Main controller, kế thừa Entity
+- `PlayerInput.cs` \- Input handling (WASD, mouse, keys)
+- `PlayerStats.cs` \- HP, Speed, Damage, Level, XP
+- `PlayerAnimator.cs` \- Animation state management
+- `Bullet.cs` \- Projectile logic
 - `PlayerSaveData.cs` \- DTO cho save
 
 #### Combat/
 
-- `Enemy.cs` \- Abstract base class  
-- `Slime.cs` \- Enemy melee đơn giản  
-- `GoblinArcher.cs` \- Enemy ranged  
-- `Beast.cs` \- Enemy fast melee mạnh  
-- `DemonBoss.cs` \- Boss với 3 phases  
-- `EnemyPool.cs` \- Object pooling  
-- `EnemyData.cs` \- ScriptableObject  
+- `Enemy.cs` \- Abstract base class
+- `Slime.cs` \- Enemy melee đơn giản
+- `GoblinArcher.cs` \- Enemy ranged
+- `Beast.cs` \- Enemy fast melee mạnh
+- `DemonBoss.cs` \- Boss với 3 phases
+- `EnemyPool.cs` \- Object pooling
+- `EnemyData.cs` \- ScriptableObject
 - `DamageCalculator.cs` \- Logic tính damage
 
 ### Timeline:
@@ -582,10 +582,10 @@ public class playercontroller : MonoBehaviour
 
 ### Deliverables:
 
-- ✅ Player điều khiển mượt mà  
-- ✅ Bắn đạn, đánh enemy hoạt động  
-- ✅ 3 loại enemy với AI khác nhau  
-- ✅ Boss fight 3 phases ấn tượng  
+- ✅ Player điều khiển mượt mà
+- ✅ Bắn đạn, đánh enemy hoạt động
+- ✅ 3 loại enemy với AI khác nhau
+- ✅ Boss fight 3 phases ấn tượng
 - ✅ Object pooling cho performance
 
 ---
@@ -594,31 +594,31 @@ public class playercontroller : MonoBehaviour
 
 ### Trách nhiệm chính:
 
-- **Farming system** (cây, tile, grid)  
-- **Day/Night cycle**  
-- **Wave spawning** enemy theo thời gian  
-- **Power-up drops**  
+- **Farming system** (cây, tile, grid)
+- **Day/Night cycle**
+- **Wave spawning** enemy theo thời gian
+- **Power-up drops**
 - **Level/Map design**
 
 ### Files phụ trách:
 
 #### Farming/
 
-- `CropData.cs` \- ScriptableObject định nghĩa loại cây  
-- `Crop.cs` \- Cây cụ thể trong scene  
-- `FarmTile.cs` \- Tile đất đai  
-- `FarmManager.cs` \- Quản lý grid  
-- `CropStage.cs` \- Enum stages  
+- `CropData.cs` \- ScriptableObject định nghĩa loại cây
+- `Crop.cs` \- Cây cụ thể trong scene
+- `FarmTile.cs` \- Tile đất đai
+- `FarmManager.cs` \- Quản lý grid
+- `CropStage.cs` \- Enum stages
 - `TileState.cs` \- Enum tile states
 
 #### World/
 
-- `DayNightCycle.cs` \- Manage Dawn → Day → Dusk → Night  
-- `WaveManager.cs` \- Spawn enemy waves  
-- `EnemyWaveData.cs` \- ScriptableObject định nghĩa wave  
-- `SpawnPoint.cs` \- Marker cho spawn locations  
-- `PowerUp.cs` \- Power-up logic  
-- `PowerUpData.cs` \- ScriptableObject  
+- `DayNightCycle.cs` \- Manage Dawn → Day → Dusk → Night
+- `WaveManager.cs` \- Spawn enemy waves
+- `EnemyWaveData.cs` \- ScriptableObject định nghĩa wave
+- `SpawnPoint.cs` \- Marker cho spawn locations
+- `PowerUp.cs` \- Power-up logic
+- `PowerUpData.cs` \- ScriptableObject
 - `PowerUpSpawner.cs` \- Spawn ngẫu nhiên
 
 ### Timeline:
@@ -627,10 +627,10 @@ public class playercontroller : MonoBehaviour
 
 ### Deliverables:
 
-- ✅ Cây mọc theo thời gian  
-- ✅ Player có thể cày/trồng/tưới/thu hoạch  
-- ✅ Day/Night cycle chạy mượt  
-- ✅ Enemy spawn theo wave ban đêm  
+- ✅ Cây mọc theo thời gian
+- ✅ Player có thể cày/trồng/tưới/thu hoạch
+- ✅ Day/Night cycle chạy mượt
+- ✅ Enemy spawn theo wave ban đêm
 - ✅ Power-ups rơi ngẫu nhiên
 
 ---
@@ -639,54 +639,54 @@ public class playercontroller : MonoBehaviour
 
 ### Trách nhiệm chính:
 
-- **UI/UX hoàn chỉnh** (HUD, menus, upgrade screen)  
-- **Upgrade system**  
-- **Companion (Drone)**  
-- **Audio system**  
+- **UI/UX hoàn chỉnh** (HUD, menus, upgrade screen)
+- **Upgrade system**
+- **Companion (Drone)**
+- **Audio system**
 - **Polish & juice** (particles, screen shake)
 
 ### Files phụ trách:
 
 #### UI/HUD/
 
-- `HUDController.cs` \- HP bar, XP bar, gold counter  
-- `DayCounter.cs` \- Hiển thị "Day X"  
-- `WaveIndicator.cs` \- Wave counter  
+- `HUDController.cs` \- HP bar, XP bar, gold counter
+- `DayCounter.cs` \- Hiển thị "Day X"
+- `WaveIndicator.cs` \- Wave counter
 - `MinimapController.cs` \- Bonus: minimap
 
 #### UI/Menu/
 
-- `MainMenuController.cs`  
-- `PauseMenuController.cs`  
-- `GameOverScreen.cs`  
-- `SettingsMenu.cs`  
+- `MainMenuController.cs`
+- `PauseMenuController.cs`
+- `GameOverScreen.cs`
+- `SettingsMenu.cs`
 - `InventoryUI.cs`
 
 #### UI/UpgradeUI/
 
-- `UpgradeScreen.cs` \- Hiện 3 perk khi level up  
+- `UpgradeScreen.cs` \- Hiện 3 perk khi level up
 - `UpgradeCard.cs` \- UI card cho từng perk
 
 #### Upgrade/
 
-- `UpgradeData.cs` \- ScriptableObject  
-- `UpgradeManager.cs` \- Apply effect lên Player  
+- `UpgradeData.cs` \- ScriptableObject
+- `UpgradeManager.cs` \- Apply effect lên Player
 - `PerkSystem.cs` \- Random 3 perks từ pool
 
 #### Companion/
 
-- `Drone.cs` \- Companion drone bay theo, tự bắn  
+- `Drone.cs` \- Companion drone bay theo, tự bắn
 - `Scarecrow.cs` \- Bù nhìn (companion option 2\)
 
 #### Audio/
 
-- `AudioManager.cs` \- Singleton play SFX/BGM  
+- `AudioManager.cs` \- Singleton play SFX/BGM
 - `AudioMixer.cs` \- Volume settings
 
 #### Polish/
 
-- `CameraShake.cs`  
-- `DamageNumber.cs` \- Số damage bay lên  
+- `CameraShake.cs`
+- `DamageNumber.cs` \- Số damage bay lên
 - `HitFlash.cs` \- Flash trắng khi bị đánh
 
 ### Timeline:
@@ -695,10 +695,10 @@ public class playercontroller : MonoBehaviour
 
 ### Deliverables:
 
-- ✅ UI đẹp, chuyên nghiệp  
-- ✅ Upgrade screen ấn tượng  
-- ✅ Companion drone hoạt động  
-- ✅ Audio đầy đủ (BGM \+ SFX)  
+- ✅ UI đẹp, chuyên nghiệp
+- ✅ Upgrade screen ấn tượng
+- ✅ Companion drone hoạt động
+- ✅ Audio đầy đủ (BGM \+ SFX)
 - ✅ Game cảm giác "juicy"
 
 ---
@@ -709,23 +709,23 @@ public class playercontroller : MonoBehaviour
 
 ### Cả team:
 
-- **Họp kickoff** (1 buổi 2 tiếng)  
-- Mỗi người **học Unity** qua Brackeys tutorial (8 video)  
-- Cài Unity 2022.3.62f1 LTS (BẮT BUỘC cùng version)  
+- **Họp kickoff** (1 buổi 2 tiếng)
+- Mỗi người **học Unity** qua Brackeys tutorial (8 video)
+- Cài Unity 2022.3.62f1 LTS (BẮT BUỘC cùng version)
 - Cài Visual Studio 2022 \+ Game dev with Unity workload
 
 ### Người 1:
 
-- [x] Tạo GitHub repo  
-- [x] Setup .gitignore Unity  
-- [x] Setup folder structure  
-- [x] Tạo branch strategy (main, develop, feature branches)  
+- [x] Tạo GitHub repo
+- [x] Setup .gitignore Unity
+- [x] Setup folder structure
+- [x] Tạo branch strategy (main, develop, feature branches)
 - [x] Code Core/Interfaces/Enums
 
 ### Người 2, 3, 4:
 
-- Xem Brackeys 2D Game Tutorial Series (full)  
-- Tự làm 1 mini project test (spawn cube, move với WASD)  
+- Xem Brackeys 2D Game Tutorial Series (full)
+- Tự làm 1 mini project test (spawn cube, move với WASD)
 - Đọc về Coroutine, ScriptableObject
 
 ### Milestone:
@@ -738,30 +738,30 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Code `GameEvents.cs` (Event bus)  
-- [x] Code `ServiceLocator.cs`  
-- [x] Code `Entity.cs` (base class)  
+- [x] Code `GameEvents.cs` (Event bus)
+- [x] Code `ServiceLocator.cs`
+- [x] Code `Entity.cs` (base class)
 - [x] Push lên develop branch
 
 ### Người 2:
 
-- [x] Tạo Player GameObject \+ Rigidbody \+ Collider  
-- [x] Code `PlayerInput.cs` (đọc WASD \+ mouse)  
-- [x] Code `PlayerController.cs` (movement)  
+- [x] Tạo Player GameObject \+ Rigidbody \+ Collider
+- [x] Code `PlayerInput.cs` (đọc WASD \+ mouse)
+- [x] Code `PlayerController.cs` (movement)
 - [x] Test Player di chuyển trong scene trống
 
 ### Người 3:
 
-- [x] Code `CropData.cs` ScriptableObject  
-- [x] Tạo 3 crop assets (Wheat, Pumpkin, MagicHerb)  
-- [x] Code `Crop.cs` với coroutine growth  
+- [x] Code `CropData.cs` ScriptableObject
+- [x] Tạo 3 crop assets (Wheat, Pumpkin, MagicHerb)
+- [x] Code `Crop.cs` với coroutine growth
 - [x] Test 1 crop mọc qua các stage
 
 ### Người 4:
 
-- [x] Tạo Main Menu scene  
-- [x] Code `MainMenuController.cs`  
-- [x] Tạo button: Play, Settings, Quit  
+- [x] Tạo Main Menu scene
+- [x] Code `MainMenuController.cs`
+- [x] Tạo button: Play, Settings, Quit
 - [x] Test bấm Play → load scene game
 
 ### Milestone:
@@ -774,28 +774,28 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Code `GameManager.cs` với state machine  
-- [x] Code `SceneLoader.cs` (chuyển scene mượt mà)  
+- [x] Code `GameManager.cs` với state machine
+- [x] Code `SceneLoader.cs` (chuyển scene mượt mà)
 - [x] Setup PR review process
 
 ### Người 2:
 
-- [x] Code `Bullet.cs` \+ bullet prefab  
-- [x] Player bắn được đạn theo hướng chuột  
-- [x] Code `PlayerStats.cs` (HP, Damage, Speed)  
+- [x] Code `Bullet.cs` \+ bullet prefab
+- [x] Player bắn được đạn theo hướng chuột
+- [x] Code `PlayerStats.cs` (HP, Damage, Speed)
 - [x] Code combat: bullet hit enemy → trừ HP
 
 ### Người 3:
 
-- [x] Code `FarmTile.cs` \+ `FarmManager.cs`  
-- [x] Tạo grid 10x10 farm  
-- [x] Player có thể cày/trồng/tưới/thu hoạch  
+- [x] Code `FarmTile.cs` \+ `FarmManager.cs`
+- [x] Tạo grid 10x10 farm
+- [x] Player có thể cày/trồng/tưới/thu hoạch
 - [x] Test full farming loop
 
 ### Người 4:
 
-- [x] Code `HUDController.cs`  
-- [x] HP bar, XP bar, Gold counter UI  
+- [x] Code `HUDController.cs`
+- [x] HP bar, XP bar, Gold counter UI
 - [x] Subscribe events từ GameEvents
 
 ### Milestone:
@@ -808,28 +808,28 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Code `SaveSystem.cs` (JSON)  
-- [x] Tạo `GameSaveData.cs` DTO  
+- [x] Code `SaveSystem.cs` (JSON)
+- [x] Tạo `GameSaveData.cs` DTO
 - [x] Test save/load với fake data
 
 ### Người 2:
 
-- [x] Code `Enemy.cs` base class  
-- [x] Code `Slime.cs` \- enemy đầu tiên  
-- [x] AI: Slime đi tới crop gần nhất → đánh  
+- [x] Code `Enemy.cs` base class
+- [x] Code `Slime.cs` \- enemy đầu tiên
+- [x] AI: Slime đi tới crop gần nhất → đánh
 - [x] Test slime tấn công farm
 
 ### Người 3:
 
-- [x] Code `EnemyWaveData.cs` ScriptableObject  
-- [x] Tạo 3 wave assets (Wave\_01, 02, 03\)  
-- [x] Code `WaveManager.cs` spawn theo wave  
+- [x] Code `EnemyWaveData.cs` ScriptableObject
+- [x] Tạo 3 wave assets (Wave_01, 02, 03\)
+- [x] Code `WaveManager.cs` spawn theo wave
 - [x] Test 1 wave spawn enemy
 
 ### Người 4:
 
-- [x] Code `UpgradeData.cs` ScriptableObject  
-- [x] Tạo 10 upgrade assets (5 combat, 5 defense)  
+- [x] Code `UpgradeData.cs` ScriptableObject
+- [x] Tạo 10 upgrade assets (5 combat, 5 defense)
 - [x] Code `UpgradeScreen.cs` UI (3 cards chọn 1\)
 
 ### Milestone:
@@ -842,27 +842,27 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Tích hợp SaveSystem vào Player, FarmManager  
+- [x] Tích hợp SaveSystem vào Player, FarmManager
 - [x] Code Pause functionality
 
 ### Người 2:
 
-- [x] Code `GoblinArcher.cs` (ranged enemy)  
-- [x] Code `Beast.cs` (fast melee)  
-- [x] Code `EnemyPool.cs` cho performance  
+- [x] Code `GoblinArcher.cs` (ranged enemy)
+- [x] Code `Beast.cs` (fast melee)
+- [x] Code `EnemyPool.cs` cho performance
 - [x] Test cả 3 enemy types
 
 ### Người 3:
 
-- [x] Code `DayNightCycle.cs`  
-- [x] 4 phases: Dawn/Day/Dusk/Night  
-- [x] Visual effect: thay đổi ambient light  
+- [x] Code `DayNightCycle.cs`
+- [x] 4 phases: Dawn/Day/Dusk/Night
+- [x] Visual effect: thay đổi ambient light
 - [x] Enemy chỉ spawn vào Night
 
 ### Người 4:
 
-- [x] Code `UpgradeManager.cs` apply lên PlayerStats  
-- [x] Test level up → chọn perk → stats tăng  
+- [x] Code `UpgradeManager.cs` apply lên PlayerStats
+- [x] Test level up → chọn perk → stats tăng
 - [x] Code damage numbers bay lên
 
 ### Milestone:
@@ -875,26 +875,26 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Review code toàn team, refactor  
+- [x] Review code toàn team, refactor
 - [x] Fix bugs critical
 
 ### Người 2:
 
-- [x] Bug fix combat  
-- [x] Improve enemy AI (state machine)  
+- [x] Bug fix combat
+- [x] Improve enemy AI (state machine)
 - [x] Hit feedback (screen flash, particle)
 
 ### Người 3:
 
-- [x] Code `PowerUp.cs` \+ 5 power-up types  
-- [x] Enemy có 10% drop power-up khi chết  
+- [x] Code `PowerUp.cs` \+ 5 power-up types
+- [x] Enemy có 10% drop power-up khi chết
 - [x] Power-up có duration, hiển thị timer
 
 ### Người 4:
 
-- [x] Code `Drone.cs` companion  
-- [x] Drone bay quanh player, tự bắn enemy gần nhất  
-- [x] Drone là child object của Player ⭐ YC 13  
+- [x] Code `Drone.cs` companion
+- [x] Drone bay quanh player, tự bắn enemy gần nhất
+- [x] Drone là child object của Player ⭐ YC 13
 - [x] UI hiển thị drone status
 
 ### Milestone:
@@ -907,25 +907,25 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Code Main Menu → Game → GameOver flow  
-- [x] Test scene transitions mượt mà  
+- [x] Code Main Menu → Game → GameOver flow
+- [x] Test scene transitions mượt mà
 - [x] Persistent data giữa scenes (DontDestroyOnLoad)
 
 ### Người 2:
 
-- [x] Bug fixes  
+- [x] Bug fixes
 - [x] Balance enemy stats
 
 ### Người 3:
 
-- [x] Tạo Hub Town scene (NPC, shop)  
-- [x] Code NPC dialogue đơn giản  
+- [x] Tạo Hub Town scene (NPC, shop)
+- [x] Code NPC dialogue đơn giản
 - [x] Portal giữa Farm Scene ↔ Hub Town
 
 ### Người 4:
 
-- [x] Code shop UI (mua upgrade vĩnh viễn bằng gold)  
-- [x] Code Settings menu (volume, fullscreen)  
+- [x] Code shop UI (mua upgrade vĩnh viễn bằng gold)
+- [x] Code Settings menu (volume, fullscreen)
 - [x] Code Pause menu
 
 ### Milestone:
@@ -938,28 +938,28 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Hoàn thiện Save/Load full game state  
-- [x] Test save → exit → reopen → load → đúng state  
+- [x] Hoàn thiện Save/Load full game state
+- [x] Test save → exit → reopen → load → đúng state
 - [x] Hiển thị save time trong menu
 
 ### Người 2:
 
-- [x] Code `DemonBoss.cs` với 3 phases  
-- [x] Boss spawn ở wave cuối cùng  
-- [x] Boss AI patterns khác nhau theo phase  
+- [x] Code `DemonBoss.cs` với 3 phases
+- [x] Boss spawn ở wave cuối cùng
+- [x] Boss AI patterns khác nhau theo phase
 - [x] Test boss fight đầy đủ
 
 ### Người 3:
 
 - [x] Code Game Over conditions  
-      - Player chết  
-      - Tất cả crop bị phá  
+       - Player chết  
+       - Tất cả crop bị phá
 - [x] Trigger GameOver scene đúng cách
 
 ### Người 4:
 
-- [x] Code Game Over screen  
-- [x] Hiển thị stats: days survived, gold earned, enemies killed  
+- [x] Code Game Over screen
+- [x] Hiển thị stats: days survived, gold earned, enemies killed
 - [x] Buttons: Retry, Main Menu
 
 ### Milestone:
@@ -972,26 +972,26 @@ public class playercontroller : MonoBehaviour
 
 ### Người 1:
 
-- [x] Performance optimization  
-- [x] Fix memory leaks  
+- [x] Performance optimization
+- [x] Fix memory leaks
 - [x] Build test trên máy khác
 
 ### Người 2:
 
-- [x] Polish combat: screen shake, hit pause  
-- [x] Particle effects khi enemy chết  
+- [x] Polish combat: screen shake, hit pause
+- [x] Particle effects khi enemy chết
 - [x] Bullet trail effects
 
 ### Người 3:
 
-- [x] Polish farming: particle khi tưới, thu hoạch  
+- [x] Polish farming: particle khi tưới, thu hoạch
 - [x] Visual feedback cho ngày/đêm
 
 ### Người 4:
 
-- [x] Code `AudioManager.cs`  
-- [x] Import & gán 20+ sound effects  
-- [x] BGM cho menu, day, night, boss  
+- [x] Code `AudioManager.cs`
+- [x] Import & gán 20+ sound effects
+- [x] BGM cho menu, day, night, boss
 - [x] Audio mixer \+ volume controls
 
 ### Milestone:
@@ -1004,34 +1004,34 @@ public class playercontroller : MonoBehaviour
 
 ### Cả team:
 
-- [x] **Bug bash day** (cả team chơi test, ghi bug)  
-- [x] Fix all critical bugs  
-- [x] Balance final  
+- [x] **Bug bash day** (cả team chơi test, ghi bug)
+- [x] Fix all critical bugs
+- [x] Balance final
 - [x] Họp prep demo
 
 ### Người 1:
 
-- [x] Build .exe Release  
-- [x] Test trên Windows khác  
-- [x] Viết README.md GitHub chuyên nghiệp  
+- [x] Build .exe Release
+- [x] Test trên Windows khác
+- [x] Viết README.md GitHub chuyên nghiệp
 - [x] Setup release page trên GitHub
 
 ### Người 2:
 
-- [x] Full playthrough test  
-- [x] Quay video gameplay highlights  
+- [x] Full playthrough test
+- [x] Quay video gameplay highlights
 - [x] Document combat system trong slide
 
 ### Người 3:
 
-- [x] Test all gameplay loops  
-- [x] Document farming/wave system trong slide  
+- [x] Test all gameplay loops
+- [x] Document farming/wave system trong slide
 - [x] Vẽ diagram architecture cho slide
 
 ### Người 4:
 
-- [x] Làm slide thuyết trình (10-15 slides)  
-- [x] Quay trailer video (1-2 phút)  
+- [x] Làm slide thuyết trình (10-15 slides)
+- [x] Quay trailer video (1-2 phút)
 - [x] Tutorial dialogue cho người mới chơi
 
 ### Milestone:
@@ -1044,9 +1044,9 @@ public class playercontroller : MonoBehaviour
 
 ## 7.1 Branch Strategy
 
-main                    ← Production (chỉ merge từ develop khi stable)
+main ← Production (chỉ merge từ develop khi stable)
 
-└── develop             ← Branch chính team làm việc
+└── develop ← Branch chính team làm việc
 
     ├── feature/core-events           (Người 1\)
 
@@ -1074,12 +1074,12 @@ main                    ← Production (chỉ merge từ develop khi stable)
 
 ### Types:
 
-- `feat:` Tính năng mới  
-- `fix:` Sửa bug  
-- `refactor:` Refactor cưode (không thêm feature)  
-- `docs:` Cập nhật documentation  
-- `style:` Format code  
-- `test:` Thêm/sửa tests  
+- `feat:` Tính năng mới
+- `fix:` Sửa bug
+- `refactor:` Refactor cưode (không thêm feature)
+- `docs:` Cập nhật documentation
+- `style:` Format code
+- `test:` Thêm/sửa tests
 - `chore:` Việc lặt vặt (cập nhật .gitignore, etc.)
 
 ### Ví dụ:
@@ -1120,19 +1120,19 @@ git push origin feature/your-feature
 
 ## 7.4 Rules quan trọng
 
-1. ❌ **KHÔNG push thẳng vào main hoặc develop**  
-2. ❌ **KHÔNG edit cùng Scene file cùng lúc** (file .unity khó merge)  
-3. ✅ **Commit mỗi ngày** (đừng để dồn 1 tuần)  
-4. ✅ **Pull develop trước khi code mới**  
-5. ✅ **Mỗi feature 1 branch riêng**  
+1. ❌ **KHÔNG push thẳng vào main hoặc develop**
+2. ❌ **KHÔNG edit cùng Scene file cùng lúc** (file .unity khó merge)
+3. ✅ **Commit mỗi ngày** (đừng để dồn 1 tuần)
+4. ✅ **Pull develop trước khi code mới**
+5. ✅ **Mỗi feature 1 branch riêng**
 6. ✅ **PR phải có description rõ ràng**
 
 ## 7.5 Conflict Resolution
 
 Khi conflict scene .unity:
 
-1. Discord/Zalo báo team STOP edit scene  
-2. Người 1 (Tech Lead) merge tay  
+1. Discord/Zalo báo team STOP edit scene
+2. Người 1 (Tech Lead) merge tay
 3. Test kỹ trước khi push
 
 → **Phòng tránh:** Mỗi người làm trên prefab riêng, hạn chế edit scene chính cùng lúc.
@@ -1143,42 +1143,42 @@ Khi conflict scene .unity:
 
 ## 8.1 Họp định kỳ
 
-| Loại họp | Thời gian | Nội dung |
-| :---- | :---- | :---- |
+| Loại họp          | Thời gian                 | Nội dung                                         |
+| :---------------- | :------------------------ | :----------------------------------------------- |
 | **Daily standup** | 15 phút mỗi ngày (online) | Hôm qua làm gì, hôm nay làm gì, có blocker không |
-| **Weekly sync** | 1 tiếng mỗi tuần | Demo progress, plan tuần tới |
-| **Sprint review** | 30 phút mỗi 2 tuần | Đánh giá milestone, điều chỉnh |
-| **Emergency** | Khi cần | Khi có blocker lớn |
+| **Weekly sync**   | 1 tiếng mỗi tuần          | Demo progress, plan tuần tới                     |
+| **Sprint review** | 30 phút mỗi 2 tuần        | Đánh giá milestone, điều chỉnh                   |
+| **Emergency**     | Khi cần                   | Khi có blocker lớn                               |
 
 ## 8.2 Communication Channels
 
 ### Discord/Zalo channels:
 
-- `#general` \- Trao đổi chung  
-- `#code-help` \- Hỏi đáp kỹ thuật  
-- `#git-prs` \- Notify khi tạo PR  
-- `#bugs` \- Báo bug  
+- `#general` \- Trao đổi chung
+- `#code-help` \- Hỏi đáp kỹ thuật
+- `#git-prs` \- Notify khi tạo PR
+- `#bugs` \- Báo bug
 - `#resources` \- Share link, asset
 
 ### GitHub:
 
-- Issues \- Track bugs \+ tasks  
-- Projects \- Kanban board (Todo, In Progress, Done)  
+- Issues \- Track bugs \+ tasks
+- Projects \- Kanban board (Todo, In Progress, Done)
 - Pull Requests \- Code review
 
 ## 8.3 Task Tracking
 
 Dùng **GitHub Projects** hoặc **Trello**:
 
-\[Todo\]               \[In Progress\]         \[Review\]            \[Done\]
+\[Todo\] \[In Progress\] \[Review\] \[Done\]
 
-─────────────        ─────────────         ─────────────       ─────────────
+───────────── ───────────── ───────────── ─────────────
 
-Player anim         PlayerController       Enemy AI base      Setup project
+Player anim PlayerController Enemy AI base Setup project
 
-Save UI                                                       GameEvents
+Save UI GameEvents
 
-Boss phase 2                                                  Crop growth
+Boss phase 2 Crop growth
 
 ---
 
@@ -1186,36 +1186,36 @@ Boss phase 2                                                  Crop growth
 
 ## Mapping yêu cầu → Module trong game
 
-| \# | Yêu cầu | Module | Người phụ trách |
-| :---- | :---- | :---- | :---- |
-| 1 | Input bàn phím | PlayerInput | Người 2 |
-| 2 | Game Over | GameOverDetector | Người 3 \+ 4 |
-| 3 | Animation/Collision/Coroutine | Toàn bộ | Tất cả |
-| 4 | Hiển thị điểm | HUDController | Người 4 |
-| 5 | Âm thanh | AudioManager | Người 4 |
-| 6 | C\# \+ OOP | Toàn bộ kiến trúc | Người 1 design |
-| 7 | Nhiều scene | SceneLoader (3 scenes) | Người 1 |
-| 8 | Độ khó tăng | WaveManager | Người 3 |
-| 9 | Promotion (buff) | PowerUp system | Người 3 |
-| 10 | Upgrade character | UpgradeManager | Người 4 |
-| 11 | Đổi appearance | Dragon Armor upgrade | Người 2 \+ 4 |
-| 12 | Spawn objects | EnemySpawner, CropSpawner | Người 3 |
-| 13 | Child object hỗ trợ | Drone Companion | Người 4 |
-| 14 | Save/Load | SaveSystem JSON | Người 1 |
-| 15 | GitHub | Repo \+ workflow | Người 1 |
-| 16 | Extra features | Achievement, leaderboard | Tất cả |
+| \#  | Yêu cầu                       | Module                    | Người phụ trách |
+| :-- | :---------------------------- | :------------------------ | :-------------- |
+| 1   | Input bàn phím                | PlayerInput               | Người 2         |
+| 2   | Game Over                     | GameOverDetector          | Người 3 \+ 4    |
+| 3   | Animation/Collision/Coroutine | Toàn bộ                   | Tất cả          |
+| 4   | Hiển thị điểm                 | HUDController             | Người 4         |
+| 5   | Âm thanh                      | AudioManager              | Người 4         |
+| 6   | C\# \+ OOP                    | Toàn bộ kiến trúc         | Người 1 design  |
+| 7   | Nhiều scene                   | SceneLoader (3 scenes)    | Người 1         |
+| 8   | Độ khó tăng                   | WaveManager               | Người 3         |
+| 9   | Promotion (buff)              | PowerUp system            | Người 3         |
+| 10  | Upgrade character             | UpgradeManager            | Người 4         |
+| 11  | Đổi appearance                | Dragon Armor upgrade      | Người 2 \+ 4    |
+| 12  | Spawn objects                 | EnemySpawner, CropSpawner | Người 3         |
+| 13  | Child object hỗ trợ           | Drone Companion           | Người 4         |
+| 14  | Save/Load                     | SaveSystem JSON           | Người 1         |
+| 15  | GitHub                        | Repo \+ workflow          | Người 1         |
+| 16  | Extra features                | Achievement, leaderboard  | Tất cả          |
 
 ## Extra features (yêu cầu 16\) \- điểm cộng:
 
-- ✅ **Boss fight** với 3 phases  
-- ✅ **Hub Town** với NPC dialogue  
-- ✅ **Shop system** mua upgrade vĩnh viễn  
-- ✅ **Achievement system** (giết 100 enemy, sống 5 ngày)  
-- ✅ **Leaderboard** local top 10  
-- ✅ **Settings menu** đầy đủ (volume, fullscreen, key binding)  
-- ✅ **Difficulty selector** (Easy/Normal/Hard)  
-- ✅ **Particle effects** ấn tượng  
-- ✅ **Screen shake \+ hit pause**  
+- ✅ **Boss fight** với 3 phases
+- ✅ **Hub Town** với NPC dialogue
+- ✅ **Shop system** mua upgrade vĩnh viễn
+- ✅ **Achievement system** (giết 100 enemy, sống 5 ngày)
+- ✅ **Leaderboard** local top 10
+- ✅ **Settings menu** đầy đủ (volume, fullscreen, key binding)
+- ✅ **Difficulty selector** (Easy/Normal/Hard)
+- ✅ **Particle effects** ấn tượng
+- ✅ **Screen shake \+ hit pause**
 - ✅ **Vietnamese localization** (extra impress)
 
 ---
@@ -1226,50 +1226,49 @@ Boss phase 2                                                  Crop growth
 
 ### Mọi người làm cùng:
 
-- [ ] Tải Unity Hub: [https://unity.com/download](https://unity.com/download)  
-- [ ] Cài Unity **2022.3.62f1** (KHÔNG được version khác\!)  
-- [ ] Cài Visual Studio 2022 Community  
-- [ ] Trong VS Installer: tick **"Game development with Unity"**  
-- [ ] Cài Git: [https://git-scm.com/](https://git-scm.com/)  
-- [ ] Tạo GitHub account (nếu chưa có)  
+- [ ] Tải Unity Hub: [https://unity.com/download](https://unity.com/download)
+- [ ] Cài Unity **2022.3.62f1** (KHÔNG được version khác\!)
+- [ ] Cài Visual Studio 2022 Community
+- [ ] Trong VS Installer: tick **"Game development with Unity"**
+- [ ] Cài Git: [https://git-scm.com/](https://git-scm.com/)
+- [ ] Tạo GitHub account (nếu chưa có)
 - [ ] Cài Discord/Zalo cho team
 
 ### Người 1 làm thêm:
 
-- [ ] Tạo GitHub repo `magic-farm-defender`  
-- [ ] Setup `.gitignore` cho Unity:  
-        
-      \[Ll\]ibrary/  
-        
-      \[Tt\]emp/  
-        
-      \[Oo\]bj/  
-        
-      \[Bb\]uild/  
-        
-      \[Bb\]uilds/  
-        
-      \[Ll\]ogs/  
-        
-      \[Uu\]ser\[Ss\]ettings/  
-        
-      .vs/  
-        
-      \*.csproj  
-        
-      \*.sln  
-        
-- [ ] Add 3 thành viên còn lại làm collaborators  
-- [ ] Setup branch protection cho `main` và `develop`  
-- [ ] Tạo Project Board trên GitHub (Kanban)  
+- [ ] Tạo GitHub repo `magic-farm-defender`
+- [ ] Setup `.gitignore` cho Unity:
+      \[Ll\]ibrary/
+
+      \[Tt\]emp/
+
+      \[Oo\]bj/
+
+      \[Bb\]uild/
+
+      \[Bb\]uilds/
+
+      \[Ll\]ogs/
+
+      \[Uu\]ser\[Ss\]ettings/
+
+      .vs/
+
+      \*.csproj
+
+      \*.sln
+
+- [ ] Add 3 thành viên còn lại làm collaborators
+- [ ] Setup branch protection cho `main` và `develop`
+- [ ] Tạo Project Board trên GitHub (Kanban)
 - [ ] Share repo link cho cả team
 
 ### Họp kickoff tuần 1:
 
-- [ ] Đọc full document này cùng nhau  
-- [ ] Thống nhất vai trò 4 người  
-- [ ] Setup channel communication  
-- [ ] Lịch họp weekly  
+- [ ] Đọc full document này cùng nhau
+- [ ] Thống nhất vai trò 4 người
+- [ ] Setup channel communication
+- [ ] Lịch họp weekly
 - [ ] Mỗi người tự confirm: "Tôi sẽ làm \[vai trò X\], có thể dành Y giờ/tuần"
 
 ---
@@ -1286,36 +1285,36 @@ Boss phase 2                                                  Crop growth
 
 #### Người 1 (Architecture):
 
-- Game Programming Patterns (free book): [http://gameprogrammingpatterns.com/](http://gameprogrammingpatterns.com/)  
+- Game Programming Patterns (free book): [http://gameprogrammingpatterns.com/](http://gameprogrammingpatterns.com/)
 - Code Monkey \- Unity OOP best practices
 
 #### Người 2 (Combat):
 
-- Sebastian Lague \- Enemy AI series  
+- Sebastian Lague \- Enemy AI series
 - Code Monkey \- Object Pooling
 
 #### Người 3 (World):
 
-- Brackeys \- Tilemap tutorial  
+- Brackeys \- Tilemap tutorial
 - Tarodev \- 2D Top-Down movement
 
 #### Người 4 (UI/Polish):
 
-- Game Dev Guide \- Unity UI Tutorials series  
+- Game Dev Guide \- Unity UI Tutorials series
 - Code Monkey \- Make game JUICY
 
 ## Cheatsheet C\# → Unity (cho team .NET background)
 
-| .NET | Unity tương đương |
-| :---- | :---- |
-| `Main()` | `Start()` |
-| `Console.WriteLine` | `Debug.Log` |
-| `Task.Delay()` | `Coroutine + WaitForSeconds` |
-| `Event/Delegate` | `UnityEvent` hoặc C\# Action |
-| DI Container | ServiceLocator \+ ScriptableObject |
-| `[Serializable]` | `[SerializeField]` |
-| Class library DLL | Assembly Definition (.asmdef) |
-| Logger | `Debug.Log/LogWarning/LogError` |
+| .NET                | Unity tương đương                  |
+| :------------------ | :--------------------------------- |
+| `Main()`            | `Start()`                          |
+| `Console.WriteLine` | `Debug.Log`                        |
+| `Task.Delay()`      | `Coroutine + WaitForSeconds`       |
+| `Event/Delegate`    | `UnityEvent` hoặc C\# Action       |
+| DI Container        | ServiceLocator \+ ScriptableObject |
+| `[Serializable]`    | `[SerializeField]`                 |
+| Class library DLL   | Assembly Definition (.asmdef)      |
+| Logger              | `Debug.Log/LogWarning/LogError`    |
 
 ---
 
@@ -1325,18 +1324,18 @@ Boss phase 2                                                  Crop growth
 
 ### 1\. Unity Editor shortcuts:
 
-- `Ctrl + S` \- Save scene  
-- `Ctrl + P` \- Play/Stop  
-- `Ctrl + Shift + P` \- Pause  
-- `Ctrl + D` \- Duplicate  
-- `F` \- Focus camera vào object  
+- `Ctrl + S` \- Save scene
+- `Ctrl + P` \- Play/Stop
+- `Ctrl + Shift + P` \- Pause
+- `Ctrl + D` \- Duplicate
+- `F` \- Focus camera vào object
 - `Q W E R T` \- Toggle tool (hand/move/rotate/scale/rect)
 
 ### 2\. Visual Studio shortcuts:
 
-- `F12` \- Go to definition  
-- `Shift + F12` \- Find all references  
-- `Ctrl + .` \- Quick fix  
+- `F12` \- Go to definition
+- `Shift + F12` \- Find all references
+- `Ctrl + .` \- Quick fix
 - `Ctrl + R, Ctrl + R` \- Rename symbol
 
 ### 3\. Git tips:
@@ -1415,32 +1414,32 @@ public class EnemySpawnManager { ... }
 
 ### Mức 5 điểm (Pass):
 
-- ✅ Game chạy được, không crash  
-- ✅ Có đủ 16 yêu cầu PRU213  
+- ✅ Game chạy được, không crash
+- ✅ Có đủ 16 yêu cầu PRU213
 - ✅ Push lên GitHub
 
 ### Mức 7 điểm (Khá):
 
-- ✅ Mức 5 điểm \+  
-- ✅ Code clean, có comment  
-- ✅ Architecture rõ ràng  
+- ✅ Mức 5 điểm \+
+- ✅ Code clean, có comment
+- ✅ Architecture rõ ràng
 - ✅ Có art/audio cơ bản
 
 ### Mức 9 điểm (Giỏi):
 
-- ✅ Mức 7 điểm \+  
-- ✅ Polish ấn tượng (particles, screen shake)  
-- ✅ Có boss fight  
-- ✅ Có 3-5 extra features  
+- ✅ Mức 7 điểm \+
+- ✅ Polish ấn tượng (particles, screen shake)
+- ✅ Có boss fight
+- ✅ Có 3-5 extra features
 - ✅ Slide thuyết trình chuyên nghiệp
 
 ### Mức 10 điểm (Xuất sắc):
 
-- ✅ Mức 9 điểm \+  
-- ✅ Code architecture xuất sắc (test được Unit Test)  
-- ✅ Game có replay value cao  
-- ✅ Documentation đầy đủ  
-- ✅ Video trailer ấn tượng  
+- ✅ Mức 9 điểm \+
+- ✅ Code architecture xuất sắc (test được Unit Test)
+- ✅ Game có replay value cao
+- ✅ Documentation đầy đủ
+- ✅ Video trailer ấn tượng
 - ✅ Thuyết trình tự tin, trả lời được mọi câu hỏi technical
 
 ## Mục tiêu team: **9-10 điểm**
@@ -1451,30 +1450,30 @@ public class EnemySpawnManager { ... }
 
 ## A. Quick links
 
-- Unity Hub: [https://unity.com/download](https://unity.com/download)  
-- Visual Studio: [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)  
-- Git: [https://git-scm.com/](https://git-scm.com/)  
+- Unity Hub: [https://unity.com/download](https://unity.com/download)
+- Visual Studio: [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)
+- Git: [https://git-scm.com/](https://git-scm.com/)
 - GitHub Desktop: [https://desktop.github.com/](https://desktop.github.com/)
 
 ## B. Inspiration games (chơi để hiểu vibe):
 
-- **Atomicrops** (Steam) \- Reference chính  
-- **Farmfence Demo** (Steam, FREE) \- Concept tương tự  
-- **Vampire Survivors** \- Wave-based gameplay  
+- **Atomicrops** (Steam) \- Reference chính
+- **Farmfence Demo** (Steam, FREE) \- Concept tương tự
+- **Vampire Survivors** \- Wave-based gameplay
 - **Brotato** \- Roguelike \+ upgrade
 
 ## C. Backup plans
 
 ### Nếu chậm tiến độ:
 
-- **Tuần 5 còn chậm:** Cắt boss fight đến tuần 9  
-- **Tuần 7 còn chậm:** Bỏ Hub Town, chỉ 1 scene chính  
+- **Tuần 5 còn chậm:** Cắt boss fight đến tuần 9
+- **Tuần 7 còn chậm:** Bỏ Hub Town, chỉ 1 scene chính
 - **Tuần 9 còn chậm:** Bỏ một số polish, focus core gameplay
 
 ### Nếu mất 1 thành viên:
 
-- Người 1 thay vai trò  
-- Cắt scope của module người đó  
+- Người 1 thay vai trò
+- Cắt scope của module người đó
 - Communicate với giáo viên về team size
 
 ---
@@ -1483,14 +1482,14 @@ public class EnemySpawnManager { ... }
 
 Document này là **bible** của team trong 10 tuần tới. Mỗi người **PHẢI**:
 
-1. ✅ Đọc kỹ phần vai trò của mình  
-2. ✅ Đồng ý với timeline và deliverables  
-3. ✅ Commit dành đủ thời gian (15-20 giờ/tuần)  
-4. ✅ Communicate khi gặp blocker  
+1. ✅ Đọc kỹ phần vai trò của mình
+2. ✅ Đồng ý với timeline và deliverables
+3. ✅ Commit dành đủ thời gian (15-20 giờ/tuần)
+4. ✅ Communicate khi gặp blocker
 5. ✅ Code clean theo standards
 
 **Chúc team thành công và làm ra game đỉnh\! 🎮🌾⚔️**
 
 ---
 
-*Document version: 1.0* *Last updated: Tuần 1* *Maintainer: Người 1 (Tech Lead)*  
+_Document version: 1.0_ _Last updated: Tuần 1_ _Maintainer: Người 1 (Tech Lead)_
