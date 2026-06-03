@@ -7,6 +7,7 @@ public class PlayerController : Entity
     [SerializeField] private float _dashForce = 12f;
     [SerializeField] private float _dashCooldown = 1f;
     [SerializeField] private float _dashDuration = 0.15f;
+    [SerializeField] private GameObject _bulletPrefab;
 
     private Rigidbody2D _rb;
     private PlayerInput _input;
@@ -16,6 +17,7 @@ public class PlayerController : Entity
 
     private bool _isDashing;
     private float _dashCooldownTimer;
+    private float _attackCooldownTimer;
     private SpriteRenderer _spriteRenderer;
 
     protected override void Awake()
@@ -42,17 +44,45 @@ public class PlayerController : Entity
     private void Update()
     {
         if (_dashCooldownTimer > 0) _dashCooldownTimer -= Time.deltaTime;
+        if (_attackCooldownTimer > 0) _attackCooldownTimer -= Time.deltaTime;
 
         if (_input.DashPressed && _dashCooldownTimer <= 0 && !_isDashing)
             StartCoroutine(Dash());
 
-        if (_input.AttackPressed && !_isDashing)
+        // Left click → shoot bullet
+        if (_input.AttackPressed && !_isDashing && _attackCooldownTimer <= 0)
+            Shoot();
+
+        // Right click → use tool (farm)
+        if (_input.ToolUsePressed && !_isDashing)
             _toolHandler?.UseTool();
 
         if (_input.ToolSwitchInput > 0)
             _toolHandler?.SwitchTool(_input.ToolSwitchInput);
 
-        FlipSprite(_input.AimDirection);
+        if (_input.MovementInput != Vector2.zero)
+            FlipSprite(_input.MovementInput);
+        _animator?.SetMoving(_input.MovementInput != Vector2.zero);
+    }
+
+    private void Shoot()
+    {
+        if (_bulletPrefab == null) return;
+        _attackCooldownTimer = 1f / Mathf.Max(_stats.AttackSpeed, 0.1f);
+        _animator?.SetAttacking(true);
+
+        Vector3 spawnPos = transform.position + (Vector3)(_input.AimDirection * 0.6f);
+        GameObject bullet = Instantiate(_bulletPrefab, spawnPos, Quaternion.identity);
+        if (bullet.TryGetComponent<Bullet>(out var b))
+            b.Init(_input.AimDirection, _stats.Damage);
+
+        StartCoroutine(ResetAttack());
+    }
+
+    private IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(0.3f);
+        _animator?.SetAttacking(false);
     }
 
     private void FixedUpdate()
@@ -65,6 +95,7 @@ public class PlayerController : Entity
     {
         _isDashing = true;
         _dashCooldownTimer = _dashCooldown;
+        _animator?.TriggerDash();
         Vector2 dir = _input.MovementInput == Vector2.zero ? _input.AimDirection : _input.MovementInput;
         _rb.AddForce(dir * _dashForce, ForceMode2D.Impulse);
         yield return new WaitForSeconds(_dashDuration);
