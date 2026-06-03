@@ -20,7 +20,7 @@ public class PlayerAnimator : MonoBehaviour
     public void SetMoving(bool value) => _animator.SetBool(IsMoving, value);
     public void SetAttacking(bool value) => _animator.SetBool(IsAttacking, value);
     public void SetDead() => _animator.SetBool(IsDead, true);
-    public void TriggerDash() => _animator.SetTrigger(Dash);
+    public void TriggerDash() => _animator.SetTrigger("Dash");
 
     public void SetArmored(bool armored)
     {
