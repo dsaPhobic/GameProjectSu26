@@ -67,6 +67,7 @@ public abstract class Enemy : Entity
         }
 
         _animator?.SetBool(AnimIsMoving, _state == EnemyState.Chase);
+        _animator?.SetBool(AnimIsAttacking, _state == EnemyState.Attack);
     }
 
     protected virtual void MoveTowardTarget()

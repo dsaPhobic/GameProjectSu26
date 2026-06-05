@@ -20,7 +20,6 @@ public class Slime : Enemy
     protected override void AttackTarget()
     {
         if (_target == null) return;
-        _animator?.SetTrigger("Attack");
         if (_target.TryGetComponent<IDamageable>(out var dmg))
             dmg.TakeDamage(_data.damage);
     }
