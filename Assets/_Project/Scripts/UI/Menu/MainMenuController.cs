@@ -23,11 +23,19 @@ public class MainMenuController : MonoBehaviour
         if (_settingsPanel != null) _settingsPanel.SetActive(true);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && _settingsPanel != null && _settingsPanel.activeSelf)
+            _settingsPanel.SetActive(false);
+    }
+
     public void OnQuitPressed()
     {
-        // Application.Quit();
-
-        UnityEditor.EditorApplication.isPlaying = false;
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
     }
 
     private void Start()

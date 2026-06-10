@@ -29,10 +29,6 @@ public class PlayerController : Entity
         _animator = GetComponent<PlayerAnimator>();
         _toolHandler = GetComponent<PlayerToolHandler>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-    }
-
-    private void Start()
-    {
         ServiceLocator.Register(this);
     }
 
@@ -41,10 +37,18 @@ public class PlayerController : Entity
         ServiceLocator.Unregister<PlayerController>();
     }
 
+    private bool IsInputBlocked()
+    {
+        var state = GameManager.Instance?.CurrentState;
+        return state == GameState.Paused || state == GameState.GameOver || state == GameState.LevelUp;
+    }
+
     private void Update()
     {
         if (_dashCooldownTimer > 0) _dashCooldownTimer -= Time.deltaTime;
         if (_attackCooldownTimer > 0) _attackCooldownTimer -= Time.deltaTime;
+
+        if (IsInputBlocked()) return;
 
         if (_input.DashPressed && _dashCooldownTimer <= 0 && !_isDashing)
             StartCoroutine(Dash());
@@ -108,6 +112,8 @@ public class PlayerController : Entity
         if (_spriteRenderer == null) return;
         _spriteRenderer.flipX = aimDir.x < 0;
     }
+
+    public void ReduceDashCooldown(float delta) => _dashCooldown = Mathf.Max(0.1f, _dashCooldown - delta);
 
     public override void TakeDamage(int damage)
     {

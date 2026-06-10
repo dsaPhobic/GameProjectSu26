@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
+    private PlayerController _player;
     private PlayerStats _stats;
     private PlayerAnimator _animator;
     private Drone _drone;
@@ -16,12 +17,12 @@ public class UpgradeManager : MonoBehaviour
 
     private void Start()
     {
-        var player = ServiceLocator.Get<PlayerController>();
-        if (player != null)
+        _player = ServiceLocator.Get<PlayerController>();
+        if (_player != null)
         {
-            _stats = player.GetComponent<PlayerStats>();
-            _animator = player.GetComponent<PlayerAnimator>();
-            _drone = player.GetComponentInChildren<Drone>(true);
+            _stats = _player.GetComponent<PlayerStats>();
+            _animator = _player.GetComponent<PlayerAnimator>();
+            _drone = _player.GetComponentInChildren<Drone>(true);
         }
     }
 
@@ -54,6 +55,9 @@ public class UpgradeManager : MonoBehaviour
                 break;
             case UpgradeEffect.UnlockDrone:
                 _drone?.gameObject.SetActive(true);
+                break;
+            case UpgradeEffect.ReduceCooldown:
+                _player?.ReduceDashCooldown(upgrade.value);
                 break;
         }
 
