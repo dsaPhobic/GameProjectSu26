@@ -20,6 +20,7 @@ public class DayNightCycle : MonoBehaviour
     private void Start()
     {
         _waveManager = ServiceLocator.Get<WaveManager>();
+        GameManager.Instance?.StartGame();
         StartCoroutine(CycleRoutine());
     }
 

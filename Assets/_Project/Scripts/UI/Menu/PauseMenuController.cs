@@ -9,6 +9,11 @@ public class PauseMenuController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (_settingsPanel != null && _settingsPanel.activeSelf)
+            {
+                _settingsPanel.SetActive(false);
+                return;
+            }
             if (GameManager.Instance?.CurrentState == GameState.Playing) Pause();
             else if (GameManager.Instance?.CurrentState == GameState.Paused) Resume();
         }
@@ -16,13 +21,17 @@ public class PauseMenuController : MonoBehaviour
 
     public void Pause()
     {
+        AudioManager.Instance?.PlaySFX("sfx_button_click");
         GameManager.Instance?.PauseGame();
+        if (_settingsPanel != null) _settingsPanel.SetActive(false); 
         if (_pausePanel != null) _pausePanel.SetActive(true);
     }
 
     public void Resume()
     {
+        AudioManager.Instance?.PlaySFX("sfx_button_click");
         GameManager.Instance?.ResumeGame();
+        if (_settingsPanel != null) _settingsPanel.SetActive(false);
         if (_pausePanel != null) _pausePanel.SetActive(false);
     }
 

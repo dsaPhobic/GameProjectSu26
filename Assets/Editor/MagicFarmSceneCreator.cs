@@ -35,7 +35,7 @@ public static class MagicFarmSceneCreator
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
         // ── Camera ──────────────────────────────────────────────
-        var cam = BuildCamera(new Color(0.08f, 0.06f, 0.04f));
+        BuildCamera(new Color(0.08f, 0.06f, 0.04f));
 
         // ── EventSystem ─────────────────────────────────────────
         BuildEventSystem();
@@ -52,14 +52,14 @@ public static class MagicFarmSceneCreator
         var controller = canvasGO.AddComponent<MainMenuController>();
 
         // Background (full screen, màu tối)
-        var bgGO = BuildStretchImage(canvasGO.transform, "Background",
+        BuildStretchImage(canvasGO.transform, "Background",
             LoadSprite(UI_PNG + "panel_brown.png"), new Color(0.12f, 0.08f, 0.05f));
 
         // Title
         BuildText(canvasGO.transform, "Title",
             "Magic Farm Defender",
             72, FontStyles.Bold, new Color(1f, 0.9f, 0.4f),
-            new Vector2(0.5f, 0.85f), new Vector2(0.5f, 0.96f), Vector2.zero, new Vector2(1000, 130));
+            new Vector2(0.5f, 0.85f), new Vector2(0.5f, 0.96f), new Vector2(1000, 130));
 
         // Panel Buttons (VerticalLayoutGroup)
         var btnPanel = BuildVerticalPanel(canvasGO.transform, "Panel_Buttons",
@@ -80,7 +80,7 @@ public static class MagicFarmSceneCreator
 
         BuildText(settingsPanel.transform, "Title_Settings",
             "Settings", 40, FontStyles.Bold, Color.black,
-            new Vector2(0f, 0.82f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero);
+            new Vector2(0f, 0.82f), new Vector2(1f, 1f), Vector2.zero);
 
         var bgmSlider        = BuildSliderRow(settingsPanel.transform, "Row_BGM",         "Music",      0.60f, 0.80f, 0.8f);
         var sfxSlider        = BuildSliderRow(settingsPanel.transform, "Row_SFX",         "SFX",        0.38f, 0.58f, 1.0f);
@@ -109,18 +109,6 @@ public static class MagicFarmSceneCreator
         // ── Save ─────────────────────────────────────────────────
         EditorSceneManager.SaveScene(scene, SCENE_DIR + "MainMenu.unity");
         AssetDatabase.Refresh();
-
-        EditorUtility.DisplayDialog("✅ MainMenu Scene Created!",
-            "Scene lưu tại:\nAssets/_Project/Scenes/MainMenu.unity\n\n" +
-            "⚠️  2 bước còn lại phải làm tay:\n\n" +
-            "1. Tạo AudioMixer:\n" +
-            "   Assets > Create > Audio Mixer\n" +
-            "   Đặt tên 'MainMixer', expose 2 param:\n" +
-            "   'BGMVolume' và 'SFXVolume'\n\n" +
-            "2. Kéo MainMixer vào:\n" +
-            "   Panel_Settings > SettingsMenu > _mixer\n\n" +
-            "3. Thêm scene vào Build Settings (index 0)",
-            "OK");
     }
 
     [MenuItem("MagicFarm/Create Scenes/2 - GameOver Scene")]
@@ -153,7 +141,7 @@ public static class MagicFarmSceneCreator
         BuildText(overlayGO.transform, "Text_Title",
             "GAME OVER",
             90, FontStyles.Bold, new Color(0.9f, 0.2f, 0.15f),
-            new Vector2(0.5f, 0.72f), new Vector2(0.5f, 0.88f), Vector2.zero, new Vector2(800, 150));
+            new Vector2(0.5f, 0.72f), new Vector2(0.5f, 0.88f), new Vector2(800, 150));
 
         // Stats panel
         var statsPanel = BuildVerticalPanel(overlayGO.transform, "Panel_Stats",
@@ -185,13 +173,104 @@ public static class MagicFarmSceneCreator
         var scene = EditorSceneManager.GetActiveScene();
         EditorSceneManager.SaveScene(scene, SCENE_DIR + "GameOver.unity");
         AssetDatabase.Refresh();
+    }
 
-        EditorUtility.DisplayDialog("✅ GameOver Scene Created!",
-            "Scene lưu tại:\nAssets/_Project/Scenes/GameOver.unity\n\n" +
-            "⚠️  Thêm scene vào Build Settings (index 2)\n\n" +
-            "Lưu ý: ShowResults() được gọi tự động\n" +
-            "khi GameOverDetector load scene này.",
-            "OK");
+    [MenuItem("MagicFarm/Build Pause Menu (current scene)")]
+    public static void BuildPauseMenu()
+    {
+        var pmc = Object.FindObjectOfType<PauseMenuController>(true);
+        if (pmc == null)
+        {
+            Debug.LogWarning("[MagicFarmSceneCreator] No PauseMenuController found in the current scene.");
+            return;
+        }
+
+        EnsureSpriteUIType(
+            UI_PNG + "panel_brown.png",
+            UI_PNG + "panel_beige.png",
+            UI_PNG + "buttonLong_brown.png",
+            UI_PNG + "buttonLong_brown_pressed.png"
+        );
+
+        var canvasTf = pmc.transform;
+
+        // Xóa Panel_Pause cũ nếu có (kể cả inactive)
+        var old = canvasTf.Find("Panel_Pause");
+        if (old != null) Object.DestroyImmediate(old.gameObject);
+
+        // ── Overlay tối toàn màn hình = Panel_Pause root ──
+        var overlay = BuildStretchImage(canvasTf, "Panel_Pause",
+            null, new Color(0f, 0f, 0f, 0.7f));
+
+        // ── Box nâu ở giữa ──
+        var box = BuildCenteredPanel(overlay.transform, "Box",
+            new Vector2(440, 480), LoadSprite(UI_PNG + "panel_brown.png"),
+            new Color(0.45f, 0.32f, 0.2f));
+        var vlg = box.AddComponent<VerticalLayoutGroup>();
+        vlg.childAlignment = TextAnchor.MiddleCenter;
+        vlg.spacing = 28f;
+        vlg.padding = new RectOffset(30, 30, 30, 30);
+        vlg.childControlHeight = false;
+        vlg.childControlWidth = false;
+        vlg.childForceExpandHeight = false;
+        vlg.childForceExpandWidth = false;
+
+        // ── Title PAUSE ──
+        var titleGO = new GameObject("Title");
+        titleGO.transform.SetParent(box.transform, false);
+        titleGO.AddComponent<RectTransform>().sizeDelta = new Vector2(360, 90);
+        var titleLE = titleGO.AddComponent<LayoutElement>();
+        titleLE.preferredHeight = 90;
+        var titleTMP = titleGO.AddComponent<TextMeshProUGUI>();
+        titleTMP.text = "PAUSE";
+        titleTMP.fontSize = 56;
+        titleTMP.fontStyle = FontStyles.Bold;
+        titleTMP.color = new Color(1f, 0.9f, 0.4f);
+        titleTMP.alignment = TextAlignmentOptions.Center;
+
+        // ── Buttons ──
+        var btnNormal = LoadSprite(UI_PNG + "buttonLong_brown.png");
+        var btnPressed = LoadSprite(UI_PNG + "buttonLong_brown_pressed.png");
+        var resumeBtn = BuildMenuButton(box.transform, "Btn_Resume", "RESUME", btnNormal, btnPressed);
+        var settingsBtn = BuildMenuButton(box.transform, "Btn_Settings", "SETTINGS", btnNormal, btnPressed);
+        var quitBtn = BuildMenuButton(box.transform, "Btn_Quit", "QUIT", btnNormal, btnPressed);
+
+        // ── Panel Settings (ẩn, hiện khi bấm SETTINGS) ──
+        var settingsPanel = BuildCenteredPanel(overlay.transform, "Panel_Settings",
+            new Vector2(500, 420), LoadSprite(UI_PNG + "panel_beige.png"),
+            new Color(0.93f, 0.87f, 0.76f));
+
+        BuildText(settingsPanel.transform, "Title_Settings",
+            "Settings", 40, FontStyles.Bold, Color.black,
+            new Vector2(0f, 0.82f), new Vector2(1f, 1f), Vector2.zero);
+
+        var bgmSlider        = BuildSliderRow(settingsPanel.transform, "Row_BGM",        "Music",      0.60f, 0.80f, 0.8f);
+        var sfxSlider        = BuildSliderRow(settingsPanel.transform, "Row_SFX",        "SFX",        0.38f, 0.58f, 1.0f);
+        var fullscreenToggle = BuildToggleRow(settingsPanel.transform, "Row_Fullscreen", "Fullscreen", 0.16f, 0.36f);
+
+        var closeBtn = BuildMenuButton(settingsPanel.transform, "Btn_Close", "CLOSE", btnNormal, btnPressed);
+        SetAnchors(closeBtn.GetComponent<RectTransform>(),
+            new Vector2(0.2f, 0.02f), new Vector2(0.8f, 0.15f));
+
+        var settingsMenu = settingsPanel.AddComponent<SettingsMenu>();
+        SetSerializedField(settingsMenu, "_bgmSlider",        bgmSlider);
+        SetSerializedField(settingsMenu, "_sfxSlider",        sfxSlider);
+        SetSerializedField(settingsMenu, "_fullscreenToggle", fullscreenToggle);
+        AddClick(closeBtn, settingsMenu.OnClosePressed);
+        settingsPanel.SetActive(false);
+
+        // ── Wire ──
+        AddClick(resumeBtn, pmc.Resume);
+        AddClick(settingsBtn, pmc.OnSettingsPressed);
+        AddClick(quitBtn, pmc.OnQuitPressed);
+        SetSerializedField(pmc, "_pausePanel", overlay);
+        SetSerializedField(pmc, "_settingsPanel", settingsPanel);
+
+        overlay.SetActive(false);
+
+        var scene = pmc.gameObject.scene;
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -268,7 +347,7 @@ public static class MagicFarmSceneCreator
 
     static void BuildText(Transform parent, string name, string text, float size,
         FontStyles style, Color color,
-        Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 sizeDelta)
+        Vector2 anchorMin, Vector2 anchorMax, Vector2 sizeDelta)
     {
         var go = new GameObject(name);
         go.transform.SetParent(parent, false);
