@@ -31,7 +31,6 @@ public class GoblinArcher : Enemy
     protected override void AttackTarget()
     {
         if (_target == null || _arrowPrefab == null) return;
-        _animator?.SetTrigger("Attack");
         Vector2 dir = ((Vector2)_target.position - (Vector2)transform.position).normalized;
         var arrow = Instantiate(_arrowPrefab, transform.position, Quaternion.identity);
         if (arrow.TryGetComponent<Bullet>(out var bullet))

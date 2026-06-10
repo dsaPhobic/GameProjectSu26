@@ -2,7 +2,7 @@
 
 > Dựa trên GDD v1.0 + 16 yêu cầu PRU213  
 > Mục tiêu điểm: **9–10**  
-> Engine: Unity 2022.3.62f1 LTS | C# OOP
+> Engine: Unity 2022.3.62f3 LTS | C# OOP
 
 ---
 
@@ -21,24 +21,24 @@
 
 ## 1. MAPPING 16 YÊU CẦU
 
-| # | Yêu cầu | Giải pháp trong game | File chính | Người |
-|---|---------|---------------------|------------|-------|
-| 1 | Input bàn phím điều khiển hướng/hành động | WASD move + Mouse aim + 1/2/3 tool + Space dash | `PlayerInput.cs` | P2 |
-| 2 | Game Over | Player chết **hoặc** tất cả crop bị phá | `GameOverDetector.cs` | P3+P4 |
-| 3 | Animation, Collision, Coroutine | Animator crop growth + Physics2D hit + WaitForSeconds | Toàn bộ | All |
-| 4 | Hiển thị điểm (score) | Gold counter + XP bar + Day counter trên HUD | `HUDController.cs` | P4 |
-| 5 | Âm thanh | BGM day/night + SFX attack/harvest/levelup | `AudioManager.cs` | P4 |
-| 6 | C# + OOP | Entity → Player/Enemy inheritance + Interfaces | Toàn bộ | All |
-| 7 | Nhiều scene (≥2) | MainMenu + GameScene + GameOver (3 scene) | `SceneLoader.cs` | P1 |
-| 8 | Độ khó tăng dần | Wave ngày sau nhiều enemy hơn, HP/damage scale | `WaveManager.cs` | P3 |
-| 9 | Promotion (buff) | Power-up drops: Speed/DoubleDmg/Shield/HealthRestore | `PowerUp.cs` | P3 |
-| 10 | Upgrade nhân vật trong scene | Level-up → chọn perk → stats thay đổi ngay | `UpgradeManager.cs` | P4 |
-| 11 | Thay đổi appearance | Dragon Armor upgrade → đổi sprite Player | `PlayerAnimator.cs` | P2+P4 |
-| 12 | Spawn object mới | Enemy spawn ban đêm + Crop spawn khi trồng | `WaveManager.cs` + `FarmManager.cs` | P3 |
-| 13 | Child object hỗ trợ | Drone Companion là child của Player, tự bắn | `Drone.cs` | P4 |
-| 14 | Save/Load | JSON serialize game state → persist giữa session | `SaveSystem.cs` | P1 |
-| 15 | GitHub | Branch strategy: main/develop/feature/* | Git workflow | P1 |
-| 16 | Extra features | Boss fight, Shop, Hub Town, Achievement, Leaderboard | (xem Phần 8) | All |
+| #   | Yêu cầu                                   | Giải pháp trong game                                  | File chính                          | Người |
+| --- | ----------------------------------------- | ----------------------------------------------------- | ----------------------------------- | ----- |
+| 1   | Input bàn phím điều khiển hướng/hành động | WASD move + Mouse aim + 1/2/3 tool + Space dash       | `PlayerInput.cs`                    | P2    |
+| 2   | Game Over                                 | Player chết **hoặc** tất cả crop bị phá               | `GameOverDetector.cs`               | P3+P4 |
+| 3   | Animation, Collision, Coroutine           | Animator crop growth + Physics2D hit + WaitForSeconds | Toàn bộ                             | All   |
+| 4   | Hiển thị điểm (score)                     | Gold counter + XP bar + Day counter trên HUD          | `HUDController.cs`                  | P4    |
+| 5   | Âm thanh                                  | BGM day/night + SFX attack/harvest/levelup            | `AudioManager.cs`                   | P4    |
+| 6   | C# + OOP                                  | Entity → Player/Enemy inheritance + Interfaces        | Toàn bộ                             | All   |
+| 7   | Nhiều scene (≥2)                          | MainMenu + GameScene + GameOver (3 scene)             | `SceneLoader.cs`                    | P1    |
+| 8   | Độ khó tăng dần                           | Wave ngày sau nhiều enemy hơn, HP/damage scale        | `WaveManager.cs`                    | P3    |
+| 9   | Promotion (buff)                          | Power-up drops: Speed/DoubleDmg/Shield/HealthRestore  | `PowerUp.cs`                        | P3    |
+| 10  | Upgrade nhân vật trong scene              | Level-up → chọn perk → stats thay đổi ngay            | `UpgradeManager.cs`                 | P4    |
+| 11  | Thay đổi appearance                       | Dragon Armor upgrade → đổi sprite Player              | `PlayerAnimator.cs`                 | P2+P4 |
+| 12  | Spawn object mới                          | Enemy spawn ban đêm + Crop spawn khi trồng            | `WaveManager.cs` + `FarmManager.cs` | P3    |
+| 13  | Child object hỗ trợ                       | Drone Companion là child của Player, tự bắn           | `Drone.cs`                          | P4    |
+| 14  | Save/Load                                 | JSON serialize game state → persist giữa session      | `SaveSystem.cs`                     | P1    |
+| 15  | GitHub                                    | Branch strategy: main/develop/feature/\*              | Git workflow                        | P1    |
+| 16  | Extra features                            | Boss fight, Shop, Hub Town, Achievement, Leaderboard  | (xem Phần 8)                        | All   |
 
 ---
 
@@ -48,24 +48,24 @@
 
 > Tất cả đã được lưu tại Google Drive: https://drive.google.com/drive/folders/1WB6Sgto-bJQuglTEzoX1SjKBnsOZtVP2
 
-| Loại | Pack | Link | Dùng cho |
-|------|------|------|---------|
-| **Player** | Hero Knight (Penzilla) | https://penzilla.itch.io/hero-knight | Player sprite + animation |
-| **Enemy** | Monsters Creatures Fantasy (LuizMelo) | https://luizmelo.itch.io/monsters-creatures-fantasy | Slime, Goblin, Beast, Demon Boss |
-| **Tileset** | Cozy Farm Asset Pack (shubibubi) | https://shubibubi.itch.io/cozy-farm | Farm tiles + crop sprites |
-| **Tileset** | Free Stylized Top-Down Grass (Stealthix) | https://stealthix.itch.io/grass | Grass background |
-| **Tileset** | Pixel Crawler Dungeon (Anokolisa) | https://anokolisa.itch.io/dungeon-crawler-pixel-art-asset-pack | Dungeon/forest border |
-| **UI** | Kenney UI RPG | https://kenney.nl/assets/ui-pack-rpg-expansion | Buttons, panels, icons |
-| **Effects** | Battle Effects Pack 1 (Pimen) | https://pimen.itch.io/battle-effects-pack-1 | Particle, hit, fire, frost |
-| **SFX** | Mixkit Free Game SFX | https://mixkit.co/free-sound-effects/game/ | Click, shoot, hit, harvest |
-| **BGM** | OpenGameArt | https://opengameart.org/ | Day theme, night theme, boss |
+| Loại        | Pack                                     | Link                                                           | Dùng cho                         |
+| ----------- | ---------------------------------------- | -------------------------------------------------------------- | -------------------------------- |
+| **Player**  | Hero Knight (Penzilla)                   | https://penzilla.itch.io/hero-knight                           | Player sprite + animation        |
+| **Enemy**   | Monsters Creatures Fantasy (LuizMelo)    | https://luizmelo.itch.io/monsters-creatures-fantasy            | Slime, Goblin, Beast, Demon Boss |
+| **Tileset** | Cozy Farm Asset Pack (shubibubi)         | https://shubibubi.itch.io/cozy-farm                            | Farm tiles + crop sprites        |
+| **Tileset** | Free Stylized Top-Down Grass (Stealthix) | https://stealthix.itch.io/grass                                | Grass background                 |
+| **Tileset** | Pixel Crawler Dungeon (Anokolisa)        | https://anokolisa.itch.io/dungeon-crawler-pixel-art-asset-pack | Dungeon/forest border            |
+| **UI**      | Kenney UI RPG                            | https://kenney.nl/assets/ui-pack-rpg-expansion                 | Buttons, panels, icons           |
+| **Effects** | Battle Effects Pack 1 (Pimen)            | https://pimen.itch.io/battle-effects-pack-1                    | Particle, hit, fire, frost       |
+| **SFX**     | Mixkit Free Game SFX                     | https://mixkit.co/free-sound-effects/game/                     | Click, shoot, hit, harvest       |
+| **BGM**     | OpenGameArt                              | https://opengameart.org/                                       | Day theme, night theme, boss     |
 
 ### 2.2 Sprite cần slice/prepare trong Unity
 
 ```
 Player (Hero Knight):
   - Idle (4 frame)         → PlayerIdle
-  - Run (8 frame)          → PlayerRun  
+  - Run (8 frame)          → PlayerRun
   - Attack (6 frame)       → PlayerAttack
   - Dash (4 frame)         → PlayerDash
   - Death (6 frame)        → PlayerDeath
@@ -341,7 +341,7 @@ public interface IDamageable {
     bool IsDead { get; }
 }
 
-// IInteractable.cs  
+// IInteractable.cs
 public interface IInteractable {
     void Interact(PlayerToolHandler player);
     bool CanInteract(ToolType tool);
@@ -414,14 +414,14 @@ public class GameSaveData {
     public List<string> appliedUpgradeIds;
     public bool hasDragonArmor;         // req #11 appearance
     public bool hasDrone;               // req #13 child object
-    
+
     // Farm
     public List<TileSaveData> tiles;
-    
+
     // World
     public int currentDay;
     public float dayTimer;
-    
+
     // Meta
     public int totalEnemiesKilled;
     public int totalGoldEarned;
@@ -498,6 +498,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Git sạch, project structure hoàn chỉnh, cả team code được.
 
 #### P1 — Tech Lead:
+
 ```
 [ ] Tạo GitHub repo "magic-farm-defender"
 [ ] Setup .gitignore Unity (Library/, Temp/, Builds/, *.csproj, *.sln)
@@ -511,6 +512,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2, P3, P4:
+
 ```
 [ ] Clone repo, cài Unity 2022.3.62f1
 [ ] Xem Brackeys 2D Game Tutorial Series (8 video)
@@ -528,6 +530,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Nhìn thấy Player di chuyển trên màn hình.
 
 #### P1:
+
 ```
 [ ] Code GameEvents.cs (static class với tất cả events)
 [ ] Code ServiceLocator.cs (Register<T>/Get<T>)
@@ -536,6 +539,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Import Hero Knight sprites, slice spritesheet
 [ ] Setup Player prefab: GameObject + Rigidbody2D + Collider2D + SpriteRenderer
@@ -554,6 +558,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Code CropData.cs (ScriptableObject):
     - cropName, cropType, growthTime, sellPrice, XP, maxHP
@@ -567,6 +572,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Tạo MainMenu scene với Canvas
 [ ] Code MainMenuController.cs:
@@ -586,6 +592,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Vòng lặp farming cơ bản hoạt động.
 
 #### P1:
+
 ```
 [ ] Code GameManager.cs:
     - State machine: Menu → Playing → Paused → LevelUp → GameOver
@@ -595,6 +602,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Import + slice bullet sprite
 [ ] Code Bullet.cs:
@@ -615,6 +623,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Code TileState.cs enum: Empty, Tilled, Watered, Planted
 [ ] Code FarmTile.cs:
@@ -633,6 +642,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Code HUDController.cs:
     - Thanh HP (Image.fillAmount)  [req #4]
@@ -652,6 +662,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Enemy đầu tiên, save/load hoạt động.
 
 #### P1:
+
 ```
 [ ] Code SaveSystem.cs:
     - Save(GameSaveData) → JSON → Application.persistentDataPath
@@ -662,6 +673,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Import Slime sprites, setup Animator:
     - States: Idle → Walk → Attack → Death  [req #3 animation]
@@ -680,6 +692,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Code EnemyWaveData.cs ScriptableObject:
     - dayNumber, List<SpawnEntry> (enemyType, count, interval)
@@ -694,6 +707,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Code UpgradeData.cs ScriptableObject:
     - id, displayName, description, category (Combat/Defense/Utility)
@@ -714,6 +728,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Full day/night cycle, 3 loại enemy.
 
 #### P1:
+
 ```
 [ ] Integrate SaveSystem với PlayerStats, FarmManager
 [ ] Code Pause functionality:
@@ -722,6 +737,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Code GoblinArcher.cs:
     - Keep distance với Player (orbit behavior)
@@ -738,6 +754,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Code DayNightCycle.cs:
     - Timer: Dawn(15s) → Day(90s) → Dusk(15s) → Night(120s) → loop
@@ -753,6 +770,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Code UpgradeManager.cs:
     - ApplyUpgrade(UpgradeData) → switch case theo effect
@@ -776,6 +794,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Drone companion, power-up drops.
 
 #### P1:
+
 ```
 [ ] Code review toàn team (checklist: naming, access modifiers, no magic numbers)
 [ ] Fix bugs critical từ tuần trước
@@ -783,6 +802,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Polish combat:
     - HitFlash (SpriteRenderer color flash) khi bị đánh
@@ -797,6 +817,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Code PowerUpData.cs ScriptableObject
 [ ] Code PowerUp.cs:
@@ -811,6 +832,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Code Drone.cs:
     - Là child object của Player prefab  [req #13]
@@ -832,6 +854,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Full scene flow, shop system.
 
 #### P1:
+
 ```
 [ ] Code full scene flow:
     MainMenu → [Play] → GameScene
@@ -843,6 +866,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Balance enemy stats dựa trên playtest
 [ ] Bug fixes từ feedback P3, P4
@@ -850,6 +874,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] (Optional) Tạo HubTown scene đơn giản:
     - NPC Merchant: dialogue → mở Shop
@@ -862,6 +887,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Code GameOverScreen.cs:
     - Hiển thị: Days Survived, Gold Earned, Enemies Killed  [req #4]
@@ -883,6 +909,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Boss ấn tượng, save/load production-ready.
 
 #### P1:
+
 ```
 [ ] Full save/load integration:
     - Save khi: qua dawn (mỗi ngày)
@@ -892,6 +919,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Code DemonBoss.cs:
     Phase 1 (100% → 50% HP):
@@ -910,6 +938,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Polish farming:
     - Particle khi tưới cây (water droplet effect)
@@ -921,6 +950,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Polish upgrade screen:
     - Animation card slide in
@@ -942,6 +972,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Game đầy đủ âm thanh, visual polish chuyên nghiệp.
 
 #### P1:
+
 ```
 [ ] Performance optimization:
     - Profile với Unity Profiler
@@ -952,6 +983,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Polish combat:
     - Screen shake khi player bị đánh (CameraShake.cs)
@@ -961,6 +993,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Polish farming:
     - Ripple animation trên watered tile
@@ -971,6 +1004,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Code AudioManager.cs:
     - Singleton + DontDestroyOnLoad
@@ -999,6 +1033,7 @@ Performance, bug fixes, balance, build
 **Mục tiêu:** Build .exe sẵn sàng nộp, demo ấn tượng.
 
 #### Cả team:
+
 ```
 [ ] Bug bash day (2 tiếng): mỗi người chơi → list bugs
 [ ] Fix all P0/P1 bugs
@@ -1007,6 +1042,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P1:
+
 ```
 [ ] Build → Windows x64 .exe
 [ ] Test trên 2 máy khác nhau
@@ -1021,6 +1057,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P2:
+
 ```
 [ ] Full playthrough test (Day 1 → Boss → Win)
 [ ] Quay video gameplay 2 phút
@@ -1028,6 +1065,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P3:
+
 ```
 [ ] Test all gameplay loops (farming, waves, power-ups)
 [ ] Document farming + world system cho slide
@@ -1035,6 +1073,7 @@ Performance, bug fixes, balance, build
 ```
 
 #### P4:
+
 ```
 [ ] Làm slide thuyết trình (10-15 slides):
     1. Title + Team
@@ -1131,39 +1170,40 @@ Mỗi tuần (30-60 phút):
 
 ### Priority 1 — Nên làm (điểm cao nhất)
 
-| Feature | Mô tả | Tuần | Người |
-|---------|-------|------|-------|
-| **Boss Fight 3 Phases** | Demon Boss đổi AI theo HP | T8 | P2 |
-| **Dragon Armor** | Upgrade đổi appearance player hoàn toàn | T6 | P2+P4 |
-| **Achievement System** | 5-10 achievement với popup | T8 | P4 |
-| **Local Leaderboard** | Top 10 high score lưu JSON | T9 | P1 |
-| **Difficulty Selector** | Easy/Normal/Hard ở Main Menu | T7 | P3+P4 |
+| Feature                 | Mô tả                                   | Tuần | Người |
+| ----------------------- | --------------------------------------- | ---- | ----- |
+| **Boss Fight 3 Phases** | Demon Boss đổi AI theo HP               | T8   | P2    |
+| **Dragon Armor**        | Upgrade đổi appearance player hoàn toàn | T6   | P2+P4 |
+| **Achievement System**  | 5-10 achievement với popup              | T8   | P4    |
+| **Local Leaderboard**   | Top 10 high score lưu JSON              | T9   | P1    |
+| **Difficulty Selector** | Easy/Normal/Hard ở Main Menu            | T7   | P3+P4 |
 
 ### Priority 2 — Nếu có thời gian
 
-| Feature | Mô tả | Tuần | Người |
-|---------|-------|------|-------|
-| **Shop System** | Mua upgrade vĩnh viễn bằng gold ở HubTown | T7 | P4 |
-| **Hub Town Scene** | Scene thứ 3 với NPC + shop | T7 | P3 |
-| **Minimap** | RenderTexture minimap góc phải | T9 | P4 |
-| **Inventory UI** | Xem items đang có | T8 | P4 |
-| **Scarecrow** | Companion đặt tại farm, làm chậm enemy | T8 | P4 |
+| Feature            | Mô tả                                     | Tuần | Người |
+| ------------------ | ----------------------------------------- | ---- | ----- |
+| **Shop System**    | Mua upgrade vĩnh viễn bằng gold ở HubTown | T7   | P4    |
+| **Hub Town Scene** | Scene thứ 3 với NPC + shop                | T7   | P3    |
+| **Minimap**        | RenderTexture minimap góc phải            | T9   | P4    |
+| **Inventory UI**   | Xem items đang có                         | T8   | P4    |
+| **Scarecrow**      | Companion đặt tại farm, làm chậm enemy    | T8   | P4    |
 
 ### Priority 3 — Bonus tốt
 
-| Feature | Mô tả |
-|---------|-------|
-| **Particle System đẹp** | Glow herb, harvest sparkle, death explosion |
-| **Screen Shake** | Camera shake khi boss đánh |
-| **Hit Pause** | 0.05s freeze khi hit mạnh |
-| **Day Transition Effect** | Fade to black + Day X text |
-| **Tutorial** | First-time dialogue guide |
+| Feature                   | Mô tả                                       |
+| ------------------------- | ------------------------------------------- |
+| **Particle System đẹp**   | Glow herb, harvest sparkle, death explosion |
+| **Screen Shake**          | Camera shake khi boss đánh                  |
+| **Hit Pause**             | 0.05s freeze khi hit mạnh                   |
+| **Day Transition Effect** | Fade to black + Day X text                  |
+| **Tutorial**              | First-time dialogue guide                   |
 
 ---
 
 ## 9. CHECKLIST TRƯỚC KHI NỘP
 
 ### Code Quality
+
 ```
 [ ] Không có TODO/FIXME còn sót
 [ ] Không có Debug.Log trong production code
@@ -1173,6 +1213,7 @@ Mỗi tuần (30-60 phút):
 ```
 
 ### 16 Requirements
+
 ```
 [ ] 1.  WASD + Mouse + Keys hoạt động
 [ ] 2.  Game Over screen hiện ra đúng
@@ -1193,6 +1234,7 @@ Mỗi tuần (30-60 phút):
 ```
 
 ### Build
+
 ```
 [ ] Build Windows x64 chạy được
 [ ] Không crash trong 10 phút đầu
@@ -1210,7 +1252,7 @@ Ngay bây giờ (Tuần 1, Ngày 1):
 
 P1:  git init + folder structure + Enums + Interfaces → push develop
 P2:  Download assets → Import → Slice sprites → PlayerInput.cs
-P3:  Download Cozy Farm pack → CropData SO → Crop.cs growth coroutine  
+P3:  Download Cozy Farm pack → CropData SO → Crop.cs growth coroutine
 P4:  Tạo MainMenu scene → Canvas → 3 buttons → SceneLoader test
 
 Không nên làm trước:
@@ -1222,4 +1264,4 @@ Không nên làm trước:
 
 ---
 
-*Plan version: 1.0 | Ngày tạo: 2026-05-22 | Owner: Team 3*
+_Plan version: 1.0 | Ngày tạo: 2026-05-22 | Owner: Team 3_

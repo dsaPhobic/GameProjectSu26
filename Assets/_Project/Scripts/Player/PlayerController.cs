@@ -64,8 +64,7 @@ public class PlayerController : Entity
         if (_input.ToolSwitchInput > 0)
             _toolHandler?.SwitchTool(_input.ToolSwitchInput);
 
-        if (_input.MovementInput != Vector2.zero)
-            FlipSprite(_input.MovementInput);
+        FlipSprite(_input.AimDirection);
         _animator?.SetMoving(_input.MovementInput != Vector2.zero);
     }
 

@@ -74,8 +74,6 @@ public class DemonBoss : Enemy
     protected override void AttackTarget()
     {
         if (_target == null) return;
-        _animator?.SetTrigger("Attack");
-
         if (_phase >= 2 && _projectilePrefab != null)
         {
             ShootFan();
