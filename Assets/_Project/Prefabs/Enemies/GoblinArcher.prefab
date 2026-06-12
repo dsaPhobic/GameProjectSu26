@@ -186,7 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 100
   _data: {fileID: 11400000, guid: 14aa6a0cef8247738e1bd3a59778d5d7, type: 2}
-  _arrowPrefab: {fileID: 0}
+  _arrowPrefab: {fileID: 1604439286018291457, guid: d58f13a5fdfc7614abc591f22f7d9fc4, type: 3}
   _orbitDistance: 4
   _arrowDamage: 12
 --- !u!114 &1000008
