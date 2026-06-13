@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd8ce8d8c446b84429d6225f2989e2b7, type: 3}
   m_Name: SO_Wheat
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   cropName: Wheat
   cropType: 0
   growthTime: 60
@@ -19,7 +19,7 @@ MonoBehaviour:
   xpReward: 5
   maxHP: 30
   stageSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 628781386, guid: 19df13beafc39b2449437518e8286a65, type: 3}
+  - {fileID: 9072700, guid: 19df13beafc39b2449437518e8286a65, type: 3}
+  - {fileID: -906466221, guid: 19df13beafc39b2449437518e8286a65, type: 3}
+  - {fileID: 2103471205, guid: 19df13beafc39b2449437518e8286a65, type: 3}
