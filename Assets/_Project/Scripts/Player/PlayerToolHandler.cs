@@ -27,8 +27,12 @@ public class PlayerToolHandler : MonoBehaviour
 
     public void UseTool()
     {
-        Collider2D hit = Physics2D.OverlapCircle(transform.position + (Vector3)_input.AimDirection * _interactRange,
-            0.3f, _farmTileLayer);
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = new Vector2(mouseWorld.x, mouseWorld.y);
+
+        if (Vector2.Distance(transform.position, mousePos) > _interactRange) return;
+
+        Collider2D hit = Physics2D.OverlapCircle(mousePos, 0.3f, _farmTileLayer);
 
         if (hit != null && hit.TryGetComponent<IInteractable>(out var interactable))
         {

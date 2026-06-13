@@ -6,6 +6,7 @@ public class FarmTile : MonoBehaviour, IInteractable
     [SerializeField] private Sprite _tilledSprite;
     [SerializeField] private Sprite _wateredSprite;
     [SerializeField] private GameObject _cropPrefab;
+    [SerializeField] private CropData _defaultCropData;
 
     public TileState State { get; private set; } = TileState.Empty;
     private Crop _currentCrop;
@@ -24,6 +25,7 @@ public class FarmTile : MonoBehaviour, IInteractable
     {
         GridX = x;
         GridY = y;
+        SetState(TileState.Empty);
     }
 
     public bool CanInteract(ToolType tool)
@@ -61,19 +63,23 @@ public class FarmTile : MonoBehaviour, IInteractable
         State = newState;
         _spriteRenderer.sprite = newState switch
         {
-            TileState.Tilled => _tilledSprite,
-            TileState.Watered => _wateredSprite,
+            TileState.Tilled => _tilledSprite != null ? _tilledSprite : _emptySprite,
+            TileState.Watered => _wateredSprite != null ? _wateredSprite : _emptySprite,
             _ => _emptySprite
         };
+        _spriteRenderer.color = Color.white;
     }
 
     private void PlantCrop()
     {
+        if (_pendingCropData == null) _pendingCropData = _defaultCropData;
         if (_pendingCropData == null || _cropPrefab == null) return;
         var go = Instantiate(_cropPrefab, transform.position, Quaternion.identity);
         _currentCrop = go.GetComponent<Crop>();
-        _currentCrop?.Init(_pendingCropData);
-        SetState(TileState.Planted);
+        _currentCrop?.Init(_pendingCropData, () => {
+            _currentCrop = null;
+            SetState(TileState.Empty);
+        });
     }
 
     public void SetCropData(CropData data) => _pendingCropData = data;
