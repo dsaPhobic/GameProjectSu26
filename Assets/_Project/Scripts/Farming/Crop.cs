@@ -17,11 +17,14 @@ public class Crop : MonoBehaviour, IDamageable, ISaveable
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Init(CropData data)
+    private System.Action _onKilled;
+
+    public void Init(CropData data, System.Action onKilled = null)
     {
         _data = data;
         _currentHP = data.maxHP;
         _stage = CropStage.Seed;
+        _onKilled = onKilled;
         UpdateSprite();
         _growthCoroutine = StartCoroutine(GrowthCoroutine());
     }
@@ -61,6 +64,7 @@ public class Crop : MonoBehaviour, IDamageable, ISaveable
     private void OnDestroyed()
     {
         if (_growthCoroutine != null) StopCoroutine(_growthCoroutine);
+        _onKilled?.Invoke();
         Destroy(gameObject);
     }
 
