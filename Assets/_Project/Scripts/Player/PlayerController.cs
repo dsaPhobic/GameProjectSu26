@@ -53,11 +53,9 @@ public class PlayerController : Entity
         if (_input.DashPressed && _dashCooldownTimer <= 0 && !_isDashing)
             StartCoroutine(Dash());
 
-        // Left click → shoot bullet
         if (_input.AttackPressed && !_isDashing && _attackCooldownTimer <= 0)
             Shoot();
 
-        // Right click → use tool (farm)
         if (_input.ToolUsePressed && !_isDashing)
             _toolHandler?.UseTool();
 
@@ -73,12 +71,10 @@ public class PlayerController : Entity
         if (_bulletPrefab == null) return;
         _attackCooldownTimer = 1f / Mathf.Max(_stats.AttackSpeed, 0.1f);
         _animator?.SetAttacking(true);
-
         Vector3 spawnPos = transform.position + (Vector3)(_input.AimDirection * 0.6f);
         GameObject bullet = Instantiate(_bulletPrefab, spawnPos, Quaternion.identity);
         if (bullet.TryGetComponent<Bullet>(out var b))
             b.Init(_input.AimDirection, _stats.Damage);
-
         StartCoroutine(ResetAttack());
     }
 

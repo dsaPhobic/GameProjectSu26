@@ -2557,6 +2557,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {fileID: 2102490802}
   _smoothSpeed: 5
+  _minX: -10
+  _maxX: 10
+  _minY: -10
+  _maxY: 10
 --- !u!1 &496116637
 GameObject:
   m_ObjectHideFlags: 0
