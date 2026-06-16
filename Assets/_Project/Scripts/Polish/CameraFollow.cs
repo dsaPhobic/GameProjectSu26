@@ -9,13 +9,24 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float _minY = -10f;
     [SerializeField] private float _maxY = 10f;
 
+    private Camera _cam;
+
+    private void Awake()
+    {
+        _cam = GetComponent<Camera>();
+    }
+
     private void LateUpdate()
     {
         if (_target == null) return;
+
+        float halfH = _cam.orthographicSize;
+        float halfW = halfH * _cam.aspect;
+
         Vector3 desired = new Vector3(_target.position.x, _target.position.y, transform.position.z);
         Vector3 smoothed = Vector3.Lerp(transform.position, desired, _smoothSpeed * Time.deltaTime);
-        smoothed.x = Mathf.Clamp(smoothed.x, _minX, _maxX);
-        smoothed.y = Mathf.Clamp(smoothed.y, _minY, _maxY);
+        smoothed.x = Mathf.Clamp(smoothed.x, _minX + halfW, _maxX - halfW);
+        smoothed.y = Mathf.Clamp(smoothed.y, _minY + halfH, _maxY - halfH);
         transform.position = smoothed;
     }
 }
