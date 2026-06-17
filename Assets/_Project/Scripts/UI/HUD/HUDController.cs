@@ -8,6 +8,7 @@ public class HUDController : MonoBehaviour
     [SerializeField] private Image _xpBar;
     [SerializeField] private TextMeshProUGUI _goldText;
     [SerializeField] private TextMeshProUGUI _dayText;
+    [SerializeField] private TextMeshProUGUI _seedText;
 
     private PlayerStats _stats;
 
@@ -20,6 +21,10 @@ public class HUDController : MonoBehaviour
         GameEvents.OnPlayerXPChanged += UpdateXP;
         GameEvents.OnGoldChanged += UpdateGold;
         GameEvents.OnDayChanged += UpdateDay;
+        GameEvents.OnSeedChanged += UpdateSeed;
+
+        var toolHandler = player?.GetComponent<PlayerToolHandler>();
+        if (toolHandler != null) UpdateSeed(toolHandler.SelectedSeed);
 
         RefreshAll();
     }
@@ -30,6 +35,7 @@ public class HUDController : MonoBehaviour
         GameEvents.OnPlayerXPChanged -= UpdateXP;
         GameEvents.OnGoldChanged -= UpdateGold;
         GameEvents.OnDayChanged -= UpdateDay;
+        GameEvents.OnSeedChanged -= UpdateSeed;
     }
 
     private void RefreshAll()
@@ -63,5 +69,11 @@ public class HUDController : MonoBehaviour
     private void UpdateDay(int day)
     {
         if (_dayText != null) _dayText.text = $"Day {day}";
+    }
+
+    private void UpdateSeed(CropData seed)
+    {
+        if (_seedText != null)
+            _seedText.text = seed != null ? $"Seed: {seed.cropName} [Q]" : "Seed: None";
     }
 }

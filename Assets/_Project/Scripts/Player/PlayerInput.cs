@@ -8,6 +8,7 @@ public class PlayerInput : MonoBehaviour
     public bool ToolUsePressed { get; private set; }
     public bool DashPressed { get; private set; }
     public int ToolSwitchInput { get; private set; }
+    public bool SeedCyclePressed { get; private set; }
 
     private Camera _camera;
 
@@ -24,6 +25,7 @@ public class PlayerInput : MonoBehaviour
         ToolUsePressed = Input.GetMouseButtonDown(1);
         DashPressed = Input.GetKeyDown(KeyCode.Space);
         ToolSwitchInput = ReadToolSwitch();
+        SeedCyclePressed = Input.GetKeyDown(KeyCode.Q);
     }
 
     private Vector2 ReadAimDirection()
