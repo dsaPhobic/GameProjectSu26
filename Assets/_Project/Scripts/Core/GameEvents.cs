@@ -19,6 +19,9 @@ public static class GameEvents
     public static event Action<Enemy> OnEnemyDied;
     public static event Action OnAllCropsDestroyed;
 
+    // Farming events
+    public static event Action<CropData> OnSeedChanged;
+
     // Upgrade events
     public static event Action OnLevelUpScreenOpen;
 
@@ -33,5 +36,6 @@ public static class GameEvents
     public static void RaiseWaveCompleted() => OnWaveCompleted?.Invoke();
     public static void RaiseEnemyDied(Enemy enemy) => OnEnemyDied?.Invoke(enemy);
     public static void RaiseAllCropsDestroyed() => OnAllCropsDestroyed?.Invoke();
+    public static void RaiseSeedChanged(CropData seed) => OnSeedChanged?.Invoke(seed);
     public static void RaiseLevelUpScreenOpen() => OnLevelUpScreenOpen?.Invoke();
 }

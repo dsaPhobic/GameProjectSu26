@@ -6,8 +6,15 @@ public class PlayerToolHandler : MonoBehaviour
 
     [SerializeField] private float _interactRange = 1.5f;
     [SerializeField] private LayerMask _farmTileLayer;
+    [SerializeField] private CropData[] _availableSeeds;
 
+    private int _selectedSeedIndex = 0;
     private PlayerInput _input;
+
+    public CropData SelectedSeed => (_availableSeeds != null && _availableSeeds.Length > 0)
+        ? _availableSeeds[_selectedSeedIndex] : null;
+
+    public string SelectedSeedName => SelectedSeed != null ? SelectedSeed.cropName : "None";
 
     private void Awake()
     {
@@ -25,6 +32,13 @@ public class PlayerToolHandler : MonoBehaviour
         };
     }
 
+    public void CycleSeed()
+    {
+        if (_availableSeeds == null || _availableSeeds.Length == 0) return;
+        _selectedSeedIndex = (_selectedSeedIndex + 1) % _availableSeeds.Length;
+        GameEvents.RaiseSeedChanged(SelectedSeed);
+    }
+
     public void UseTool()
     {
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -37,7 +51,11 @@ public class PlayerToolHandler : MonoBehaviour
         if (hit != null && hit.TryGetComponent<IInteractable>(out var interactable))
         {
             if (interactable.CanInteract(CurrentTool))
+            {
+                if (CurrentTool == ToolType.WateringCan && hit.TryGetComponent<FarmTile>(out var tile))
+                    tile.SetCropData(SelectedSeed);
                 interactable.Interact(this);
+            }
         }
     }
 
