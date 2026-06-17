@@ -35,6 +35,10 @@ public class HUDController : MonoBehaviour
     private void Awake()
     {
         BuildHUD();
+
+        // Đảm bảo màn chọn nâng cấp tồn tại (phòng khi bootstrap của nó không kích hoạt).
+        if (FindObjectOfType<LevelUpScreen>() == null)
+            new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
     }
 
     private void Start()
