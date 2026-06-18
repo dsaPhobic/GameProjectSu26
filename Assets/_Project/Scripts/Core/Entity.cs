@@ -7,6 +7,8 @@ public abstract class Entity : MonoBehaviour, IDamageable
     protected int _currentHP;
 
     public bool IsDead => _currentHP <= 0;
+    public int CurrentHP => _currentHP;
+    public int MaxHP => maxHP;
 
     protected virtual void Awake()
     {
