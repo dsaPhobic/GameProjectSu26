@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public enum EnemyState { Idle, Chase, Attack, Dead }
@@ -7,6 +6,8 @@ public enum EnemyState { Idle, Chase, Attack, Dead }
 public abstract class Enemy : Entity
 {
     [SerializeField] protected EnemyData _data;
+    [SerializeField] private float _bounceSpeed = 10f;
+    [SerializeField] private float _bounceAmount = 0.12f;
 
     protected Rigidbody2D _rb;
     protected Animator _animator;
@@ -14,6 +15,7 @@ public abstract class Enemy : Entity
     protected EnemyState _state = EnemyState.Idle;
     protected Transform _target;
     private float _attackTimer;
+    private Vector3 _baseScale;
 
     protected static readonly int AnimIsMoving = Animator.StringToHash("IsMoving");
     protected static readonly int AnimIsAttacking = Animator.StringToHash("IsAttacking");
@@ -26,6 +28,7 @@ public abstract class Enemy : Entity
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (_data != null) maxHP = _data.maxHP;
+        _baseScale = transform.localScale;
     }
 
     private void Update()
@@ -33,6 +36,20 @@ public abstract class Enemy : Entity
         if (_state == EnemyState.Dead) return;
         _target = GetTarget();
         UpdateState();
+        UpdateBounce();
+    }
+
+    private void UpdateBounce()
+    {
+        if (_state == EnemyState.Chase)
+        {
+            float bounce = 1f + Mathf.Abs(Mathf.Sin(Time.time * _bounceSpeed)) * _bounceAmount;
+            transform.localScale = new Vector3(_baseScale.x, _baseScale.y * bounce, _baseScale.z);
+        }
+        else
+        {
+            transform.localScale = _baseScale;
+        }
     }
 
     private void FixedUpdate()
@@ -68,6 +85,8 @@ public abstract class Enemy : Entity
 
         _animator?.SetBool(AnimIsMoving, _state == EnemyState.Chase);
         _animator?.SetBool(AnimIsAttacking, _state == EnemyState.Attack);
+        if (_animator != null)
+            _animator.speed = (_state == EnemyState.Idle) ? 0f : 1f;
     }
 
     protected virtual void MoveTowardTarget()
@@ -83,6 +102,7 @@ public abstract class Enemy : Entity
     protected override void Die()
     {
         _state = EnemyState.Dead;
+        if (_animator != null) _animator.speed = 1f;
         _animator?.SetBool(AnimIsDead, true);
         _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;

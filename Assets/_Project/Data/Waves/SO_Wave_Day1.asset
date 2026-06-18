@@ -15,5 +15,5 @@ MonoBehaviour:
   dayNumber: 1
   spawnEntries:
   - enemyType: 0
-    count: 5
-    spawnInterval: 1.5
+    count: 3
+    spawnInterval: 0.8

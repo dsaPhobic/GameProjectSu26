@@ -33,7 +33,11 @@ public class GoblinArcher : Enemy
         if (_target == null || _arrowPrefab == null) return;
         Vector2 dir = ((Vector2)_target.position - (Vector2)transform.position).normalized;
         var arrow = Instantiate(_arrowPrefab, transform.position, Quaternion.identity);
+        var myCol = GetComponent<Collider2D>();
+        var arrowCol = arrow.GetComponent<Collider2D>();
+        if (myCol != null && arrowCol != null)
+            Physics2D.IgnoreCollision(arrowCol, myCol);
         if (arrow.TryGetComponent<Bullet>(out var bullet))
-            bullet.Init(dir, _arrowDamage);
+            bullet.Init(dir, _arrowDamage, fromEnemy: true);
     }
 }
