@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -9,11 +9,14 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private float _duskDuration = 15f;
     [SerializeField] private float _nightDuration = 120f;
 
-    [SerializeField] private Image _overlayImage;
-    [SerializeField] private Color _dawnColor = new Color(1f, 0.5f, 0f, 0.3f);
-    [SerializeField] private Color _dayColor = new Color(0f, 0f, 0f, 0f);
-    [SerializeField] private Color _duskColor = new Color(0.8f, 0.3f, 0f, 0.35f);
-    [SerializeField] private Color _nightColor = new Color(0f, 0f, 0.3f, 0.65f);
+    [SerializeField] private Light2D _globalLight;
+    [SerializeField] private Color _dawnColor = new Color(1f, 0.8f, 0.6f);
+    [SerializeField] private Color _dayColor = Color.white;
+    [SerializeField] private Color _duskColor = new Color(1f, 0.5f, 0.2f);
+    [SerializeField] private Color _nightColor = new Color(0.1f, 0.1f, 0.3f);
+
+    [SerializeField] private float _dayIntensity = 1f;
+    [SerializeField] private float _nightIntensity = 0.3f;
 
     private int _currentDay = 1;
     private WaveManager _waveManager;
@@ -22,7 +25,7 @@ public class DayNightCycle : MonoBehaviour
     {
         _waveManager = ServiceLocator.Get<WaveManager>();
         GameManager.Instance?.StartGame();
-        if (_overlayImage != null) _overlayImage.color = _dayColor;
+        if (_globalLight != null) _globalLight.color = _dayColor;
         StartCoroutine(CycleRoutine());
     }
 
@@ -47,12 +50,18 @@ public class DayNightCycle : MonoBehaviour
             _waveManager?.StartWave(_currentDay);
 
         float elapsed = 0f;
-        Color startColor = _overlayImage != null ? _overlayImage.color : Color.clear;
+        Color startColor = _globalLight != null ? _globalLight.color : Color.white;
+        float startIntensity = _globalLight != null ? _globalLight.intensity : 1f;
+        float targetIntensity = (phase == DayPhase.Night || phase == DayPhase.Dusk) ? _nightIntensity : _dayIntensity;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            if (_overlayImage != null)
-                _overlayImage.color = Color.Lerp(startColor, targetColor, elapsed / duration);
+            float t = elapsed / duration;
+            if (_globalLight != null)
+            {
+                _globalLight.color = Color.Lerp(startColor, targetColor, t);
+                _globalLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
+            }
             yield return null;
         }
     }
