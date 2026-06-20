@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   enemyName: Goblin
   enemyType: 1
-  maxHP: 25
+  maxHP: 80
   damage: 8
   moveSpeed: 2
   xpReward: 15
