@@ -75,7 +75,7 @@ public abstract class Enemy : Entity
                 AttackTarget();
             }
         }
-        else if (dist <= _data.detectionRange)
+        else if (CanChaseTarget(dist))
         {
             _state = EnemyState.Chase;
         }
@@ -95,6 +95,11 @@ public abstract class Enemy : Entity
         Vector2 dir = ((Vector2)_target.position - _rb.position).normalized;
         _rb.MovePosition(_rb.position + dir * (_data.moveSpeed * Time.fixedDeltaTime));
         if (_spriteRenderer != null) _spriteRenderer.flipX = dir.x < 0;
+    }
+
+    protected virtual bool CanChaseTarget(float distanceToTarget)
+    {
+        return distanceToTarget <= _data.detectionRange;
     }
 
     protected abstract Transform GetTarget();

@@ -10,6 +10,8 @@ public class WaveManager : MonoBehaviour
 
     [SerializeField] private float _hpScalePerDay = 1.1f;
     [SerializeField] private float _countScalePerDay = 1.2f;
+    [SerializeField] private float _leftSpawnMinX = -16.2f;
+    [SerializeField] private float _topSpawnMaxY = 16.2f;
 
     private int _currentDay = 1;
     private int _activeEnemyCount;
@@ -61,8 +63,21 @@ public class WaveManager : MonoBehaviour
         var point = _spawnPoints[Random.Range(0, _spawnPoints.Count)];
         var prefab = GetPrefabForType(type);
         if (prefab == null) return;
-        Instantiate(prefab, point.transform.position, Quaternion.identity);
+        Instantiate(prefab, GetSafeSpawnPosition(point), Quaternion.identity);
         _activeEnemyCount++;
+    }
+
+    private Vector3 GetSafeSpawnPosition(SpawnPoint point)
+    {
+        Vector3 position = point.transform.position;
+
+        if (position.x < _leftSpawnMinX)
+            position.x = _leftSpawnMinX;
+
+        if (position.y > _topSpawnMaxY)
+            position.y = _topSpawnMaxY;
+
+        return position;
     }
 
     private EnemyWaveData GetWaveData(int day)
