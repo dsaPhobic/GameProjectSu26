@@ -40,6 +40,16 @@ public class MainMenuController : MonoBehaviour
 
     private void Start()
     {
+        EnsureSettingsMenu();
         AudioManager.Instance?.PlayBGM("bgm_main_menu");
+    }
+
+    private void EnsureSettingsMenu()
+    {
+        if (_settingsPanel == null) return;
+
+        var settingsMenu = _settingsPanel.GetComponent<SettingsMenu>();
+        if (settingsMenu == null) settingsMenu = _settingsPanel.AddComponent<SettingsMenu>();
+        settingsMenu.Initialize();
     }
 }

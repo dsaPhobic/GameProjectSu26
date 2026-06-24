@@ -11,6 +11,7 @@ public class PlayerStats : MonoBehaviour
     private int _level = 1;
     private int _xp;
     private int _gold;
+    private bool _isDead;
 
     public int MaxHP => _maxHP;
     public int CurrentHP => _currentHP;
@@ -44,9 +45,16 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        if (_isDead) return;
+
         _currentHP = Mathf.Max(0, _currentHP - amount);
         GameEvents.RaisePlayerHPChanged(_currentHP);
-        if (_currentHP == 0) GameEvents.RaisePlayerDied();
+        if (_currentHP == 0)
+        {
+            _isDead = true;
+            AudioManager.Instance?.PlaySFX("sfx_die");
+            GameEvents.RaisePlayerDied();
+        }
     }
 
     public void Heal(int amount)
@@ -81,6 +89,7 @@ public class PlayerStats : MonoBehaviour
     private void LevelUp()
     {
         _level++;
+        AudioManager.Instance?.PlaySFX("sfx_levelup");
         GameEvents.RaisePlayerLevelUp(_level);
         GameEvents.RaiseLevelUpScreenOpen();
     }

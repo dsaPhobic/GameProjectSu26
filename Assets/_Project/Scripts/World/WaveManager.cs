@@ -59,16 +59,30 @@ public class WaveManager : MonoBehaviour
 
     private void SpawnEnemy(EnemyType type)
     {
-        if (_spawnPoints.Count == 0) return;
-        var point = _spawnPoints[Random.Range(0, _spawnPoints.Count)];
+        var point = GetRandomSpawnPoint();
+        if (point == null) return;
+
         var prefab = GetPrefabForType(type);
         if (prefab == null) return;
+
         Instantiate(prefab, GetSafeSpawnPosition(point), Quaternion.identity);
         _activeEnemyCount++;
     }
 
+    private SpawnPoint GetRandomSpawnPoint()
+    {
+        if (_spawnPoints == null || _spawnPoints.Count == 0) return null;
+
+        _spawnPoints.RemoveAll(point => point == null);
+        if (_spawnPoints.Count == 0) return null;
+
+        return _spawnPoints[Random.Range(0, _spawnPoints.Count)];
+    }
+
     private Vector3 GetSafeSpawnPosition(SpawnPoint point)
     {
+        if (point == null) return transform.position;
+
         Vector3 position = point.transform.position;
 
         if (position.x < _leftSpawnMinX)

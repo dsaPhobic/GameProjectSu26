@@ -28,6 +28,11 @@ public class GameOverScreen : MonoBehaviour
         GameEvents.OnEnemyDied -= OnEnemyDied;
     }
 
+    private void Start()
+    {
+        ShowResults();
+    }
+
     private void OnDayChanged(int d) => _daysSurvived = d;
     private void OnGoldChanged(int g) => _goldEarned = g;
     private void OnEnemyDied(Enemy _) => _enemiesKilled++;

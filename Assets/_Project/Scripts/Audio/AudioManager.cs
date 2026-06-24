@@ -22,6 +22,8 @@ public class AudioManager : MonoBehaviour
 
     private Dictionary<string, AudioClip> _bgm;
     private Dictionary<string, AudioClip> _sfx;
+    private float _bgmVolume = 1f;
+    private float _sfxVolume = 1f;
 
     private void Awake()
     {
@@ -29,6 +31,7 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        EnsureSources();
         _bgm = new Dictionary<string, AudioClip>();
         _sfx = new Dictionary<string, AudioClip>();
         foreach (var e in _bgmList) _bgm[e.key] = e.clip;
@@ -38,6 +41,7 @@ public class AudioManager : MonoBehaviour
     public void PlayBGM(string key, bool fade = true)
     {
         if (!_bgm.TryGetValue(key, out var clip)) return;
+        EnsureSources();
         if (_bgmSource.clip == clip) return;
         if (fade) StartCoroutine(FadeBGM(clip));
         else { _bgmSource.clip = clip; _bgmSource.Play(); }
@@ -46,11 +50,58 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(string key, float volume = 1f)
     {
         if (_sfx.TryGetValue(key, out var clip))
-            _sfxSource.PlayOneShot(clip, volume);
+            _sfxSource.PlayOneShot(clip, volume * _sfxVolume);
+    }
+
+    public void SetBGMVolume(float value)
+    {
+        _bgmVolume = Mathf.Clamp01(value);
+        EnsureSources();
+        _bgmSource.volume = _bgmVolume;
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        _sfxVolume = Mathf.Clamp01(value);
+    }
+
+    private void EnsureSources()
+    {
+        if (_bgmSource == null)
+        {
+            var bgm = transform.Find("BGM_Source");
+            _bgmSource = bgm != null ? bgm.GetComponent<AudioSource>() : null;
+        }
+
+        if (_sfxSource == null)
+        {
+            var sfx = transform.Find("SFX_Source");
+            _sfxSource = sfx != null ? sfx.GetComponent<AudioSource>() : null;
+        }
+
+        if (_bgmSource == null)
+        {
+            var bgmObject = new GameObject("BGM_Source");
+            bgmObject.transform.SetParent(transform, false);
+            _bgmSource = bgmObject.AddComponent<AudioSource>();
+            _bgmSource.loop = true;
+            _bgmSource.playOnAwake = false;
+        }
+
+        if (_sfxSource == null)
+        {
+            var sfxObject = new GameObject("SFX_Source");
+            sfxObject.transform.SetParent(transform, false);
+            _sfxSource = sfxObject.AddComponent<AudioSource>();
+            _sfxSource.playOnAwake = false;
+        }
+
+        _bgmSource.volume = _bgmVolume;
     }
 
     private IEnumerator FadeBGM(AudioClip newClip)
     {
+        EnsureSources();
         float startVol = _bgmSource.volume;
         for (float t = 0; t < _fadeTime; t += Time.unscaledDeltaTime)
         {
@@ -64,6 +115,6 @@ public class AudioManager : MonoBehaviour
             _bgmSource.volume = Mathf.Lerp(0, startVol, t / _fadeTime);
             yield return null;
         }
-        _bgmSource.volume = startVol;
+        _bgmSource.volume = _bgmVolume;
     }
 }

@@ -5,6 +5,11 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private GameObject _pausePanel;
     [SerializeField] private GameObject _settingsPanel;
 
+    private void Start()
+    {
+        EnsureSettingsMenu();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -37,6 +42,7 @@ public class PauseMenuController : MonoBehaviour
 
     public void OnSettingsPressed()
     {
+        EnsureSettingsMenu();
         if (_settingsPanel != null) _settingsPanel.SetActive(true);
     }
 
@@ -44,5 +50,14 @@ public class PauseMenuController : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneLoader.Instance?.LoadMainMenu();
+    }
+
+    private void EnsureSettingsMenu()
+    {
+        if (_settingsPanel == null) return;
+
+        var settingsMenu = _settingsPanel.GetComponent<SettingsMenu>();
+        if (settingsMenu == null) settingsMenu = _settingsPanel.AddComponent<SettingsMenu>();
+        settingsMenu.Initialize();
     }
 }

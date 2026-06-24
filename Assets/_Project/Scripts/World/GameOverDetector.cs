@@ -31,6 +31,7 @@ public class GameOverDetector : MonoBehaviour
     private void TriggerGameOver()
     {
         GameManager.Instance?.TriggerGameOver();
+        AudioManager.Instance?.PlayBGM("bgm_game_over");
         SceneLoader.Instance?.LoadGameOver();
     }
 }

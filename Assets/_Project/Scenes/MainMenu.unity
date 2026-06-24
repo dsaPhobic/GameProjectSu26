@@ -1820,8 +1820,34 @@ MonoBehaviour:
   _bgmSource: {fileID: 1474756246}
   _sfxSource: {fileID: 608683312}
   _fadeTime: 1
-  _bgmList: []
-  _sfxList: []
+  _bgmList:
+  - key: bgm_main_menu
+    clip: {fileID: 8300000, guid: 38917b3412d64c044affc9d09bc6cce1, type: 3}
+  - key: bgm_day
+    clip: {fileID: 8300000, guid: 5a286cda2df027f4fbffcb7e6e200119, type: 3}
+  - key: bgm_night
+    clip: {fileID: 8300000, guid: bd0f128400788ed43a6d2faeff79c94a, type: 3}
+  - key: bgm_boss
+    clip: {fileID: 8300000, guid: 63186b8848959364ba184720895a7896, type: 3}
+  - key: bgm_game_over
+    clip: {fileID: 8300000, guid: 977644ad73043ae498f65f2230cac59e, type: 3}
+  _sfxList:
+  - key: sfx_attack
+    clip: {fileID: 8300000, guid: 59295f888644a2e448bfb33ef02093c8, type: 3}
+  - key: sfx_hit
+    clip: {fileID: 8300000, guid: 8d16bad89c7e3e7479be6c6a77cb2546, type: 3}
+  - key: sfx_harvest
+    clip: {fileID: 8300000, guid: 8f6756983e265a6428ab00f726d9c181, type: 3}
+  - key: sfx_levelup
+    clip: {fileID: 8300000, guid: 1d9482d1019f4514090e36a506c78256, type: 3}
+  - key: sfx_die
+    clip: {fileID: 8300000, guid: a3034873bb7648846bc887defef57866, type: 3}
+  - key: sfx_digging
+    clip: {fileID: 8300000, guid: 41d46c26a46f11a47bb58552ee9d86cd, type: 3}
+  - key: sfx_button_click
+    clip: {fileID: 8300000, guid: 65818c3878d51204898c638e2ae2388a, type: 3}
+  - key: sfx_powerup_pickup
+    clip: {fileID: 8300000, guid: 1ddab91be530c644b9f8f8af517626a9, type: 3}
 --- !u!4 &1322426225
 Transform:
   m_ObjectHideFlags: 0
@@ -3333,6 +3359,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {fileID: 4126873119756540907, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
   _smoothSpeed: 5
+  _minX: -10
+  _maxX: 10
+  _minY: -10
+  _maxY: 10
 --- !u!1 &1986802240
 GameObject:
   m_ObjectHideFlags: 0
