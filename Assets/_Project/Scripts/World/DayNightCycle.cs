@@ -4,10 +4,10 @@ using UnityEngine.Rendering.Universal;
 
 public class DayNightCycle : MonoBehaviour
 {
-    [SerializeField] private float _dawnDuration = 15f;
-    [SerializeField] private float _dayDuration = 90f;
-    [SerializeField] private float _duskDuration = 15f;
-    [SerializeField] private float _nightDuration = 120f;
+    [SerializeField] private float _dawnDuration = 10f;
+    [SerializeField] private float _dayDuration = 150f;
+    [SerializeField] private float _duskDuration = 10f;
+    [SerializeField] private float _nightDuration = 60f;
 
     [SerializeField] private Light2D _globalLight;
     [SerializeField] private Color _dawnColor = new Color(1f, 0.8f, 0.6f);
