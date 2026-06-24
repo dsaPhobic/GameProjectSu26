@@ -21,6 +21,11 @@ public class Beast : Enemy
         if (_spriteRenderer != null) _spriteRenderer.flipX = dir.x < 0;
     }
 
+    protected override bool CanChaseTarget(float distanceToTarget)
+    {
+        return _target != null && _target.TryGetComponent<PlayerController>(out _);
+    }
+
     protected override void AttackTarget()
     {
         if (_target == null) return;

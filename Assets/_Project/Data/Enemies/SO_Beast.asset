@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   enemyName: Skeleton
   enemyType: 2
-  maxHP: 50
+  maxHP: 160
   damage: 12
   moveSpeed: 4
   xpReward: 20

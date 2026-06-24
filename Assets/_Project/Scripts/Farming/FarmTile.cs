@@ -13,6 +13,9 @@ public class FarmTile : MonoBehaviour, IInteractable
     private SpriteRenderer _spriteRenderer;
     private CropData _pendingCropData;
 
+    public Crop CurrentCrop => _currentCrop;
+    public bool HasLivingCrop => _currentCrop != null && !_currentCrop.IsDead;
+
     public int GridX { get; private set; }
     public int GridY { get; private set; }
 
@@ -47,12 +50,12 @@ public class FarmTile : MonoBehaviour, IInteractable
                 SetState(TileState.Tilled);
                 break;
             case ToolType.WateringCan:
-                SetState(TileState.Watered);
                 PlantCrop();
                 break;
             case ToolType.Sword:
                 var stats = player.GetComponent<PlayerStats>();
                 _currentCrop?.Harvest(stats);
+                _currentCrop = null;
                 SetState(TileState.Empty);
                 break;
         }
@@ -65,6 +68,7 @@ public class FarmTile : MonoBehaviour, IInteractable
         {
             TileState.Tilled => _tilledSprite != null ? _tilledSprite : _emptySprite,
             TileState.Watered => _wateredSprite != null ? _wateredSprite : _emptySprite,
+            TileState.Planted => _wateredSprite != null ? _wateredSprite : _emptySprite,
             _ => _emptySprite
         };
         _spriteRenderer.color = Color.white;
@@ -80,6 +84,7 @@ public class FarmTile : MonoBehaviour, IInteractable
             _currentCrop = null;
             SetState(TileState.Empty);
         });
+        SetState(_currentCrop != null ? TileState.Planted : TileState.Watered);
     }
 
     public void SetCropData(CropData data) => _pendingCropData = data;

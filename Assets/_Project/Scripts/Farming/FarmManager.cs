@@ -51,7 +51,28 @@ public class FarmManager : MonoBehaviour
     {
         int count = 0;
         foreach (var tile in _tiles)
-            if (tile.State == TileState.Planted) count++;
+            if (tile.HasLivingCrop) count++;
         return count;
+    }
+
+    public Crop GetNearestCrop(Vector2 worldPos)
+    {
+        Crop nearest = null;
+        float nearestSqrDistance = float.MaxValue;
+
+        foreach (var tile in _tiles)
+        {
+            if (!tile.HasLivingCrop) continue;
+
+            Crop crop = tile.CurrentCrop;
+            float sqrDistance = ((Vector2)crop.transform.position - worldPos).sqrMagnitude;
+            if (sqrDistance < nearestSqrDistance)
+            {
+                nearestSqrDistance = sqrDistance;
+                nearest = crop;
+            }
+        }
+
+        return nearest;
     }
 }
