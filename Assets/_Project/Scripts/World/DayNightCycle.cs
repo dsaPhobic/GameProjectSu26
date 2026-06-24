@@ -45,6 +45,7 @@ public class DayNightCycle : MonoBehaviour
     private IEnumerator RunPhase(DayPhase phase, float duration, Color targetColor)
     {
         GameEvents.RaiseDayPhaseChanged(phase);
+        PlayPhaseMusic(phase);
 
         if (phase == DayPhase.Night)
             _waveManager?.StartWave(_currentDay);
@@ -63,6 +64,21 @@ public class DayNightCycle : MonoBehaviour
                 _globalLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
             }
             yield return null;
+        }
+    }
+
+    private void PlayPhaseMusic(DayPhase phase)
+    {
+        switch (phase)
+        {
+            case DayPhase.Night:
+                AudioManager.Instance?.PlayBGM("bgm_night");
+                break;
+            case DayPhase.Dawn:
+            case DayPhase.Day:
+            case DayPhase.Dusk:
+                AudioManager.Instance?.PlayBGM("bgm_day");
+                break;
         }
     }
 }

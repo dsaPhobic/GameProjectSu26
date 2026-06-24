@@ -78,6 +78,7 @@ public class PlayerController : Entity
         GameObject bullet = Instantiate(_bulletPrefab, spawnPos, Quaternion.identity);
         if (bullet.TryGetComponent<Bullet>(out var b))
             b.Init(_input.AimDirection, _stats.Damage);
+        AudioManager.Instance?.PlaySFX("sfx_attack");
         StartCoroutine(ResetAttack());
     }
 

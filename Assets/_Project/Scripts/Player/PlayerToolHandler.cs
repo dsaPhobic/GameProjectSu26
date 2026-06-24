@@ -85,6 +85,8 @@ public class PlayerToolHandler : MonoBehaviour
                     return;
                 }
                 interactable.Interact(this);
+                if (CurrentTool == ToolType.Hoe)
+                    AudioManager.Instance?.PlaySFX("sfx_digging");
             }
         }
     }

@@ -113,6 +113,7 @@ public abstract class Enemy : Entity
         _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
         GetComponent<Collider2D>().enabled = false;
+        AudioManager.Instance?.PlaySFX("sfx_hit");
         GameEvents.RaiseEnemyDied(this);
         Destroy(gameObject, 1.5f);
     }
