@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
 
     private int _damage;
     private Vector2 _direction;
+    private bool _fromEnemy;
     private Rigidbody2D _rb;
 
     private void Awake()
@@ -14,10 +15,11 @@ public class Bullet : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Init(Vector2 direction, int damage)
+    public void Init(Vector2 direction, int damage, bool fromEnemy = false)
     {
         _direction = direction.normalized;
         _damage = damage;
+        _fromEnemy = fromEnemy;
         Destroy(gameObject, _lifetime);
     }
 
@@ -28,7 +30,15 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<PlayerController>() != null) return;
+        if (_fromEnemy)
+        {
+            if (other.GetComponent<Enemy>() != null) return;
+        }
+        else
+        {
+            if (other.GetComponent<PlayerController>() != null) return;
+        }
+
         if (other.TryGetComponent<IDamageable>(out var target))
         {
             target.TakeDamage(_damage);

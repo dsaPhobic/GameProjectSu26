@@ -71,6 +71,11 @@ public class DemonBoss : Enemy
         return player != null ? player.transform : null;
     }
 
+    protected override bool CanChaseTarget(float distanceToTarget)
+    {
+        return _target != null && _target.TryGetComponent<PlayerController>(out _);
+    }
+
     protected override void AttackTarget()
     {
         if (_target == null) return;
@@ -89,12 +94,16 @@ public class DemonBoss : Enemy
     {
         Vector2 baseDir = ((Vector2)_target.position - (Vector2)transform.position).normalized;
         float[] angles = { -20f, 0f, 20f };
+        var myCol = GetComponent<Collider2D>();
         foreach (float angle in angles)
         {
             Vector2 dir = Quaternion.Euler(0, 0, angle) * baseDir;
             var proj = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
+            var projCol = proj.GetComponent<Collider2D>();
+            if (myCol != null && projCol != null)
+                Physics2D.IgnoreCollision(projCol, myCol);
             if (proj.TryGetComponent<Bullet>(out var bullet))
-                bullet.Init(dir, _projectileDamage);
+                bullet.Init(dir, _projectileDamage, fromEnemy: true);
         }
     }
 }
