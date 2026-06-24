@@ -11,7 +11,6 @@ public class PlayerToolHandler : MonoBehaviour
 
     private int _selectedSeedIndex = 0;
     private int[] _seedCounts;
-    private PlayerInput _input;
 
     public CropData SelectedSeed => (_availableSeeds != null && _availableSeeds.Length > 0)
         ? _availableSeeds[_selectedSeedIndex] : null;
@@ -35,7 +34,6 @@ public class PlayerToolHandler : MonoBehaviour
 
     private void Awake()
     {
-        _input = GetComponent<PlayerInput>();
         if (_availableSeeds != null)
         {
             _seedCounts = new int[_availableSeeds.Length];
