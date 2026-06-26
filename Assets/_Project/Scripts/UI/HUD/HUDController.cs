@@ -2,14 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// HUD chính. Tự dựng thanh máu/XP/level/gold/day bằng code lúc runtime để không phụ
-/// thuộc vào việc kéo-thả reference trong scene (tránh lỗi serialize/ghi đè scene).
-/// Đặt component này trên Canvas (Canvas_HUD).
-/// </summary>
 public class HUDController : MonoBehaviour
 {
-    // Seed text đã có sẵn trong scene (tính năng seed cycling) — vẫn dùng reference cũ nếu có.
     [SerializeField] private TextMeshProUGUI _seedText;
 
     private PlayerStats _stats;
@@ -36,7 +30,6 @@ public class HUDController : MonoBehaviour
     {
         BuildHUD();
 
-        // Đảm bảo màn chọn nâng cấp tồn tại (phòng khi bootstrap của nó không kích hoạt).
         if (FindObjectOfType<LevelUpScreen>() == null)
             new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
     }
@@ -63,7 +56,6 @@ public class HUDController : MonoBehaviour
         GameEvents.OnSeedChanged -= UpdateSeed;
     }
 
-    // Player có thể đăng ký sau HUD nên resolve lazily cho tới khi tìm thấy.
     private void Update()
     {
         if (_stats == null) TryResolvePlayer();
@@ -116,7 +108,6 @@ public class HUDController : MonoBehaviour
             _seedText.text = seed != null ? $"Seed: {seed.cropName} [Q]" : "Seed: None";
     }
 
-    // ---------- Dựng HUD bằng code ----------
     private void BuildHUD()
     {
         var dark = new Color(0.12f, 0.12f, 0.12f, 0.85f);

@@ -59,7 +59,6 @@ public class SeedInventoryUI : MonoBehaviour
 
     private RectTransform CreateSlot(CropData crop, int index)
     {
-        // Root slot
         var slotGO = new GameObject($"SeedSlot_{index}");
         var slotRT = slotGO.AddComponent<RectTransform>();
         slotRT.sizeDelta = new Vector2(_slotSize, _slotSize);
@@ -77,7 +76,6 @@ public class SeedInventoryUI : MonoBehaviour
         }
         slotBg.raycastTarget = false;
 
-        // Highlight border (behind icon)
         var hlGO = new GameObject("Highlight");
         var hlRT = hlGO.AddComponent<RectTransform>();
         hlRT.SetParent(slotRT, false);
@@ -90,7 +88,6 @@ public class SeedInventoryUI : MonoBehaviour
         hl.raycastTarget = false;
         _highlights[index] = hl;
 
-        // Crop icon
         var iconGO = new GameObject("Icon");
         var iconRT = iconGO.AddComponent<RectTransform>();
         iconRT.SetParent(slotRT, false);
@@ -105,7 +102,6 @@ public class SeedInventoryUI : MonoBehaviour
         var sprite = crop?.stageSprites?.Length > 0 ? crop.stageSprites[0] : null;
         if (sprite != null) icon.sprite = sprite;
 
-        // Count badge (góc dưới phải)
         var badgeGO = new GameObject("Count");
         var badgeRT = badgeGO.AddComponent<RectTransform>();
         badgeRT.SetParent(slotRT, false);
