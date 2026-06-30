@@ -109,7 +109,9 @@ public class PlayerController : Entity
     private void FlipSprite(Vector2 aimDir)
     {
         if (_spriteRenderer == null) return;
-        _spriteRenderer.flipX = aimDir.x < 0;
+        bool facingLeft = aimDir.x < 0;
+        _spriteRenderer.flipX = facingLeft;
+        _toolHandler?.FlipTool(facingLeft);
     }
 
     public void ReduceDashCooldown(float delta) => _dashCooldown = Mathf.Max(0.1f, _dashCooldown - delta);

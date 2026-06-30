@@ -9,6 +9,12 @@ public class PlayerToolHandler : MonoBehaviour
     [SerializeField] private CropData[] _availableSeeds;
     [SerializeField] private int _startingSeedCount = 5;
 
+    [Header("Tool Visuals")]
+    [SerializeField] private SpriteRenderer _toolRenderer;
+    [SerializeField] private Sprite _hoeSprite;
+    [SerializeField] private Sprite _wateringCanSprite;
+    [SerializeField] private Sprite _swordSprite;
+
     private int _selectedSeedIndex = 0;
     private int[] _seedCounts;
 
@@ -40,6 +46,7 @@ public class PlayerToolHandler : MonoBehaviour
             for (int i = 0; i < _seedCounts.Length; i++)
                 _seedCounts[i] = _startingSeedCount;
         }
+        UpdateToolSprite();
     }
 
     public void SwitchTool(int slot)
@@ -50,6 +57,28 @@ public class PlayerToolHandler : MonoBehaviour
             2 => ToolType.WateringCan,
             3 => ToolType.Sword,
             _ => CurrentTool
+        };
+        UpdateToolSprite();
+    }
+
+    public void FlipTool(bool facingLeft)
+    {
+        if (_toolRenderer == null) return;
+        _toolRenderer.flipX = facingLeft;
+        Vector3 pos = _toolRenderer.transform.localPosition;
+        pos.x = facingLeft ? -Mathf.Abs(pos.x) : Mathf.Abs(pos.x);
+        _toolRenderer.transform.localPosition = pos;
+    }
+
+    private void UpdateToolSprite()
+    {
+        if (_toolRenderer == null) return;
+        _toolRenderer.sprite = CurrentTool switch
+        {
+            ToolType.Hoe => _hoeSprite,
+            ToolType.WateringCan => _wateringCanSprite,
+            ToolType.Sword => _swordSprite,
+            _ => null
         };
     }
 
