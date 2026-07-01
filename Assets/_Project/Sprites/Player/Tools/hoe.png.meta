@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f2c509c395a956547ba4e571f44083db
+guid: 04df5d9db17f8054487b3499096a5c5c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 2500
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 2Shotgun02_0
+      name: hoe_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 45
-        height: 13
+        x: 113
+        y: 102
+        width: 304
+        height: 303
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,8 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a9ec6f4856e90424383cfd4f85c12cda
-      internalID: -1241171472
+      spriteID: f4467982fc7b21d49a13a7eb31208392
+      internalID: 1352869474
       vertices: []
       indices: 
       edges: []
@@ -128,7 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      2Shotgun02_0: -1241171472
+      hoe_0: 1352869474
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
