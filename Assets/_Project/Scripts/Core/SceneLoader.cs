@@ -21,6 +21,7 @@ public class SceneLoader : MonoBehaviour
     public void LoadGameScene() => LoadScene("GameScene");
     public void LoadGameOver() => LoadScene("GameOver");
     public void LoadHubTown() => LoadScene("HubTown");
+    public void LoadShopInterior() => LoadScene("ShopInterior");
 
     public void LoadScene(string sceneName)
     {
