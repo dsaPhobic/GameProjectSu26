@@ -29,7 +29,10 @@ public abstract class Enemy : Entity
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (_data != null) { maxHP = _data.maxHP; _currentHP = maxHP; }
         _baseScale = transform.localScale;
-        gameObject.AddComponent<EnemyHealthBar>();
+        if (_data != null && _data.enemyType == EnemyType.DemonBoss)
+            gameObject.AddComponent<BossHealthBar>();
+        else
+            gameObject.AddComponent<EnemyHealthBar>();
     }
 
     private void Update()
