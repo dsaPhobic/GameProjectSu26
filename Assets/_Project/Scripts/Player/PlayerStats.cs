@@ -6,6 +6,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int _damage = 20;
     [SerializeField] private float _attackSpeed = 1f;
     [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private int _startingGold = 25;
 
     private int _currentHP;
     private int _level = 1;
@@ -30,6 +31,7 @@ public class PlayerStats : MonoBehaviour
     private void Awake()
     {
         _currentHP = _maxHP;
+        _gold = _startingGold;
     }
 
     private void OnEnable() => GameEvents.OnEnemyDied += HandleEnemyKilled;
@@ -79,6 +81,16 @@ public class PlayerStats : MonoBehaviour
     {
         _gold += amount;
         GameEvents.RaiseGoldChanged(_gold);
+    }
+
+    public bool SpendGold(int amount)
+    {
+        if (amount <= 0) return true;
+        if (_gold < amount) return false;
+
+        _gold -= amount;
+        GameEvents.RaiseGoldChanged(_gold);
+        return true;
     }
 
     public void ModifyMaxHP(int delta) { _maxHP += delta; Heal(0); }
