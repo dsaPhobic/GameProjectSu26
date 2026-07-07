@@ -7,6 +7,7 @@ public class PlayerToolHandler : MonoBehaviour
     public ToolType CurrentTool { get; private set; }
 
     [SerializeField] private float _interactRange = 1.5f;
+    [SerializeField] private float _interactOriginOffset = 0.35f;
     [SerializeField] private LayerMask _farmTileLayer;
     [SerializeField] private CropData[] _availableSeeds;
     [SerializeField] private int _startingSeedCount = 5;
@@ -21,6 +22,7 @@ public class PlayerToolHandler : MonoBehaviour
     private int _selectedSeedIndex = 0;
     private int[] _seedCounts;
     private Vector3 _defaultToolLocalPosition;
+    private Vector2 _lastAimDirection = Vector2.right;
 
     public CropData SelectedSeed => (_availableSeeds != null && _availableSeeds.Length > 0)
         ? _availableSeeds[_selectedSeedIndex] : null;
@@ -95,10 +97,15 @@ public class PlayerToolHandler : MonoBehaviour
 
     public void AimTool(Vector2 aimDirection)
     {
-        if (_toolRenderer == null || CurrentTool != ToolType.Gun || aimDirection.sqrMagnitude <= 0.001f)
+        if (aimDirection.sqrMagnitude <= 0.001f)
             return;
 
         Vector2 dir = aimDirection.normalized;
+        _lastAimDirection = dir;
+
+        if (_toolRenderer == null || CurrentTool != ToolType.Gun)
+            return;
+
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         float distance = Mathf.Max(_defaultToolLocalPosition.magnitude, 0.1f);
 
@@ -138,8 +145,9 @@ public class PlayerToolHandler : MonoBehaviour
     {
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos = new Vector2(mouseWorld.x, mouseWorld.y);
+        Vector2 origin = GetInteractOrigin();
 
-        if (Vector2.Distance(transform.position, mousePos) > _interactRange) return;
+        if (Vector2.Distance(origin, mousePos) > _interactRange) return;
 
         Collider2D hit = Physics2D.OverlapCircle(mousePos, 0.3f, _farmTileLayer);
 
@@ -166,6 +174,15 @@ public class PlayerToolHandler : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, _interactRange);
+        Gizmos.DrawWireSphere(GetInteractOrigin(), _interactRange);
+    }
+
+    private Vector2 GetInteractOrigin()
+    {
+        Vector2 direction = _lastAimDirection.sqrMagnitude > 0.001f
+            ? _lastAimDirection.normalized
+            : Vector2.right;
+
+        return (Vector2)transform.position + direction * _interactOriginOffset;
     }
 }

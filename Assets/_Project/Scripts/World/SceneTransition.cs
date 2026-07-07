@@ -6,6 +6,8 @@ public class SceneTransition : MonoBehaviour
 {
     [SerializeField] private string _targetSceneName = "ShopInterior";
     [SerializeField] private string _targetSpawnId = "ShopEntrance";
+    [SerializeField] private bool _saveReturnPoint = true;
+    [SerializeField] private bool _returnToSavedScene;
     [SerializeField] private float _transitionCooldown = 0.5f;
 
     private static float _lastTransitionTime = -999f;
@@ -22,16 +24,37 @@ public class SceneTransition : MonoBehaviour
         if (_isTransitioning) return;
         if (Time.unscaledTime - _lastTransitionTime < _transitionCooldown) return;
         if (!other.TryGetComponent<PlayerController>(out _)) return;
-        if (string.IsNullOrWhiteSpace(_targetSceneName)) return;
+
+        string sceneToLoad = _targetSceneName;
+        if (_returnToSavedScene)
+        {
+            if (!string.IsNullOrWhiteSpace(SceneTransitionState.ReturnSceneName))
+            {
+                sceneToLoad = SceneTransitionState.ReturnSceneName;
+                SceneTransitionState.RestoreSavedReturnPointOnNextLoad();
+            }
+            else
+            {
+                SceneTransitionState.TargetSpawnId = _targetSpawnId;
+            }
+        }
+        else
+        {
+            if (_saveReturnPoint)
+                SceneTransitionState.SaveReturnPoint(SceneManager.GetActiveScene().name, other.transform.position);
+
+            SceneTransitionState.TargetSpawnId = _targetSpawnId;
+        }
+
+        if (string.IsNullOrWhiteSpace(sceneToLoad)) return;
 
         _isTransitioning = true;
         _lastTransitionTime = Time.unscaledTime;
-        SceneTransitionState.TargetSpawnId = _targetSpawnId;
 
         if (SceneLoader.Instance != null)
-            SceneLoader.Instance.LoadScene(_targetSceneName);
+            SceneLoader.Instance.LoadScene(sceneToLoad);
         else
-            SceneManager.LoadScene(_targetSceneName);
+            SceneManager.LoadScene(sceneToLoad);
     }
 
     private void OnDrawGizmos()
