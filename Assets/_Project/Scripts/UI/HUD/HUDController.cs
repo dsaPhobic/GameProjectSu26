@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 /// <summary>
@@ -9,6 +10,8 @@ using TMPro;
 /// </summary>
 public class HUDController : MonoBehaviour
 {
+    private static HUDController _instance;
+
     // Seed text đã có sẵn trong scene (tính năng seed cycling) — vẫn dùng reference cũ nếu có.
     [SerializeField] private TextMeshProUGUI _seedText;
 
@@ -32,8 +35,63 @@ public class HUDController : MonoBehaviour
         }
     }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void Bootstrap()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        EnsureHudExists(SceneManager.GetActiveScene());
+    }
+
+    private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EnsureHudExists(scene);
+    }
+
+    private static void EnsureHudExists(Scene scene)
+    {
+        if (!ShouldShowHud(scene.name))
+        {
+            if (_instance != null)
+                Destroy(_instance.gameObject);
+            return;
+        }
+
+        if (FindObjectOfType<HUDController>() != null) return;
+
+        GameObject canvasObject = new GameObject("Canvas_HUD");
+        int uiLayer = LayerMask.NameToLayer("UI");
+        if (uiLayer >= 0)
+            canvasObject.layer = uiLayer;
+
+        Canvas canvas = canvasObject.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.matchWidthOrHeight = 0.5f;
+
+        canvasObject.AddComponent<GraphicRaycaster>();
+        canvasObject.AddComponent<HUDController>();
+    }
+
+    private static bool ShouldShowHud(string sceneName)
+    {
+        return sceneName == "GameScene" || sceneName == "ShopInterior" || sceneName == "HubTown";
+    }
+
     private void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+
         BuildHUD();
 
         // Đảm bảo màn chọn nâng cấp tồn tại (phòng khi bootstrap của nó không kích hoạt).
@@ -55,6 +113,9 @@ public class HUDController : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (_instance == this)
+            _instance = null;
+
         GameEvents.OnPlayerHPChanged -= UpdateHP;
         GameEvents.OnPlayerXPChanged -= UpdateXP;
         GameEvents.OnGoldChanged -= UpdateGold;

@@ -5113,9 +5113,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 236408505039392109, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 236408505039392109, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 306075386424939973, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4059975653942975734, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
       propertyPath: _gunSprite
       value: 
+      objectReference: {fileID: -864579181, guid: d4d0c696e77ae284ab86754993218bd1, type: 3}
+    - target: {fileID: 4126873119756540907, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126873119756540907, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4126873119756540907, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5538,6 +5558,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetSceneName: ShopInterior
   _targetSpawnId: ShopEntrance
+  _saveReturnPoint: 1
+  _returnToSavedScene: 0
   _transitionCooldown: 0.5
 --- !u!61 &1714309747
 BoxCollider2D:
