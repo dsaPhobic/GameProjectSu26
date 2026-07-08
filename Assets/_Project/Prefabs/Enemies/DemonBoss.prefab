@@ -188,14 +188,19 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: 0fbdbdd9fec248c2bae2b40fe54feed9, type: 2}
   _bounceSpeed: 10
   _bounceAmount: 0.12
-  _slimePrefab: {fileID: 2000001, guid: 9dad6803582a36b4b8089b88c4897182, type: 3}
+  _goblinArcherPrefab: {fileID: 1000001, guid: 54e63f3e5f9d39e43947a7e1c9c3ea7b, type: 3}
+  _beastPrefab: {fileID: 3000001, guid: 5e7e395d6d974e9c94f3ac1f880c0969, type: 3}
   _projectilePrefab: {fileID: 1604439286018291457, guid: d58f13a5fdfc7614abc591f22f7d9fc4, type: 3}
   _summonCount: 2
-  _summonCooldown: 10
+  _summonCooldown: 14
   _projectileDamage: 15
+  _meleeHitRange: 5.2
   _meleeWarningTime: 0.25
   _meleeEffectRadius: 1.4
   _projectileScale: 2.6
+  _phase1ShootEveryNAttacks: 4
+  _phase2ShootEveryNAttacks: 3
+  _uninterruptedShootHpThreshold: 0.3
 --- !u!114 &4000008
 MonoBehaviour:
   m_ObjectHideFlags: 0
