@@ -46,6 +46,8 @@ public class HUDController : MonoBehaviour
     private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         EnsureHudExists(scene);
+        if (_instance != null)
+            _instance.HandleSceneLoaded();
     }
 
     private static void EnsureHudExists(Scene scene)
@@ -94,9 +96,7 @@ public class HUDController : MonoBehaviour
 
         BuildHUD();
 
-        // Đảm bảo màn chọn nâng cấp tồn tại (phòng khi bootstrap của nó không kích hoạt).
-        if (FindObjectOfType<LevelUpScreen>() == null)
-            new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
+        EnsureLevelUpScreenExists();
     }
 
     private void Start()
@@ -128,6 +128,19 @@ public class HUDController : MonoBehaviour
     private void Update()
     {
         if (_stats == null) TryResolvePlayer();
+    }
+
+    private void HandleSceneLoaded()
+    {
+        _stats = null;
+        TryResolvePlayer();
+        EnsureLevelUpScreenExists();
+    }
+
+    private static void EnsureLevelUpScreenExists()
+    {
+        if (FindObjectOfType<LevelUpScreen>() == null)
+            new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
     }
 
     private void TryResolvePlayer()
@@ -195,7 +208,17 @@ public class HUDController : MonoBehaviour
         _goldText = CreateText("HUD_Gold", new Vector2(20, -110), new Vector2(220, 28), 22, TextAlignmentOptions.Left, "Gold: 0");
         _dayText = CreateText("HUD_Day", new Vector2(20, -140), new Vector2(220, 28), 22, TextAlignmentOptions.Left, "Day 1");
 
+        CreateSeedInventory();
+
         if (_xpFill != null) _xpFill.fillAmount = 0f;
+    }
+
+    private void CreateSeedInventory()
+    {
+        if (FindObjectOfType<SeedInventoryUI>() != null) return;
+
+        var rt = NewChild("HUD_SeedInventory", new Vector2(20, -190), new Vector2(64, 260));
+        rt.gameObject.AddComponent<SeedInventoryUI>();
     }
 
     private RectTransform NewChild(string name, Vector2 anchoredPos, Vector2 size)

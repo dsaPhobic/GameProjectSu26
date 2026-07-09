@@ -7556,6 +7556,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4edddcf3928474ba040d8e0468227d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _eggsForSale:
+  - {fileID: 11400000, guid: 932c944976ca4614eab5bf9b7bae5e70, type: 2}
+  _selectedEggIndex: 0
+  _interactRange: 1.5
+  _buyKey: 101
+  _cycleEggKey: 113
 --- !u!95 &1618630944
 Animator:
   serializedVersion: 5

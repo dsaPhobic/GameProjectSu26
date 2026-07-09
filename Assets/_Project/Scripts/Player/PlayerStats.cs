@@ -13,6 +13,8 @@ public class PlayerStats : MonoBehaviour
     private int _xp;
     private int _gold;
     private bool _isDead;
+    private static bool _sharedGoldInitialized;
+    private static int _sharedGold;
 
     public int MaxHP => _maxHP;
     public int CurrentHP => _currentHP;
@@ -28,10 +30,24 @@ public class PlayerStats : MonoBehaviour
     // XP cần để lên cấp kế tiếp (tăng dần theo cấp). HUD dùng để tính % thanh XP.
     public int XPToNextLevel => _xpPerLevel * _level;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetSharedRuntimeState()
+    {
+        _sharedGoldInitialized = false;
+        _sharedGold = 0;
+    }
+
     private void Awake()
     {
         _currentHP = _maxHP;
-        _gold = _startingGold;
+
+        if (!_sharedGoldInitialized)
+        {
+            _sharedGold = _startingGold;
+            _sharedGoldInitialized = true;
+        }
+
+        _gold = _sharedGold;
     }
 
     private void OnEnable() => GameEvents.OnEnemyDied += HandleEnemyKilled;
@@ -79,16 +95,18 @@ public class PlayerStats : MonoBehaviour
 
     public void AddGold(int amount)
     {
-        _gold += amount;
+        _sharedGold += amount;
+        _gold = _sharedGold;
         GameEvents.RaiseGoldChanged(_gold);
     }
 
     public bool SpendGold(int amount)
     {
         if (amount <= 0) return true;
-        if (_gold < amount) return false;
+        if (_sharedGold < amount) return false;
 
-        _gold -= amount;
+        _sharedGold -= amount;
+        _gold = _sharedGold;
         GameEvents.RaiseGoldChanged(_gold);
         return true;
     }

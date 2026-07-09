@@ -37,6 +37,7 @@ public class PlayerController : Entity
         _toolHandler = GetComponent<PlayerToolHandler>();
         _chargeBar = GetComponent<PlayerChargeBar>();
         if (_chargeBar == null) _chargeBar = gameObject.AddComponent<PlayerChargeBar>();
+        if (GetComponent<PlayerPetInventory>() == null) gameObject.AddComponent<PlayerPetInventory>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         ServiceLocator.Register(this);
     }
