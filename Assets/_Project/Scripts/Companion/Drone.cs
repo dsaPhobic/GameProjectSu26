@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class Drone : MonoBehaviour
@@ -105,11 +104,6 @@ public class Drone : MonoBehaviour
     public void SetFollowTarget(Transform target)
     {
         _followTarget = target;
-    }
-
-    public void SetBulletPrefab(GameObject bulletPrefab)
-    {
-        _bulletPrefab = bulletPrefab;
     }
 
     private void OnDrawGizmosSelected()

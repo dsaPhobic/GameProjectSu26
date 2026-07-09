@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopkeeperNPC : MonoBehaviour, IInteractable
@@ -52,14 +51,7 @@ public class ShopkeeperNPC : MonoBehaviour, IInteractable
             return;
         }
 
-        PlayerController servicePlayer = ServiceLocator.Get<PlayerController>();
-        GameObject inventoryOwner = servicePlayer != null ? servicePlayer.gameObject : player.gameObject;
-
-        PlayerPetInventory inventory = inventoryOwner.GetComponent<PlayerPetInventory>();
-        if (inventory == null)
-            inventory = inventoryOwner.AddComponent<PlayerPetInventory>();
-
-        inventory.AddEgg(egg);
+        PlayerPetInventory.AddEgg(egg);
         Debug.Log($"Bought {egg.eggName} for {egg.price} gold.");
     }
 
