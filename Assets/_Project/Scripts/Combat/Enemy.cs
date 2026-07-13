@@ -29,7 +29,10 @@ public abstract class Enemy : Entity
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (_data != null) { maxHP = _data.maxHP; _currentHP = maxHP; }
         _baseScale = transform.localScale;
-        gameObject.AddComponent<EnemyHealthBar>();
+        if (_data != null && _data.enemyType == EnemyType.DemonBoss)
+            gameObject.AddComponent<BossHealthBar>();
+        else
+            gameObject.AddComponent<EnemyHealthBar>();
     }
 
     private void Update()
@@ -55,7 +58,7 @@ public abstract class Enemy : Entity
 
     private void FixedUpdate()
     {
-        if (_state == EnemyState.Chase && _target != null)
+        if ((_state == EnemyState.Chase || ShouldMoveWhileAttacking()) && _target != null)
             MoveTowardTarget();
     }
 
@@ -100,6 +103,11 @@ public abstract class Enemy : Entity
     protected virtual bool CanChaseTarget(float distanceToTarget)
     {
         return distanceToTarget <= _data.detectionRange;
+    }
+
+    protected virtual bool ShouldMoveWhileAttacking()
+    {
+        return false;
     }
 
     protected abstract Transform GetTarget();

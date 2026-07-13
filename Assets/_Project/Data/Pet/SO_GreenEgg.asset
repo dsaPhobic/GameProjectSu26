@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00dd6ae4033a083469abbb555938fff6, type: 3}
+  m_Name: SO_GreenEgg
+  m_EditorClassIdentifier: 
+  eggName: Green Egg
+  eggSprite: {fileID: -1005806991, guid: 3d43f76664cb1f346933d7a6b279b2f1, type: 3}
+  hatchAnimatorController: {fileID: 9100000, guid: f19ba8cce17dca841b4e1d884067c230, type: 2}
+  petPrefab: {fileID: 8780587746676173527, guid: c365db07b8d25d3419d9b9d94f639cbc, type: 3}
+  price: 50
+  hatchSeconds: 30

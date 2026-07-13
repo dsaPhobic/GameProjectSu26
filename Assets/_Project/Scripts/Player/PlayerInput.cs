@@ -6,6 +6,8 @@ public class PlayerInput : MonoBehaviour
     public Vector2 AimDirection { get; private set; }
     public bool AttackPressed { get; private set; }
     public bool ToolUsePressed { get; private set; }
+    public bool ToolUseHeld { get; private set; }
+    public bool ToolUseReleased { get; private set; }
     public bool DashPressed { get; private set; }
     public int ToolSwitchInput { get; private set; }
     public bool SeedCyclePressed { get; private set; }
@@ -23,6 +25,8 @@ public class PlayerInput : MonoBehaviour
         AimDirection = ReadAimDirection();
         AttackPressed = Input.GetMouseButtonDown(0);
         ToolUsePressed = Input.GetMouseButtonDown(1);
+        ToolUseHeld = Input.GetMouseButton(1);
+        ToolUseReleased = Input.GetMouseButtonUp(1);
         DashPressed = Input.GetKeyDown(KeyCode.Space);
         ToolSwitchInput = ReadToolSwitch();
         SeedCyclePressed = Input.GetKeyDown(KeyCode.Q);
@@ -39,6 +43,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1)) return 1;
         if (Input.GetKeyDown(KeyCode.Alpha2)) return 2;
         if (Input.GetKeyDown(KeyCode.Alpha3)) return 3;
+        if (Input.GetKeyDown(KeyCode.Alpha4)) return 4;
         return 0;
     }
 }

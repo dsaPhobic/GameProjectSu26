@@ -16,6 +16,16 @@ public class CameraFollow : MonoBehaviour
         _cam = GetComponent<Camera>();
     }
 
+    private void Start()
+    {
+        if (_target == null)
+        {
+            PlayerController player = FindObjectOfType<PlayerController>();
+            if (player != null)
+                SetTarget(player.transform, snap: true);
+        }
+    }
+
     private void LateUpdate()
     {
         if (_target == null) return;
@@ -28,5 +38,19 @@ public class CameraFollow : MonoBehaviour
         smoothed.x = Mathf.Clamp(smoothed.x, _minX + halfW, _maxX - halfW);
         smoothed.y = Mathf.Clamp(smoothed.y, _minY + halfH, _maxY - halfH);
         transform.position = smoothed;
+    }
+
+    public void SetTarget(Transform target, bool snap = false)
+    {
+        _target = target;
+        if (!snap || _target == null || _cam == null) return;
+
+        float halfH = _cam.orthographicSize;
+        float halfW = halfH * _cam.aspect;
+
+        Vector3 position = new Vector3(_target.position.x, _target.position.y, transform.position.z);
+        position.x = Mathf.Clamp(position.x, _minX + halfW, _maxX - halfW);
+        position.y = Mathf.Clamp(position.y, _minY + halfH, _maxY - halfH);
+        transform.position = position;
     }
 }

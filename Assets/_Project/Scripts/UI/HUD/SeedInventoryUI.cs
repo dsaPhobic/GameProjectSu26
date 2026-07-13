@@ -13,16 +13,22 @@ public class SeedInventoryUI : MonoBehaviour
     private Image[] _highlights;
     private TextMeshProUGUI[] _countLabels;
     private int _slotCount;
+    private bool _built;
 
     private void Start()
     {
-        var player = ServiceLocator.Get<PlayerController>();
-        if (player == null) player = FindObjectOfType<PlayerController>();
-        _toolHandler = player?.GetComponent<PlayerToolHandler>();
-
-        BuildSlots();
+        TryResolveAndBuild();
         GameEvents.OnSeedChanged += OnSeedChanged;
         GameEvents.OnSeedCountChanged += OnSeedCountChanged;
+    }
+
+    private void Update()
+    {
+        PlayerController player = ServiceLocator.Get<PlayerController>();
+        PlayerToolHandler current = player != null ? player.GetComponent<PlayerToolHandler>() : null;
+
+        if (!_built || _toolHandler == null || (current != null && _toolHandler != current))
+            TryResolveAndBuild();
     }
 
     private void OnDestroy()
@@ -36,11 +42,16 @@ public class SeedInventoryUI : MonoBehaviour
         var seeds = _toolHandler?.AvailableSeeds;
         if (seeds == null || seeds.Length == 0) return;
 
+        ClearSlots();
+
         _slotCount = seeds.Length;
         _highlights = new Image[_slotCount];
         _countLabels = new TextMeshProUGUI[_slotCount];
 
-        var layout = gameObject.AddComponent<VerticalLayoutGroup>();
+        var layout = GetComponent<VerticalLayoutGroup>();
+        if (layout == null)
+            layout = gameObject.AddComponent<VerticalLayoutGroup>();
+
         layout.spacing = _spacing;
         layout.childAlignment = TextAnchor.UpperLeft;
         layout.childControlWidth = false;
@@ -55,6 +66,25 @@ public class SeedInventoryUI : MonoBehaviour
         }
 
         Refresh(_toolHandler.SelectedSeedIndex);
+        _built = true;
+    }
+
+    private void TryResolveAndBuild()
+    {
+        var player = ServiceLocator.Get<PlayerController>();
+        if (player == null) player = FindObjectOfType<PlayerController>();
+
+        PlayerToolHandler toolHandler = player?.GetComponent<PlayerToolHandler>();
+        if (toolHandler == null) return;
+
+        _toolHandler = toolHandler;
+        BuildSlots();
+    }
+
+    private void ClearSlots()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+            Destroy(transform.GetChild(i).gameObject);
     }
 
     private RectTransform CreateSlot(CropData crop, int index)

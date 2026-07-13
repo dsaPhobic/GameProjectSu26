@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class HUDController : MonoBehaviour
 {
+    private static HUDController _instance;
+
+    // Seed text đã có sẵn trong scene (tính năng seed cycling) — vẫn dùng reference cũ nếu có.
     [SerializeField] private TextMeshProUGUI _seedText;
 
     private PlayerStats _stats;
@@ -26,12 +30,68 @@ public class HUDController : MonoBehaviour
         }
     }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void Bootstrap()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        EnsureHudExists(SceneManager.GetActiveScene());
+    }
+
+    private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EnsureHudExists(scene);
+        if (_instance != null)
+            _instance.HandleSceneLoaded();
+    }
+
+    private static void EnsureHudExists(Scene scene)
+    {
+        if (!ShouldShowHud(scene.name))
+        {
+            if (_instance != null)
+                Destroy(_instance.gameObject);
+            return;
+        }
+
+        if (FindObjectOfType<HUDController>() != null) return;
+
+        GameObject canvasObject = new GameObject("Canvas_HUD");
+        int uiLayer = LayerMask.NameToLayer("UI");
+        if (uiLayer >= 0)
+            canvasObject.layer = uiLayer;
+
+        Canvas canvas = canvasObject.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.matchWidthOrHeight = 0.5f;
+
+        canvasObject.AddComponent<GraphicRaycaster>();
+        canvasObject.AddComponent<HUDController>();
+    }
+
+    private static bool ShouldShowHud(string sceneName)
+    {
+        return sceneName == "GameScene" || sceneName == "ShopInterior" || sceneName == "HubTown";
+    }
+
     private void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+
         BuildHUD();
 
-        if (FindObjectOfType<LevelUpScreen>() == null)
-            new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
+        EnsureLevelUpScreenExists();
     }
 
     private void Start()
@@ -48,6 +108,9 @@ public class HUDController : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (_instance == this)
+            _instance = null;
+
         GameEvents.OnPlayerHPChanged -= UpdateHP;
         GameEvents.OnPlayerXPChanged -= UpdateXP;
         GameEvents.OnGoldChanged -= UpdateGold;
@@ -59,6 +122,19 @@ public class HUDController : MonoBehaviour
     private void Update()
     {
         if (_stats == null) TryResolvePlayer();
+    }
+
+    private void HandleSceneLoaded()
+    {
+        _stats = null;
+        TryResolvePlayer();
+        EnsureLevelUpScreenExists();
+    }
+
+    private static void EnsureLevelUpScreenExists()
+    {
+        if (FindObjectOfType<LevelUpScreen>() == null)
+            new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
     }
 
     private void TryResolvePlayer()
@@ -125,7 +201,17 @@ public class HUDController : MonoBehaviour
         _goldText = CreateText("HUD_Gold", new Vector2(20, -110), new Vector2(220, 28), 22, TextAlignmentOptions.Left, "Gold: 0");
         _dayText = CreateText("HUD_Day", new Vector2(20, -140), new Vector2(220, 28), 22, TextAlignmentOptions.Left, "Day 1");
 
+        CreateSeedInventory();
+
         if (_xpFill != null) _xpFill.fillAmount = 0f;
+    }
+
+    private void CreateSeedInventory()
+    {
+        if (FindObjectOfType<SeedInventoryUI>() != null) return;
+
+        var rt = NewChild("HUD_SeedInventory", new Vector2(20, -190), new Vector2(64, 260));
+        rt.gameObject.AddComponent<SeedInventoryUI>();
     }
 
     private RectTransform NewChild(string name, Vector2 anchoredPos, Vector2 size)

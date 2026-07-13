@@ -2,15 +2,27 @@ using UnityEngine;
 
 public class PlayerToolHandler : MonoBehaviour
 {
-    public ToolType CurrentTool { get; private set; } = ToolType.Hoe;
+    [SerializeField] private ToolType _startingTool = ToolType.Gun;
+
+    public ToolType CurrentTool { get; private set; }
 
     [SerializeField] private float _interactRange = 1.5f;
+    [SerializeField] private float _interactOriginOffset = 0.35f;
     [SerializeField] private LayerMask _farmTileLayer;
     [SerializeField] private CropData[] _availableSeeds;
     [SerializeField] private int _startingSeedCount = 5;
 
+    [Header("Tool Visuals")]
+    [SerializeField] private SpriteRenderer _toolRenderer;
+    [SerializeField] private Sprite _hoeSprite;
+    [SerializeField] private Sprite _wateringCanSprite;
+    [SerializeField] private Sprite _swordSprite;
+    [SerializeField] private Sprite _gunSprite;
+
     private int _selectedSeedIndex = 0;
     private int[] _seedCounts;
+    private Vector3 _defaultToolLocalPosition;
+    private Vector2 _lastAimDirection = Vector2.right;
 
     public CropData SelectedSeed => (_availableSeeds != null && _availableSeeds.Length > 0)
         ? _availableSeeds[_selectedSeedIndex] : null;
@@ -34,12 +46,21 @@ public class PlayerToolHandler : MonoBehaviour
 
     private void Awake()
     {
+        if (_toolRenderer != null)
+            _defaultToolLocalPosition = _toolRenderer.transform.localPosition;
+
+        if (_gunSprite == null && _toolRenderer != null)
+            _gunSprite = _toolRenderer.sprite;
+
+        CurrentTool = _startingTool;
+
         if (_availableSeeds != null)
         {
             _seedCounts = new int[_availableSeeds.Length];
             for (int i = 0; i < _seedCounts.Length; i++)
                 _seedCounts[i] = _startingSeedCount;
         }
+        UpdateToolSprite();
     }
 
     public void SwitchTool(int slot)
@@ -49,8 +70,68 @@ public class PlayerToolHandler : MonoBehaviour
             1 => ToolType.Hoe,
             2 => ToolType.WateringCan,
             3 => ToolType.Sword,
+            4 => ToolType.Gun,
             _ => CurrentTool
         };
+        UpdateToolSprite();
+    }
+
+    public void EquipGun()
+    {
+        CurrentTool = ToolType.Gun;
+        UpdateToolSprite();
+    }
+
+    public void FlipTool(bool facingLeft)
+    {
+        if (_toolRenderer == null) return;
+        if (CurrentTool == ToolType.Gun) return;
+
+        _toolRenderer.transform.localRotation = Quaternion.identity;
+        _toolRenderer.flipY = false;
+        _toolRenderer.flipX = facingLeft;
+        Vector3 pos = _defaultToolLocalPosition;
+        pos.x = facingLeft ? -Mathf.Abs(pos.x) : Mathf.Abs(pos.x);
+        _toolRenderer.transform.localPosition = pos;
+    }
+
+    public void AimTool(Vector2 aimDirection)
+    {
+        if (aimDirection.sqrMagnitude <= 0.001f)
+            return;
+
+        Vector2 dir = aimDirection.normalized;
+        _lastAimDirection = dir;
+
+        if (_toolRenderer == null || CurrentTool != ToolType.Gun)
+            return;
+
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        float distance = Mathf.Max(_defaultToolLocalPosition.magnitude, 0.1f);
+
+        _toolRenderer.transform.localPosition = dir * distance;
+        _toolRenderer.transform.localRotation = Quaternion.Euler(0f, 0f, angle);
+        _toolRenderer.flipX = false;
+        _toolRenderer.flipY = dir.x < 0f;
+    }
+
+    private void UpdateToolSprite()
+    {
+        if (_toolRenderer == null) return;
+        _toolRenderer.sprite = CurrentTool switch
+        {
+            ToolType.Hoe => _hoeSprite,
+            ToolType.WateringCan => _wateringCanSprite,
+            ToolType.Sword => _swordSprite,
+            ToolType.Gun => _gunSprite,
+            _ => null
+        };
+
+        if (CurrentTool != ToolType.Gun)
+        {
+            _toolRenderer.transform.localRotation = Quaternion.identity;
+            _toolRenderer.flipY = false;
+        }
     }
 
     public void CycleSeed()
@@ -64,8 +145,9 @@ public class PlayerToolHandler : MonoBehaviour
     {
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos = new Vector2(mouseWorld.x, mouseWorld.y);
+        Vector2 origin = GetInteractOrigin();
 
-        if (Vector2.Distance(transform.position, mousePos) > _interactRange) return;
+        if (Vector2.Distance(origin, mousePos) > _interactRange) return;
 
         Collider2D hit = Physics2D.OverlapCircle(mousePos, 0.3f, _farmTileLayer);
 
@@ -92,6 +174,15 @@ public class PlayerToolHandler : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, _interactRange);
+        Gizmos.DrawWireSphere(GetInteractOrigin(), _interactRange);
+    }
+
+    private Vector2 GetInteractOrigin()
+    {
+        Vector2 direction = _lastAimDirection.sqrMagnitude > 0.001f
+            ? _lastAimDirection.normalized
+            : Vector2.right;
+
+        return (Vector2)transform.position + direction * _interactOriginOffset;
     }
 }

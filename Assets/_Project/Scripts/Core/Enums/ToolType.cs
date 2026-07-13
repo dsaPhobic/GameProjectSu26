@@ -2,5 +2,6 @@ public enum ToolType
 {
     Hoe,
     WateringCan,
-    Sword
+    Sword,
+    Gun
 }

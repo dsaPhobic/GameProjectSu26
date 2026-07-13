@@ -6,12 +6,15 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int _damage = 20;
     [SerializeField] private float _attackSpeed = 1f;
     [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private int _startingGold = 25;
 
     private int _currentHP;
     private int _level = 1;
     private int _xp;
     private int _gold;
     private bool _isDead;
+    private static bool _sharedGoldInitialized;
+    private static int _sharedGold;
 
     public int MaxHP => _maxHP;
     public int CurrentHP => _currentHP;
@@ -26,9 +29,24 @@ public class PlayerStats : MonoBehaviour
 
     public int XPToNextLevel => _xpPerLevel * _level;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetSharedRuntimeState()
+    {
+        _sharedGoldInitialized = false;
+        _sharedGold = 0;
+    }
+
     private void Awake()
     {
         _currentHP = _maxHP;
+
+        if (!_sharedGoldInitialized)
+        {
+            _sharedGold = _startingGold;
+            _sharedGoldInitialized = true;
+        }
+
+        _gold = _sharedGold;
     }
 
     private void OnEnable() => GameEvents.OnEnemyDied += HandleEnemyKilled;
@@ -74,8 +92,20 @@ public class PlayerStats : MonoBehaviour
 
     public void AddGold(int amount)
     {
-        _gold += amount;
+        _sharedGold += amount;
+        _gold = _sharedGold;
         GameEvents.RaiseGoldChanged(_gold);
+    }
+
+    public bool SpendGold(int amount)
+    {
+        if (amount <= 0) return true;
+        if (_sharedGold < amount) return false;
+
+        _sharedGold -= amount;
+        _gold = _sharedGold;
+        GameEvents.RaiseGoldChanged(_gold);
+        return true;
     }
 
     public void ModifyMaxHP(int delta) { _maxHP += delta; Heal(0); }

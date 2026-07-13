@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bdbd7ba5996c341bd0b40f622f2107, type: 3}
   m_Name: SO_DemonBoss
   m_EditorClassIdentifier:
-  enemyName: Flying Eye
+  enemyName: Demon Boss
   enemyType: 3
   maxHP: 500
   damage: 20
   moveSpeed: 2.5
   xpReward: 200
   goldReward: 100
-  attackCooldown: 2.5
-  attackRange: 2
+  attackCooldown: 3
+  attackRange: 12
   detectionRange: 15
