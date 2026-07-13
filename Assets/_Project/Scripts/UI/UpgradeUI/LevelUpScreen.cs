@@ -71,6 +71,15 @@ public class LevelUpScreen : MonoBehaviour
         _pool.Add(new Upgrade { Name = "Wind Walker", Desc = "+0.6 Tốc độ chạy", Apply = (s, p) => s.ModifyMoveSpeed(0.6f) });
         _pool.Add(new Upgrade { Name = "Rapid Strike", Desc = "+0.35 Tốc độ đánh", Apply = (s, p) => s.ModifyAttackSpeed(0.35f) });
         _pool.Add(new Upgrade { Name = "Phantom Step", Desc = "-0.5s Hồi chiêu lướt", Apply = (s, p) => p?.ReduceDashCooldown(0.5f) });
+        _pool.Add(new Upgrade
+        {
+            Name = "Hero Transformation",
+            Desc = "Thay đổi ngoại hình nhân vật",
+            Apply = (stats, player) =>
+            {
+                player?.GetComponent<PlayerAnimator>()?.SetArmored(true);
+            }
+        });
     }
 
     private void Open()

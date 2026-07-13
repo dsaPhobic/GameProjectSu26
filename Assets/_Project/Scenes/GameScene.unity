@@ -5262,6 +5262,14 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2041936391254081766, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+      propertyPath: _normalController
+      value: 
+      objectReference: {fileID: 9100000, guid: c06575fcbd2c4044f89b595fdd6b152c, type: 2}
+    - target: {fileID: 2041936391254081766, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
+      propertyPath: _armoredController
+      value: 
+      objectReference: {fileID: 9100000, guid: 54201656f44c1934ea7a216c96d96fed, type: 2}
     - target: {fileID: 4059975653942975734, guid: 9127b4ed4a139e3409d28c464ef3b272, type: 3}
       propertyPath: _gunSprite
       value: 
