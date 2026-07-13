@@ -4330,8 +4330,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f0ad68c3b7d942818dedb103379540ff, type: 2}
   - {fileID: 11400000, guid: a9d79d1bdfd64f21bf0be148de3ad723, type: 2}
   - {fileID: 11400000, guid: 48605903c3fa48c498cb8817b63bbc07, type: 2}
-  - {fileID: 11400000, guid: 1ede2a1dbcaf41d9a2d1dbcde6e90cbf, type: 2}
-  - {fileID: 11400000, guid: 8cc4b3c812764bd29b3e51a366381744, type: 2}
   _spawnPoints:
   - {fileID: 49917109}
   - {fileID: 1969368809}

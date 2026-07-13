@@ -98,7 +98,7 @@ public class WaveManager : MonoBehaviour
     {
         foreach (var wd in _waveDataList)
             if (wd.dayNumber == day) return wd;
-        return _waveDataList.Count > 0 ? _waveDataList[^1] : null;
+        return null;
     }
 
     private GameObject GetPrefabForType(EnemyType type)
