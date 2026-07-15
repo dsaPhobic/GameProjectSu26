@@ -1848,6 +1848,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 65818c3878d51204898c638e2ae2388a, type: 3}
   - key: sfx_powerup_pickup
     clip: {fileID: 8300000, guid: 1ddab91be530c644b9f8f8af517626a9, type: 3}
+  - key: sfx_boss_phase
+    clip: {fileID: 8300000, guid: c3a89f2c6f9145b9b6f52c64e3a6b8d1, type: 3}
+  - key: sfx_drone_shoot
+    clip: {fileID: 8300000, guid: e6b2d8a91c3f4a62a4db9f0e5c77a3f8, type: 3}
 --- !u!4 &1322426225
 Transform:
   m_ObjectHideFlags: 0
