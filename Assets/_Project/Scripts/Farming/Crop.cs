@@ -33,17 +33,30 @@ public class Crop : MonoBehaviour, IDamageable, ISaveable
     {
         float timePerStage = _data.growthTime / 3f;
         yield return new WaitForSeconds(timePerStage);
-        SetStage(CropStage.Sprout);
+        SetStageIfBehind(CropStage.Sprout);
         yield return new WaitForSeconds(timePerStage);
-        SetStage(CropStage.Growing);
+        SetStageIfBehind(CropStage.Growing);
         yield return new WaitForSeconds(timePerStage);
-        SetStage(CropStage.Mature);
+        SetStageIfBehind(CropStage.Mature);
     }
 
     private void SetStage(CropStage stage)
     {
         _stage = stage;
         UpdateSprite();
+    }
+
+    private void SetStageIfBehind(CropStage stage)
+    {
+        if ((int)_stage >= (int)stage) return;
+        SetStage(stage);
+    }
+
+    public void AdvanceStage()
+    {
+        if (IsDead || IsMature) return;
+
+        SetStage((CropStage)Mathf.Min((int)_stage + 1, (int)CropStage.Mature));
     }
 
     private void UpdateSprite()

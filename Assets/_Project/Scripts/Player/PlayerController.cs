@@ -19,9 +19,12 @@ public class PlayerController : Entity
     private PlayerAnimator _animator;
     private PlayerToolHandler _toolHandler;
     private PlayerChargeBar _chargeBar;
+    private Coroutine _shieldCoroutine;
+    private GameObject _shieldVisualRoot;
 
     private bool _isDashing;
     private bool _isChargingShot;
+    private bool _isShielded;
     private float _chargeTimer;
     private float _dashCooldownTimer;
     private float _attackCooldownTimer;
@@ -228,13 +231,97 @@ public class PlayerController : Entity
 
     public void ReduceDashCooldown(float delta) => _dashCooldown = Mathf.Max(0.1f, _dashCooldown - delta);
 
+    public void ActivateShield(float duration, Sprite shieldIcon)
+    {
+        if (_shieldCoroutine != null)
+            StopCoroutine(_shieldCoroutine);
+
+        _shieldCoroutine = StartCoroutine(ShieldRoutine(duration, shieldIcon));
+    }
+
     public override void TakeDamage(int damage)
     {
+        if (_isShielded) return;
+
         _stats.TakeDamage(damage);
     }
 
     protected override void Die()
     {
         GameEvents.RaisePlayerDied();
+    }
+
+    private IEnumerator ShieldRoutine(float duration, Sprite shieldIcon)
+    {
+        _isShielded = true;
+        ShowShieldVisual(shieldIcon);
+
+        yield return new WaitForSeconds(duration);
+
+        _isShielded = false;
+        HideShieldVisual();
+        _shieldCoroutine = null;
+    }
+
+    private void ShowShieldVisual(Sprite shieldIcon)
+    {
+        if (_shieldVisualRoot == null)
+            BuildShieldVisual(shieldIcon);
+
+        _shieldVisualRoot.SetActive(true);
+    }
+
+    private void HideShieldVisual()
+    {
+        if (_shieldVisualRoot != null)
+            _shieldVisualRoot.SetActive(false);
+    }
+
+    private void BuildShieldVisual(Sprite shieldIcon)
+    {
+        _shieldVisualRoot = new GameObject("ShieldVisual");
+        _shieldVisualRoot.transform.SetParent(transform, false);
+        _shieldVisualRoot.transform.localPosition = Vector3.zero;
+
+        var aura = new GameObject("Aura");
+        aura.transform.SetParent(_shieldVisualRoot.transform, false);
+        aura.transform.localScale = new Vector3(2.4f, 2.4f, 1f);
+        var auraRenderer = aura.AddComponent<SpriteRenderer>();
+        auraRenderer.sprite = CreateCircleSprite();
+        auraRenderer.color = new Color(0.2f, 0.85f, 1f, 0.28f);
+        auraRenderer.sortingOrder = 18;
+
+        if (shieldIcon != null)
+        {
+            var shield = new GameObject("ShieldIcon");
+            shield.transform.SetParent(_shieldVisualRoot.transform, false);
+            shield.transform.localPosition = new Vector3(0f, 0.78f, 0f);
+            shield.transform.localScale = new Vector3(0.45f, 0.45f, 1f);
+            var shieldRenderer = shield.AddComponent<SpriteRenderer>();
+            shieldRenderer.sprite = shieldIcon;
+            shieldRenderer.color = new Color(1f, 1f, 1f, 0.9f);
+            shieldRenderer.sortingOrder = 35;
+        }
+    }
+
+    private static Sprite CreateCircleSprite()
+    {
+        const int size = 64;
+        var texture = new Texture2D(size, size, TextureFormat.ARGB32, false);
+        var center = new Vector2((size - 1) * 0.5f, (size - 1) * 0.5f);
+        float radius = size * 0.46f;
+
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float distance = Vector2.Distance(new Vector2(x, y), center);
+                float alpha = Mathf.Clamp01((radius - distance) / 4f);
+                texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+
+        texture.Apply();
+        return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 64f);
     }
 }
