@@ -55,6 +55,20 @@ public class FarmManager : MonoBehaviour
         return count;
     }
 
+    public int AdvanceAllCropsOneStage()
+    {
+        int advanced = 0;
+        foreach (var tile in _tiles)
+        {
+            if (!tile.HasLivingCrop) continue;
+
+            tile.CurrentCrop.AdvanceStage();
+            advanced++;
+        }
+
+        return advanced;
+    }
+
     public Crop GetNearestCrop(Vector2 worldPos)
     {
         Crop nearest = null;

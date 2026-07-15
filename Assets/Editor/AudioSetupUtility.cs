@@ -8,6 +8,7 @@ public static class AudioSetupUtility
 {
     private const string MainMenuScene = "Assets/_Project/Scenes/MainMenu.unity";
     private const string GameScene = "Assets/_Project/Scenes/GameScene.unity";
+    private const string GameOverScene = "Assets/_Project/Scenes/GameOver.unity";
 
     private static readonly (string Key, string Path)[] BgmClips =
     {
@@ -28,6 +29,8 @@ public static class AudioSetupUtility
         ("sfx_digging", "Assets/_Project/Audio/SFX/sfx_digging.mp3"),
         ("sfx_button_click", "Assets/_Project/Audio/SFX/sfx_button_click.mp3"),
         ("sfx_powerup_pickup", "Assets/_Project/Audio/SFX/sfx_powerup_pickup.mp3"),
+        ("sfx_boss_phase", "Assets/_Project/Audio/SFX/sfx_boss_phase.mp3"),
+        ("sfx_drone_shoot", "Assets/_Project/Audio/SFX/sfx_drone_shoot.mp3"),
     };
 
     [MenuItem("Magic Farm/Audio/Assign Audio Clips To Scenes")]
@@ -45,12 +48,13 @@ public static class AudioSetupUtility
         string activeScenePath = SceneManager.GetActiveScene().path;
         ConfigureScene(MainMenuScene);
         ConfigureScene(GameScene);
+        ConfigureScene(GameOverScene);
 
         if (!string.IsNullOrEmpty(activeScenePath))
             EditorSceneManager.OpenScene(activeScenePath);
 
         AssetDatabase.SaveAssets();
-        Debug.Log("Audio clips assigned to AudioManager in MainMenu and GameScene.");
+        Debug.Log("Audio clips assigned to AudioManager in MainMenu, GameScene, and GameOver.");
     }
 
     private static void ConfigureImportSettings()

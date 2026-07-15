@@ -27,7 +27,6 @@ public class PlayerStats : MonoBehaviour
 
     [SerializeField] private int _xpPerLevel = 100;
 
-    // XP cần để lên cấp kế tiếp (tăng dần theo cấp). HUD dùng để tính % thanh XP.
     public int XPToNextLevel => _xpPerLevel * _level;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -53,7 +52,6 @@ public class PlayerStats : MonoBehaviour
     private void OnEnable() => GameEvents.OnEnemyDied += HandleEnemyKilled;
     private void OnDisable() => GameEvents.OnEnemyDied -= HandleEnemyKilled;
 
-    // Giết quái cũng cộng XP (và gold) theo dữ liệu của quái.
     private void HandleEnemyKilled(Enemy enemy)
     {
         if (enemy == null || enemy.Data == null) return;
@@ -84,7 +82,6 @@ public class PlayerStats : MonoBehaviour
     public void AddXP(int amount)
     {
         _xp += amount;
-        // Lên cấp (có thể nhiều cấp 1 lúc); mỗi cấp trừ đúng ngưỡng để XP "reset" và fill lại từ đầu.
         while (_xp >= _xpPerLevel * _level)
         {
             _xp -= _xpPerLevel * _level;
