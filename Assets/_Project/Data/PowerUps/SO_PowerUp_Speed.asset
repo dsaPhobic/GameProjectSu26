@@ -15,4 +15,4 @@ MonoBehaviour:
   type: 0
   duration: 10
   magnitude: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: aa11aa22aa33aa44aa55aa66aa77aa88, type: 3}
