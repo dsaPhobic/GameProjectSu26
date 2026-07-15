@@ -9,31 +9,21 @@ public class GameOverScreen : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _enemiesKilledText;
 
     private static bool _nextResultIsWin;
-
-    private int _daysSurvived;
-    private int _goldEarned;
-    private int _enemiesKilled;
+    private static int _nextDaysSurvived;
+    private static int _nextGoldEarned;
+    private static int _nextEnemiesKilled;
 
     public static void SetNextResult(bool isWin)
     {
         _nextResultIsWin = isWin;
     }
 
-    private void OnEnable()
+    public static void SetNextResult(bool isWin, int daysSurvived, int goldEarned, int enemiesKilled)
     {
-        GameEvents.OnDayChanged += OnDayChanged;
-        GameEvents.OnGoldChanged += OnGoldChanged;
-        GameEvents.OnEnemyDied += OnEnemyDied;
-        _daysSurvived = 0;
-        _goldEarned = 0;
-        _enemiesKilled = 0;
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.OnDayChanged -= OnDayChanged;
-        GameEvents.OnGoldChanged -= OnGoldChanged;
-        GameEvents.OnEnemyDied -= OnEnemyDied;
+        _nextResultIsWin = isWin;
+        _nextDaysSurvived = Mathf.Max(0, daysSurvived);
+        _nextGoldEarned = Mathf.Max(0, goldEarned);
+        _nextEnemiesKilled = Mathf.Max(0, enemiesKilled);
     }
 
     private void Start()
@@ -42,16 +32,12 @@ public class GameOverScreen : MonoBehaviour
         ShowResults();
     }
 
-    private void OnDayChanged(int d) => _daysSurvived = d;
-    private void OnGoldChanged(int g) => _goldEarned = g;
-    private void OnEnemyDied(Enemy _) => _enemiesKilled++;
-
     public void ShowResults()
     {
         if (_titleText != null) _titleText.text = _nextResultIsWin ? "GAME WIN" : "GAME OVER";
-        if (_daysSurvivedText != null) _daysSurvivedText.text = $"Days Survived: {_daysSurvived}";
-        if (_goldEarnedText != null) _goldEarnedText.text = $"Gold Earned: {_goldEarned}";
-        if (_enemiesKilledText != null) _enemiesKilledText.text = $"Enemies Killed: {_enemiesKilled}";
+        if (_daysSurvivedText != null) _daysSurvivedText.text = $"Days Survived: {_nextDaysSurvived}";
+        if (_goldEarnedText != null) _goldEarnedText.text = $"Gold Earned: {_nextGoldEarned}";
+        if (_enemiesKilledText != null) _enemiesKilledText.text = $"Enemies Killed: {_nextEnemiesKilled}";
         AudioManager.Instance?.PlayBGM("bgm_game_over");
     }
 
