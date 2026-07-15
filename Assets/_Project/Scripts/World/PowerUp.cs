@@ -50,12 +50,14 @@ public class PowerUp : MonoBehaviour
         switch (_data.type)
         {
             case PowerUpType.Speed:
+                PowerUpTimerUI.Show(stats, _data);
                 stats.ModifyMoveSpeed(_data.magnitude);
                 yield return new WaitForSeconds(_data.duration);
                 stats.ModifyMoveSpeed(-_data.magnitude);
                 Destroy(gameObject, 0.1f);
                 break;
             case PowerUpType.DoubleDamage:
+                PowerUpTimerUI.Show(stats, _data);
                 int bonusDamage = Mathf.RoundToInt(stats.Damage * (_data.magnitude - 1));
                 stats.ModifyDamage(bonusDamage);
                 yield return new WaitForSeconds(_data.duration);
@@ -67,6 +69,7 @@ public class PowerUp : MonoBehaviour
                 Destroy(gameObject, 0.1f);
                 break;
             case PowerUpType.Shield:
+                PowerUpTimerUI.Show(stats, _data);
                 stats.GetComponent<PlayerController>()?.ActivateShield(_data.duration, _data.icon);
                 Destroy(gameObject, 0.1f);
                 break;
