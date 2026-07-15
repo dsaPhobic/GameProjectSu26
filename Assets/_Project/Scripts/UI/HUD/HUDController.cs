@@ -91,7 +91,6 @@ public class HUDController : MonoBehaviour
 
         BuildHUD();
 
-        EnsureLevelUpScreenExists();
     }
 
     private void Start()
@@ -128,13 +127,6 @@ public class HUDController : MonoBehaviour
     {
         _stats = null;
         TryResolvePlayer();
-        EnsureLevelUpScreenExists();
-    }
-
-    private static void EnsureLevelUpScreenExists()
-    {
-        if (FindObjectOfType<LevelUpScreen>() == null)
-            new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
     }
 
     private void TryResolvePlayer()

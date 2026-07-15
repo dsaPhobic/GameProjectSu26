@@ -7,13 +7,6 @@ using UnityEngine.UI;
 
 public class LevelUpScreen : MonoBehaviour
 {
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void Bootstrap()
-    {
-        if (FindObjectOfType<LevelUpScreen>() != null) return;
-        new GameObject("LevelUpScreen").AddComponent<LevelUpScreen>();
-    }
-
     private class Upgrade
     {
         public string Name;
@@ -51,12 +44,10 @@ public class LevelUpScreen : MonoBehaviour
     {
         BuildPool();
         BuildUI();
-        GameEvents.OnLevelUpScreenOpen += Open;
     }
 
     private void OnDestroy()
     {
-        GameEvents.OnLevelUpScreenOpen -= Open;
     }
 
     private void BuildPool()
