@@ -7,8 +7,9 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
-        if (!other.TryGetComponent<PlayerStats>(out var stats)) return;
+        var stats = other.GetComponentInParent<PlayerStats>();
+        if (stats == null) return;
+
         AudioManager.Instance?.PlaySFX("sfx_powerup_pickup");
         StartCoroutine(ApplyEffect(stats));
         GetComponent<Collider2D>().enabled = false;
@@ -26,9 +27,10 @@ public class PowerUp : MonoBehaviour
                 stats.ModifyMoveSpeed(-_data.magnitude);
                 break;
             case PowerUpType.DoubleDamage:
-                stats.ModifyDamage(Mathf.RoundToInt(stats.Damage * (_data.magnitude - 1)));
+                int bonusDamage = Mathf.RoundToInt(stats.Damage * (_data.magnitude - 1));
+                stats.ModifyDamage(bonusDamage);
                 yield return new WaitForSeconds(_data.duration);
-                stats.ModifyDamage(-Mathf.RoundToInt(stats.Damage * (_data.magnitude - 1)));
+                stats.ModifyDamage(-bonusDamage);
                 break;
             case PowerUpType.HealthRestore:
                 stats.Heal(Mathf.RoundToInt(_data.magnitude));

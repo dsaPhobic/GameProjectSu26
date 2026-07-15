@@ -24952,7 +24952,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953cade0cf5d0a64dbb5e23e9a225ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _powerUpPrefabs: []
+  _powerUpPrefabs:
+  - {fileID: 7100001, guid: 7fd08192a3b44cdef5061728394a5b6c, type: 3}
+  - {fileID: 7200001, guid: 80e192a3b4c54def061728394a5b6c7d, type: 3}
+  - {fileID: 7300001, guid: 91f2a3b4c5d64ef1728394a5b6c7d8e0, type: 3}
+  - {fileID: 7400001, guid: a203b4c5d6e75f028394a5b6c7d8e9f0, type: 3}
+  - {fileID: 7500001, guid: b314c5d6e7f8601394a5b6c7d8e9f0a0, type: 3}
+  - {fileID: 7600001, guid: c425d6e7f8097124a5b6c7d8e9f0a1b0, type: 3}
   _dropChance: 0.1
   _nightRandomInterval: 30
 --- !u!4 &1811893223
