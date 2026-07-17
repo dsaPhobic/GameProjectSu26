@@ -195,6 +195,7 @@ public class HUDController : MonoBehaviour
         _dayText = CreateText("HUD_Day", new Vector2(20, -140), new Vector2(220, 28), 22, TextAlignmentOptions.Left, "Day 1");
 
         CreateSeedInventory();
+        CreatePetEggInventory();
 
         if (_xpFill != null) _xpFill.fillAmount = 0f;
     }
@@ -205,6 +206,22 @@ public class HUDController : MonoBehaviour
 
         var rt = NewChild("HUD_SeedInventory", new Vector2(20, -190), new Vector2(64, 260));
         rt.gameObject.AddComponent<SeedInventoryUI>();
+    }
+
+    private void CreatePetEggInventory()
+    {
+        if (FindObjectOfType<PetEggInventoryUI>() != null) return;
+
+        var go = new GameObject("HUD_PetEggInventory");
+        go.layer = gameObject.layer;
+        var rt = go.AddComponent<RectTransform>();
+        rt.SetParent(transform, false);
+        rt.anchorMin = new Vector2(1f, 0f);
+        rt.anchorMax = new Vector2(1f, 0f);
+        rt.pivot = new Vector2(1f, 0f);
+        rt.anchoredPosition = new Vector2(-20f, 20f);
+        rt.sizeDelta = new Vector2(280f, 190f);
+        go.AddComponent<PetEggInventoryUI>();
     }
 
     private RectTransform NewChild(string name, Vector2 anchoredPos, Vector2 size)

@@ -16,5 +16,6 @@ MonoBehaviour:
   eggSprite: {fileID: 1152282363, guid: b7ed85448a4fca240b947fec3aa43b25, type: 3}
   hatchAnimatorController: {fileID: 9100000, guid: 9d865763b6fa67341bca5c5b401052c2, type: 2}
   petPrefab: {fileID: 8780587746676173527, guid: c365db07b8d25d3419d9b9d94f639cbc, type: 3}
+  petAnimatorController: {fileID: 9100000, guid: 1e6466384d55df643a5c1d5272374d67, type: 2}
   price: 25
   hatchSeconds: 30

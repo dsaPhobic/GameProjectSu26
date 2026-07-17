@@ -12,6 +12,7 @@ public class GameOverScreen : MonoBehaviour
     private static int _nextDaysSurvived;
     private static int _nextGoldEarned;
     private static int _nextEnemiesKilled;
+    private bool _isRetrying;
 
     public static void SetNextResult(bool isWin)
     {
@@ -52,7 +53,17 @@ public class GameOverScreen : MonoBehaviour
 
     public void OnRetryPressed()
     {
+        if (_isRetrying) return;
+        _isRetrying = true;
+
         Time.timeScale = 1f;
+        PlayerStats.ResetProgress();
+        PlayerController.ResetProgress();
+        PlayerAnimator.ResetProgress();
+        PlayerToolHandler.ResetProgress();
+        PlayerPetInventory.ResetProgress();
+        LevelPortalBootstrap.ResetProgress();
+        GameManager.Instance?.StartGame();
         SceneLoader.Instance?.LoadGameScene();
     }
 

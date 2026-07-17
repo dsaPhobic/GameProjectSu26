@@ -106,6 +106,13 @@ public class Drone : MonoBehaviour
         _followTarget = target;
     }
 
+    public void SetCompanionIndex(int index)
+    {
+        int column = Mathf.Max(0, index) % 3;
+        int row = Mathf.Max(0, index) / 3;
+        _followOffset = new Vector2(-1.2f - column * 0.8f, 0.8f + row * 0.7f);
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

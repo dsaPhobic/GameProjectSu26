@@ -7,6 +7,7 @@ public class PetEggData : ScriptableObject
     public Sprite eggSprite;
     public RuntimeAnimatorController hatchAnimatorController;
     public GameObject petPrefab;
+    public RuntimeAnimatorController petAnimatorController;
     public int price = 50;
     public float hatchSeconds = 30f;
 }
