@@ -10,11 +10,29 @@ public static class PlayerPetInventory
     }
 
     private static readonly List<EggStack> SharedEggs = new();
+    private static readonly List<GameObject> PersistentPets = new();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSharedRuntimeState()
     {
         SharedEggs.Clear();
+        PersistentPets.Clear();
+    }
+
+    public static void RegisterPersistentPet(GameObject pet)
+    {
+        if (pet != null && !PersistentPets.Contains(pet))
+            PersistentPets.Add(pet);
+    }
+
+    public static void ResetProgress()
+    {
+        SharedEggs.Clear();
+        foreach (GameObject pet in PersistentPets)
+        {
+            if (pet != null) Object.Destroy(pet);
+        }
+        PersistentPets.Clear();
     }
 
     public static void AddEgg(PetEggData egg, int amount = 1)

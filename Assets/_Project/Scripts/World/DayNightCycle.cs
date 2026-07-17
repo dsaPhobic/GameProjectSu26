@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -29,6 +30,14 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
+        if (SceneManager.GetActiveScene().name == "GameScene2")
+        {
+            _currentDay = Mathf.Max(_currentDay, 5);
+            _dayColor = new Color(0.72f, 0.86f, 1f);
+            _dayDuration *= 0.75f;
+            _nightDuration *= 1.25f;
+        }
+
         _waveManager = ServiceLocator.Get<WaveManager>();
         GameManager.Instance?.StartGame();
         if (_cycleCoroutine != null) return;

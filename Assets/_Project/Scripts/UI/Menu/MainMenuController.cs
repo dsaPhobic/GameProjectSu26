@@ -8,6 +8,12 @@ public class MainMenuController : MonoBehaviour
 
     public void OnPlayPressed()
     {
+        PlayerStats.ResetProgress();
+        PlayerController.ResetProgress();
+        PlayerAnimator.ResetProgress();
+        PlayerToolHandler.ResetProgress();
+        PlayerPetInventory.ResetProgress();
+        LevelPortalBootstrap.ResetProgress();
         AudioManager.Instance?.PlaySFX("sfx_button_click");
         GameSaveController.StartNewGame();
         SceneLoader.Instance?.LoadGameScene();
