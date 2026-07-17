@@ -17,6 +17,11 @@ public class UpgradeManager : MonoBehaviour
 
     private void Start()
     {
+        ResolvePlayer();
+    }
+
+    private void ResolvePlayer()
+    {
         _player = ServiceLocator.Get<PlayerController>();
         if (_player != null)
         {
@@ -33,6 +38,10 @@ public class UpgradeManager : MonoBehaviour
 
     public void ApplyUpgrade(UpgradeData upgrade)
     {
+        if (upgrade == null) return;
+        if (_player == null || _stats == null)
+            ResolvePlayer();
+
         if (_appliedIds.Contains(upgrade.id)) return;
         _appliedIds.Add(upgrade.id);
 
