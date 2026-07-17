@@ -139,6 +139,10 @@ public class PetNestSlot : MonoBehaviour
         Transform parent = _parentPetToPlayer ? playerTransform : null;
 
         GameObject petObject = Instantiate(_currentEgg.petPrefab, spawnPosition, Quaternion.identity, parent);
+        // Persistent objects must be roots. Drone still follows the current Player through SetFollowTarget.
+        petObject.transform.SetParent(null, true);
+        DontDestroyOnLoad(petObject);
+        PlayerPetInventory.RegisterPersistentPet(petObject);
         if (petObject.TryGetComponent<Drone>(out var drone))
             drone.SetFollowTarget(playerTransform);
     }

@@ -26,10 +26,24 @@ public class PlayerController : Entity
     private float _dashCooldownTimer;
     private float _attackCooldownTimer;
     private SpriteRenderer _spriteRenderer;
+    private static bool _sharedControllerProgressInitialized;
+    private static float _sharedDashCooldown;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetSharedRuntimeState() => _sharedControllerProgressInitialized = false;
+
+    public static void ResetProgress() => _sharedControllerProgressInitialized = false;
 
     protected override void Awake()
     {
         base.Awake();
+        if (!_sharedControllerProgressInitialized)
+        {
+            _sharedDashCooldown = _dashCooldown;
+            _sharedControllerProgressInitialized = true;
+        }
+        _dashCooldown = _sharedDashCooldown;
+
         _rb = GetComponent<Rigidbody2D>();
         _input = GetComponent<PlayerInput>();
         _stats = GetComponent<PlayerStats>();
@@ -226,7 +240,11 @@ public class PlayerController : Entity
         _toolHandler?.FlipTool(facingLeft);
     }
 
-    public void ReduceDashCooldown(float delta) => _dashCooldown = Mathf.Max(0.1f, _dashCooldown - delta);
+    public void ReduceDashCooldown(float delta)
+    {
+        _dashCooldown = Mathf.Max(0.1f, _dashCooldown - delta);
+        _sharedDashCooldown = _dashCooldown;
+    }
 
     public override void TakeDamage(int damage)
     {
