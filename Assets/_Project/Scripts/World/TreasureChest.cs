@@ -91,12 +91,40 @@ public class TreasureChest : MonoBehaviour, IInteractable
 
     private void PlayOpenAnimation()
     {
-        if (_animator == null) return;
+        if (_animator == null || _animator.runtimeAnimatorController == null) return;
 
-        if (string.IsNullOrWhiteSpace(_openTriggerName) || _openTriggerName == "Open")
-            _animator.SetTrigger(OpenHash);
-        else
-            _animator.SetTrigger(_openTriggerName);
+        string triggerName = string.IsNullOrWhiteSpace(_openTriggerName) ? "Open" : _openTriggerName;
+        if (HasTrigger(triggerName))
+        {
+            if (triggerName == "Open")
+                _animator.SetTrigger(OpenHash);
+            else
+                _animator.SetTrigger(triggerName);
+            return;
+        }
+
+        // Imported Iron/Gold/Platinum controllers contain a single open state
+        // instead of an Open trigger, so play that state directly.
+        string stateName = _chestType switch
+        {
+            ChestType.Iron => "IronChest_Open",
+            ChestType.Gold => "GoldChest_Open",
+            ChestType.Platinum => "PlatinumChest_Open",
+            _ => "Open"
+        };
+        _animator.Play($"Base Layer.{stateName}", 0, 0f);
+    }
+
+    private bool HasTrigger(string parameterName)
+    {
+        foreach (AnimatorControllerParameter parameter in _animator.parameters)
+        {
+            if (parameter.type == AnimatorControllerParameterType.Trigger &&
+                parameter.name == parameterName)
+                return true;
+        }
+
+        return false;
     }
 
     private GachaReward PickReward()

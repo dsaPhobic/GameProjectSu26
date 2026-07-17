@@ -142,9 +142,17 @@ public class PetNestSlot : MonoBehaviour
         // Persistent objects must be roots. Drone still follows the current Player through SetFollowTarget.
         petObject.transform.SetParent(null, true);
         DontDestroyOnLoad(petObject);
-        PlayerPetInventory.RegisterPersistentPet(petObject);
+        int companionIndex = PlayerPetInventory.RegisterPersistentPet(petObject);
+
+        Animator petAnimator = petObject.GetComponentInChildren<Animator>();
+        if (petAnimator != null && _currentEgg.petAnimatorController != null)
+            petAnimator.runtimeAnimatorController = _currentEgg.petAnimatorController;
+
         if (petObject.TryGetComponent<Drone>(out var drone))
+        {
             drone.SetFollowTarget(playerTransform);
+            drone.SetCompanionIndex(companionIndex);
+        }
     }
 
     private void ResetNest()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public static class PlayerPetInventory
@@ -11,18 +12,30 @@ public static class PlayerPetInventory
 
     private static readonly List<EggStack> SharedEggs = new();
     private static readonly List<GameObject> PersistentPets = new();
+    public static event Action InventoryChanged;
+
+    public static int EggTypeCount => SharedEggs.Count;
+    public static int PersistentPetCount => PersistentPets.Count;
+
+    public static PetEggData GetEgg(int index) =>
+        index >= 0 && index < SharedEggs.Count ? SharedEggs[index].egg : null;
+
+    public static int GetEggCount(int index) =>
+        index >= 0 && index < SharedEggs.Count ? SharedEggs[index].count : 0;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSharedRuntimeState()
     {
         SharedEggs.Clear();
         PersistentPets.Clear();
+        InventoryChanged = null;
     }
 
-    public static void RegisterPersistentPet(GameObject pet)
+    public static int RegisterPersistentPet(GameObject pet)
     {
         if (pet != null && !PersistentPets.Contains(pet))
             PersistentPets.Add(pet);
+        return Mathf.Max(0, PersistentPets.IndexOf(pet));
     }
 
     public static void ResetProgress()
@@ -30,9 +43,10 @@ public static class PlayerPetInventory
         SharedEggs.Clear();
         foreach (GameObject pet in PersistentPets)
         {
-            if (pet != null) Object.Destroy(pet);
+            if (pet != null) UnityEngine.Object.Destroy(pet);
         }
         PersistentPets.Clear();
+        InventoryChanged?.Invoke();
     }
 
     public static void AddEgg(PetEggData egg, int amount = 1)
@@ -47,6 +61,7 @@ public static class PlayerPetInventory
         }
 
         stack.count += amount;
+        InventoryChanged?.Invoke();
         Debug.Log($"Received {amount} {egg.eggName}. Total: {stack.count}");
     }
 
@@ -61,6 +76,7 @@ public static class PlayerPetInventory
 
             stack.count--;
             egg = stack.egg;
+            InventoryChanged?.Invoke();
             Debug.Log($"Placed {egg.eggName}. Remaining eggs: {stack.count}");
             return true;
         }

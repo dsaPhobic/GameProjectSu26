@@ -5451,208 +5451,6 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
---- !u!1 &807412964
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 807412969}
-  - component: {fileID: 807412968}
-  - component: {fileID: 807412966}
-  - component: {fileID: 807412965}
-  - component: {fileID: 807412970}
-  m_Layer: 0
-  m_Name: Chest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &807412965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807412964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e8a8db16c6051847bd6f7670edce078, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _chestType: 0
-  _openCost: 25
-  _interactRange: 1.4
-  _openKey: 101
-  _rewards:
-  - displayName: Gun
-    icon: {fileID: -864579181, guid: d4d0c696e77ae284ab86754993218bd1, type: 3}
-    type: 4
-    petEgg: {fileID: 0}
-    amount: 1
-    seedIndex: 0
-    weight: 5
-  - displayName: Pet Egg
-    icon: {fileID: 21300000, guid: 8806f26a4035c6d41b504afcbdcd9360, type: 3}
-    type: 5
-    petEgg: {fileID: 0}
-    amount: 1
-    seedIndex: 0
-    weight: 18
-  - displayName: Damage Buff
-    icon: {fileID: 1545315034, guid: c74650d61231b4945979aa52967c02c1, type: 3}
-    type: 6
-    petEgg: {fileID: 0}
-    amount: 5
-    seedIndex: 0
-    weight: 35
-  - displayName: Wheat Seed
-    icon: {fileID: 628781386, guid: 19df13beafc39b2449437518e8286a65, type: 3}
-    type: 1
-    petEgg: {fileID: 0}
-    amount: 3
-    seedIndex: 0
-    weight: 42
-  _animator: {fileID: 807412970}
-  _openTriggerName: Open
-  _opened: 0
-  _allowOpenAgain: 0
---- !u!61 &807412966
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807412964}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.875, y: 0.9375}
-    newSize: {x: 0.875, y: 0.9375}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8}
-  m_EdgeRadius: 0
---- !u!212 &807412968
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807412964}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 4
-  m_Sprite: {fileID: 264020392, guid: 0b53f47633c4d00419f2c8f730351049, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.875, y: 0.9375}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!4 &807412969
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807412964}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.49, y: 3.43, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &807412970
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807412964}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2ff24734f9d2b4d4da1dbe3e2c28739c, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &809883707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5705,6 +5503,10 @@ PrefabInstance:
       propertyPath: _rewards.Array.data[1].icon
       value: 
       objectReference: {fileID: 1152282363, guid: b7ed85448a4fca240b947fec3aa43b25, type: 3}
+    - target: {fileID: 4187153801146548348, guid: b0ea364bd3dd4987be80d201e2970b99, type: 3}
+      propertyPath: _rewards.Array.data[1].petEgg
+      value: 
+      objectReference: {fileID: 11400000, guid: 932c944976ca4614eab5bf9b7bae5e70, type: 2}
     - target: {fileID: 4187153801146548349, guid: b0ea364bd3dd4987be80d201e2970b99, type: 3}
       propertyPath: m_Name
       value: TreasureChest_Gold
@@ -7307,6 +7109,10 @@ PrefabInstance:
       propertyPath: _rewards.Array.data[1].icon
       value: 
       objectReference: {fileID: -1005806991, guid: 3d43f76664cb1f346933d7a6b279b2f1, type: 3}
+    - target: {fileID: 4187153801146548432, guid: 5d14b4f977854ade8ac8f0a0870b6fc0, type: 3}
+      propertyPath: _rewards.Array.data[1].petEgg
+      value: 
+      objectReference: {fileID: 11400000, guid: 257ae7784a3448249a093cd369a0b90d, type: 2}
     - target: {fileID: 4187153801146548433, guid: 5d14b4f977854ade8ac8f0a0870b6fc0, type: 3}
       propertyPath: m_Name
       value: TreasureChest_Iron
@@ -16764,7 +16570,6 @@ SceneRoots:
   - {fileID: 1745569333}
   - {fileID: 45571080}
   - {fileID: 1618630941}
-  - {fileID: 807412969}
   - {fileID: 809883707}
   - {fileID: 986865767}
   - {fileID: 55109260}

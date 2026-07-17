@@ -116,7 +116,12 @@ public class WaveManager : MonoBehaviour
     {
         foreach (var wd in _waveDataList)
             if (wd.dayNumber == day) return wd;
-        return null;
+
+        // Higher days reuse the last configured wave, while enemy count and HP
+        // continue scaling from the actual day number.
+        return _waveDataList != null && _waveDataList.Count > 0
+            ? _waveDataList[^1]
+            : null;
     }
 
     private GameObject GetPrefabForType(EnemyType type)
