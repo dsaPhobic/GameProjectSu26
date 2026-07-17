@@ -21,6 +21,10 @@ public class PlayerToolHandler : MonoBehaviour
 
     private int _selectedSeedIndex = 0;
     private int[] _seedCounts;
+    private static bool _sharedInventoryInitialized;
+    private static int[] _sharedSeedCounts;
+    private static int _sharedSelectedSeedIndex;
+    private static ToolType _sharedCurrentTool;
     private Vector3 _defaultToolLocalPosition;
     private Vector2 _lastAimDirection = Vector2.right;
 
@@ -30,6 +34,16 @@ public class PlayerToolHandler : MonoBehaviour
     public CropData[] AvailableSeeds => _availableSeeds;
     public int SelectedSeedIndex => _selectedSeedIndex;
     public string SelectedSeedName => SelectedSeed != null ? SelectedSeed.cropName : "None";
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetSharedRuntimeState() => _sharedInventoryInitialized = false;
+
+    public static void ResetProgress()
+    {
+        _sharedInventoryInitialized = false;
+        _sharedSeedCounts = null;
+        _sharedSelectedSeedIndex = 0;
+    }
 
     public int GetSeedCount(int index)
     {
@@ -52,14 +66,26 @@ public class PlayerToolHandler : MonoBehaviour
         if (_gunSprite == null && _toolRenderer != null)
             _gunSprite = _toolRenderer.sprite;
 
-        CurrentTool = _startingTool;
-
         if (_availableSeeds != null)
         {
-            _seedCounts = new int[_availableSeeds.Length];
-            for (int i = 0; i < _seedCounts.Length; i++)
-                _seedCounts[i] = _startingSeedCount;
+            if (!_sharedInventoryInitialized || _sharedSeedCounts == null ||
+                _sharedSeedCounts.Length != _availableSeeds.Length)
+            {
+                _sharedSeedCounts = new int[_availableSeeds.Length];
+                for (int i = 0; i < _sharedSeedCounts.Length; i++)
+                    _sharedSeedCounts[i] = _startingSeedCount;
+
+                _sharedSelectedSeedIndex = 0;
+                _sharedCurrentTool = _startingTool;
+                _sharedInventoryInitialized = true;
+            }
+
+            _seedCounts = _sharedSeedCounts;
+            _selectedSeedIndex = Mathf.Clamp(_sharedSelectedSeedIndex, 0,
+                Mathf.Max(0, _availableSeeds.Length - 1));
         }
+
+        CurrentTool = _sharedInventoryInitialized ? _sharedCurrentTool : _startingTool;
         UpdateToolSprite();
     }
 
@@ -73,12 +99,14 @@ public class PlayerToolHandler : MonoBehaviour
             4 => ToolType.Gun,
             _ => CurrentTool
         };
+        _sharedCurrentTool = CurrentTool;
         UpdateToolSprite();
     }
 
     public void EquipGun()
     {
         CurrentTool = ToolType.Gun;
+        _sharedCurrentTool = CurrentTool;
         UpdateToolSprite();
     }
 
@@ -138,6 +166,7 @@ public class PlayerToolHandler : MonoBehaviour
     {
         if (_availableSeeds == null || _availableSeeds.Length == 0) return;
         _selectedSeedIndex = (_selectedSeedIndex + 1) % _availableSeeds.Length;
+        _sharedSelectedSeedIndex = _selectedSeedIndex;
         GameEvents.RaiseSeedChanged(SelectedSeed);
     }
 

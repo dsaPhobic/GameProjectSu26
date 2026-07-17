@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameOverDetector : MonoBehaviour
 {
@@ -95,7 +96,8 @@ public class GameOverDetector : MonoBehaviour
     {
         _enemiesKilled++;
 
-        if (enemy != null && enemy.Data != null && enemy.Data.enemyType == EnemyType.DemonBoss)
+        if (SceneManager.GetActiveScene().name == "GameScene2" &&
+            enemy != null && enemy.Data != null && enemy.Data.enemyType == EnemyType.DemonBoss)
             TriggerGameWin();
     }
 }

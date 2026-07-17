@@ -75,7 +75,8 @@ public class HUDController : MonoBehaviour
 
     private static bool ShouldShowHud(string sceneName)
     {
-        return sceneName == "GameScene" || sceneName == "ShopInterior" || sceneName == "HubTown";
+        return sceneName == "GameScene" || sceneName == "GameScene2" ||
+               sceneName == "ShopInterior" || sceneName == "HubTown";
     }
 
     private void Awake()

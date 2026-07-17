@@ -15,6 +15,14 @@ public class PlayerStats : MonoBehaviour
     private bool _isDead;
     private static bool _sharedGoldInitialized;
     private static int _sharedGold;
+    private static bool _sharedProgressInitialized;
+    private static int _sharedMaxHP;
+    private static int _sharedCurrentHP;
+    private static int _sharedDamage;
+    private static float _sharedAttackSpeed;
+    private static float _sharedMoveSpeed;
+    private static int _sharedLevel;
+    private static int _sharedXP;
 
     public int MaxHP => _maxHP;
     public int CurrentHP => _currentHP;
@@ -34,11 +42,38 @@ public class PlayerStats : MonoBehaviour
     {
         _sharedGoldInitialized = false;
         _sharedGold = 0;
+        _sharedProgressInitialized = false;
+    }
+
+    public static void ResetProgress()
+    {
+        _sharedGoldInitialized = false;
+        _sharedGold = 0;
+        _sharedProgressInitialized = false;
     }
 
     private void Awake()
     {
-        _currentHP = _maxHP;
+        if (!_sharedProgressInitialized)
+        {
+            _sharedMaxHP = _maxHP;
+            _sharedCurrentHP = _maxHP;
+            _sharedDamage = _damage;
+            _sharedAttackSpeed = _attackSpeed;
+            _sharedMoveSpeed = _moveSpeed;
+            _sharedLevel = 1;
+            _sharedXP = 0;
+            _sharedProgressInitialized = true;
+        }
+
+        _maxHP = _sharedMaxHP;
+        _currentHP = _sharedCurrentHP;
+        _damage = _sharedDamage;
+        _attackSpeed = _sharedAttackSpeed;
+        _moveSpeed = _sharedMoveSpeed;
+        _level = _sharedLevel;
+        _xp = _sharedXP;
+        _isDead = _currentHP <= 0;
 
         if (!_sharedGoldInitialized)
         {
@@ -47,6 +82,17 @@ public class PlayerStats : MonoBehaviour
         }
 
         _gold = _sharedGold;
+    }
+
+    private void SyncSharedProgress()
+    {
+        _sharedMaxHP = _maxHP;
+        _sharedCurrentHP = _currentHP;
+        _sharedDamage = _damage;
+        _sharedAttackSpeed = _attackSpeed;
+        _sharedMoveSpeed = _moveSpeed;
+        _sharedLevel = _level;
+        _sharedXP = _xp;
     }
 
     private void OnEnable() => GameEvents.OnEnemyDied += HandleEnemyKilled;
@@ -64,6 +110,7 @@ public class PlayerStats : MonoBehaviour
         if (_isDead) return;
 
         _currentHP = Mathf.Max(0, _currentHP - amount);
+        SyncSharedProgress();
         GameEvents.RaisePlayerHPChanged(_currentHP);
         if (_currentHP == 0)
         {
@@ -76,6 +123,8 @@ public class PlayerStats : MonoBehaviour
     public void Heal(int amount)
     {
         _currentHP = Mathf.Min(_maxHP, _currentHP + amount);
+        _isDead = _currentHP <= 0;
+        SyncSharedProgress();
         GameEvents.RaisePlayerHPChanged(_currentHP);
     }
 
@@ -87,6 +136,7 @@ public class PlayerStats : MonoBehaviour
             _xp -= _xpPerLevel * _level;
             LevelUp();
         }
+        SyncSharedProgress();
         GameEvents.RaisePlayerXPChanged(_xp);
     }
 
@@ -109,9 +159,9 @@ public class PlayerStats : MonoBehaviour
     }
 
     public void ModifyMaxHP(int delta) { _maxHP += delta; Heal(0); }
-    public void ModifyDamage(int delta) => _damage += delta;
-    public void ModifyAttackSpeed(float delta) => _attackSpeed += delta;
-    public void ModifyMoveSpeed(float delta) => _moveSpeed += delta;
+    public void ModifyDamage(int delta) { _damage += delta; SyncSharedProgress(); }
+    public void ModifyAttackSpeed(float delta) { _attackSpeed += delta; SyncSharedProgress(); }
+    public void ModifyMoveSpeed(float delta) { _moveSpeed += delta; SyncSharedProgress(); }
 
     private void LevelUp()
     {
