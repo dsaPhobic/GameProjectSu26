@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eggName: Green Egg
   eggSprite: {fileID: -1005806991, guid: 3d43f76664cb1f346933d7a6b279b2f1, type: 3}
-  hatchAnimatorController: {fileID: 9100000, guid: f19ba8cce17dca841b4e1d884067c230, type: 2}
+  hatchAnimatorController: {fileID: 9100000, guid: 8d8b73067a0ffb04d85d42f45b811cfc, type: 2}
   petPrefab: {fileID: 8780587746676173527, guid: c365db07b8d25d3419d9b9d94f639cbc, type: 3}
   petAnimatorController: {fileID: 9100000, guid: f19ba8cce17dca841b4e1d884067c230, type: 2}
   price: 50

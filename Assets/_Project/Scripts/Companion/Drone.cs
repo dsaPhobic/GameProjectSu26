@@ -18,6 +18,7 @@ public class Drone : MonoBehaviour
 
     private float _fireTimer;
     private SpriteRenderer _spriteRenderer;
+    public int Damage => _damage;
 
     private void Awake()
     {
@@ -111,6 +112,11 @@ public class Drone : MonoBehaviour
         int column = Mathf.Max(0, index) % 3;
         int row = Mathf.Max(0, index) / 3;
         _followOffset = new Vector2(-1.2f - column * 0.8f, 0.8f + row * 0.7f);
+    }
+
+    public void ModifyDamage(int delta)
+    {
+        _damage = Mathf.Max(0, _damage + delta);
     }
 
     private void OnDrawGizmosSelected()

@@ -48,6 +48,7 @@ public class PauseMenuController : MonoBehaviour
 
     public void OnQuitPressed()
     {
+        GameSaveController.SaveCurrentGame();
         Time.timeScale = 1f;
         SceneLoader.Instance?.LoadMainMenu();
     }

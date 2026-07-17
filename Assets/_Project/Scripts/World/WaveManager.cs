@@ -15,6 +15,7 @@ public class WaveManager : MonoBehaviour
 
     private int _currentDay = 1;
     private int _activeEnemyCount;
+    public int CurrentDay => _currentDay;
 
     private void Awake()
     {
@@ -67,6 +68,23 @@ public class WaveManager : MonoBehaviour
 
         Instantiate(prefab, GetSafeSpawnPosition(point), Quaternion.identity);
         _activeEnemyCount++;
+    }
+
+    public void SpawnSavedEnemy(EnemyType type, Vector3 position, int hp)
+    {
+        var prefab = GetPrefabForType(type);
+        if (prefab == null) return;
+
+        var enemyObject = Instantiate(prefab, position, Quaternion.identity);
+        if (enemyObject.TryGetComponent<Enemy>(out var enemy))
+            enemy.LoadHealth(hp);
+
+        _activeEnemyCount++;
+    }
+
+    public void SetActiveEnemyCount(int count)
+    {
+        _activeEnemyCount = Mathf.Max(0, count);
     }
 
     private SpawnPoint GetRandomSpawnPoint()

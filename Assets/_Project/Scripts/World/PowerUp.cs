@@ -12,6 +12,10 @@ public class PowerUp : MonoBehaviour
     private bool _isCollected;
     private Coroutine _attractCoroutine;
 
+    public PowerUpData Data => _data;
+    public PowerUpType Type => _data != null ? _data.type : PowerUpType.Speed;
+    public bool CanBeSaved => !_isCollected && _data != null && gameObject.activeInHierarchy;
+
     private void OnEnable()
     {
         ActivePowerUps.Add(this);
@@ -47,30 +51,20 @@ public class PowerUp : MonoBehaviour
 
     private IEnumerator ApplyEffect(PlayerStats stats)
     {
+        var buffs = stats.GetComponent<PlayerPowerUpBuffs>();
+        if (buffs == null)
+            buffs = stats.gameObject.AddComponent<PlayerPowerUpBuffs>();
+
+        if (buffs.Apply(_data))
+        {
+            Destroy(gameObject, 0.1f);
+            yield break;
+        }
+
         switch (_data.type)
         {
-            case PowerUpType.Speed:
-                PowerUpTimerUI.Show(stats, _data);
-                stats.ModifyMoveSpeed(_data.magnitude);
-                yield return new WaitForSeconds(_data.duration);
-                stats.ModifyMoveSpeed(-_data.magnitude);
-                Destroy(gameObject, 0.1f);
-                break;
-            case PowerUpType.DoubleDamage:
-                PowerUpTimerUI.Show(stats, _data);
-                int bonusDamage = Mathf.RoundToInt(stats.Damage * (_data.magnitude - 1));
-                stats.ModifyDamage(bonusDamage);
-                yield return new WaitForSeconds(_data.duration);
-                stats.ModifyDamage(-bonusDamage);
-                Destroy(gameObject, 0.1f);
-                break;
             case PowerUpType.HealthRestore:
                 stats.Heal(Mathf.RoundToInt(_data.magnitude));
-                Destroy(gameObject, 0.1f);
-                break;
-            case PowerUpType.Shield:
-                PowerUpTimerUI.Show(stats, _data);
-                stats.GetComponent<PlayerController>()?.ActivateShield(_data.duration, _data.icon);
                 Destroy(gameObject, 0.1f);
                 break;
             case PowerUpType.GrowthMagic:

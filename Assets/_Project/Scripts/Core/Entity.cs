@@ -23,6 +23,11 @@ public abstract class Entity : MonoBehaviour, IDamageable
         if (IsDead) Die();
     }
 
+    public void LoadHealth(int hp)
+    {
+        _currentHP = Mathf.Clamp(hp, 1, maxHP);
+    }
+
     protected virtual void OnDamaged(int damage) { }
 
     protected virtual void Die() { }

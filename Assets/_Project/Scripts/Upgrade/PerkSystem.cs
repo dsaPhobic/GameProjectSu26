@@ -61,8 +61,7 @@ public class PerkSystem : MonoBehaviour
 
     public List<UpgradeData> GetRandomThree()
     {
-        var applied = _upgradeManager?.GetAppliedIds() ?? new List<string>();
-        var available = _allUpgrades.FindAll(u => u != null && !applied.Contains(u.id));
+        var available = _allUpgrades.FindAll(u => u != null && (_upgradeManager == null || _upgradeManager.CanOfferUpgrade(u)));
         available.Sort((_, __) => Random.Range(-1, 2));
 
         var result = new List<UpgradeData>();
