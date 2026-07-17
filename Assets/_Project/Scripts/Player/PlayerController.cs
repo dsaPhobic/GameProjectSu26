@@ -230,6 +230,8 @@ public class PlayerController : Entity
     }
 
     public void ReduceDashCooldown(float delta) => _dashCooldown = Mathf.Max(0.1f, _dashCooldown - delta);
+    public float DashCooldown => _dashCooldown;
+    public void LoadDashCooldown(float value) => _dashCooldown = Mathf.Max(0.1f, value);
 
     public void ActivateShield(float duration, Sprite shieldIcon)
     {

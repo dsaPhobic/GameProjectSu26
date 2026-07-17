@@ -20,34 +20,54 @@ public class DayNightCycle : MonoBehaviour
 
     private int _currentDay = 1;
     private WaveManager _waveManager;
+    private Coroutine _cycleCoroutine;
+    private DayPhase _currentPhase = DayPhase.Dawn;
+    private float _phaseRemaining;
+    public int CurrentDay => _currentDay;
+    public DayPhase CurrentPhase => _currentPhase;
+    public float PhaseRemaining => _phaseRemaining;
 
     private void Start()
     {
         _waveManager = ServiceLocator.Get<WaveManager>();
         GameManager.Instance?.StartGame();
+        if (_cycleCoroutine != null) return;
+
         if (_globalLight != null) _globalLight.color = _dayColor;
-        StartCoroutine(CycleRoutine());
+        _cycleCoroutine = StartCoroutine(CycleRoutineFrom(DayPhase.Dawn, _dawnDuration, startNightWave: true));
     }
 
-    private IEnumerator CycleRoutine()
+    private IEnumerator CycleRoutineFrom(DayPhase startPhase, float startRemaining, bool startNightWave)
     {
+        DayPhase phase = startPhase;
+        float remaining = startRemaining > 0f ? startRemaining : GetPhaseDuration(phase);
+        bool isFirstPhase = true;
+
         while (true)
         {
-            yield return StartCoroutine(RunPhase(DayPhase.Dawn, _dawnDuration, _dawnColor));
-            yield return StartCoroutine(RunPhase(DayPhase.Day, _dayDuration, _dayColor));
-            yield return StartCoroutine(RunPhase(DayPhase.Dusk, _duskDuration, _duskColor));
-            yield return StartCoroutine(RunPhase(DayPhase.Night, _nightDuration, _nightColor));
-            _currentDay++;
-            GameEvents.RaiseDayChanged(_currentDay);
+            bool shouldStartNightWave = !isFirstPhase || startNightWave;
+            yield return StartCoroutine(RunPhase(phase, remaining, GetPhaseColor(phase), shouldStartNightWave));
+
+            if (phase == DayPhase.Night)
+            {
+                _currentDay++;
+                GameEvents.RaiseDayChanged(_currentDay);
+            }
+
+            phase = GetNextPhase(phase);
+            remaining = GetPhaseDuration(phase);
+            isFirstPhase = false;
         }
     }
 
-    private IEnumerator RunPhase(DayPhase phase, float duration, Color targetColor)
+    private IEnumerator RunPhase(DayPhase phase, float duration, Color targetColor, bool startNightWave)
     {
+        _currentPhase = phase;
+        _phaseRemaining = duration;
         GameEvents.RaiseDayPhaseChanged(phase);
         PlayPhaseMusic(phase);
 
-        if (phase == DayPhase.Night)
+        if (phase == DayPhase.Night && startNightWave)
             _waveManager?.StartWave(_currentDay);
 
         float elapsed = 0f;
@@ -57,7 +77,8 @@ public class DayNightCycle : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = elapsed / duration;
+            _phaseRemaining = Mathf.Max(0f, duration - elapsed);
+            float t = duration > 0f ? elapsed / duration : 1f;
             if (_globalLight != null)
             {
                 _globalLight.color = Color.Lerp(startColor, targetColor, t);
@@ -80,5 +101,91 @@ public class DayNightCycle : MonoBehaviour
                 AudioManager.Instance?.PlayBGM("bgm_day");
                 break;
         }
+    }
+
+    public void LoadDay(int day)
+    {
+        _currentDay = Mathf.Max(1, day);
+        GameEvents.RaiseDayChanged(_currentDay);
+    }
+
+    public void LoadState(int day, DayPhase phase, float phaseRemaining, bool startNightWave)
+    {
+        _waveManager = ServiceLocator.Get<WaveManager>();
+        _currentDay = Mathf.Max(1, day);
+        GameEvents.RaiseDayChanged(_currentDay);
+
+        if (_cycleCoroutine != null)
+            StopCoroutine(_cycleCoroutine);
+
+        ApplyPhaseVisual(phase, phaseRemaining);
+        _cycleCoroutine = StartCoroutine(CycleRoutineFrom(phase, phaseRemaining, startNightWave));
+    }
+
+    private void ApplyPhaseVisual(DayPhase phase, float phaseRemaining)
+    {
+        if (_globalLight == null) return;
+
+        float duration = Mathf.Max(0.01f, GetPhaseDuration(phase));
+        float remaining = phaseRemaining > 0f ? Mathf.Min(phaseRemaining, duration) : duration;
+        float elapsed = Mathf.Clamp(duration - remaining, 0f, duration);
+        float progress = elapsed / duration;
+
+        DayPhase previousPhase = GetPreviousPhase(phase);
+        _globalLight.color = Color.Lerp(GetPhaseColor(previousPhase), GetPhaseColor(phase), progress);
+        _globalLight.intensity = Mathf.Lerp(GetPhaseIntensity(previousPhase), GetPhaseIntensity(phase), progress);
+    }
+
+    private float GetPhaseDuration(DayPhase phase)
+    {
+        return phase switch
+        {
+            DayPhase.Dawn => _dawnDuration,
+            DayPhase.Day => _dayDuration,
+            DayPhase.Dusk => _duskDuration,
+            DayPhase.Night => _nightDuration,
+            _ => _dayDuration
+        };
+    }
+
+    private Color GetPhaseColor(DayPhase phase)
+    {
+        return phase switch
+        {
+            DayPhase.Dawn => _dawnColor,
+            DayPhase.Day => _dayColor,
+            DayPhase.Dusk => _duskColor,
+            DayPhase.Night => _nightColor,
+            _ => _dayColor
+        };
+    }
+
+    private DayPhase GetNextPhase(DayPhase phase)
+    {
+        return phase switch
+        {
+            DayPhase.Dawn => DayPhase.Day,
+            DayPhase.Day => DayPhase.Dusk,
+            DayPhase.Dusk => DayPhase.Night,
+            DayPhase.Night => DayPhase.Dawn,
+            _ => DayPhase.Day
+        };
+    }
+
+    private DayPhase GetPreviousPhase(DayPhase phase)
+    {
+        return phase switch
+        {
+            DayPhase.Dawn => DayPhase.Night,
+            DayPhase.Day => DayPhase.Dawn,
+            DayPhase.Dusk => DayPhase.Day,
+            DayPhase.Night => DayPhase.Dusk,
+            _ => DayPhase.Day
+        };
+    }
+
+    private float GetPhaseIntensity(DayPhase phase)
+    {
+        return (phase == DayPhase.Night || phase == DayPhase.Dusk) ? _nightIntensity : _dayIntensity;
     }
 }

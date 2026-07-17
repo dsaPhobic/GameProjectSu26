@@ -33,6 +33,9 @@ public class PlayerChargeBar : MonoBehaviour
 
     public void Show()
     {
+        if (_barRoot == null || _fill == null)
+            BuildBar();
+
         if (_barRoot != null) _barRoot.SetActive(true);
         SetProgress(0f);
     }

@@ -50,6 +50,7 @@ public class SceneTransition : MonoBehaviour
 
         _isTransitioning = true;
         _lastTransitionTime = Time.unscaledTime;
+        GameSaveController.SaveCurrentGame();
 
         if (SceneLoader.Instance != null)
             SceneLoader.Instance.LoadScene(sceneToLoad);

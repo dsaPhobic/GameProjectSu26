@@ -18,6 +18,7 @@ public class Drone : MonoBehaviour
 
     private float _fireTimer;
     private SpriteRenderer _spriteRenderer;
+    public int Damage => _damage;
 
     private void Awake()
     {
@@ -104,6 +105,11 @@ public class Drone : MonoBehaviour
     public void SetFollowTarget(Transform target)
     {
         _followTarget = target;
+    }
+
+    public void ModifyDamage(int delta)
+    {
+        _damage = Mathf.Max(0, _damage + delta);
     }
 
     private void OnDrawGizmosSelected()

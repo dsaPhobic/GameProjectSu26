@@ -32,6 +32,11 @@ public class PlayerStats : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetSharedRuntimeState()
     {
+        ResetSharedStateForNewGame();
+    }
+
+    public static void ResetSharedStateForNewGame()
+    {
         _sharedGoldInitialized = false;
         _sharedGold = 0;
     }
@@ -112,6 +117,27 @@ public class PlayerStats : MonoBehaviour
     public void ModifyDamage(int delta) => _damage += delta;
     public void ModifyAttackSpeed(float delta) => _attackSpeed += delta;
     public void ModifyMoveSpeed(float delta) => _moveSpeed += delta;
+
+    public void LoadState(int maxHP, int currentHP, int level, int xp, int gold, int damage, float attackSpeed, float moveSpeed)
+    {
+        _maxHP = Mathf.Max(1, maxHP);
+        _currentHP = Mathf.Clamp(currentHP, 0, _maxHP);
+        _level = Mathf.Max(1, level);
+        _xp = Mathf.Max(0, xp);
+        _damage = Mathf.Max(0, damage);
+        _attackSpeed = Mathf.Max(0.1f, attackSpeed);
+        _moveSpeed = Mathf.Max(0f, moveSpeed);
+        _isDead = _currentHP <= 0;
+
+        _sharedGold = Mathf.Max(0, gold);
+        _sharedGoldInitialized = true;
+        _gold = _sharedGold;
+
+        GameEvents.RaisePlayerHPChanged(_currentHP);
+        GameEvents.RaisePlayerXPChanged(_xp);
+        GameEvents.RaisePlayerLevelUp(_level);
+        GameEvents.RaiseGoldChanged(_gold);
+    }
 
     private void LevelUp()
     {

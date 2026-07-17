@@ -88,4 +88,45 @@ public class FarmTile : MonoBehaviour, IInteractable
     }
 
     public void SetCropData(CropData data) => _pendingCropData = data;
+
+    public TileSaveData GetSaveData()
+    {
+        return new TileSaveData
+        {
+            x = GridX,
+            y = GridY,
+            state = State,
+            cropType = _currentCrop != null ? _currentCrop.CropType : CropType.Wheat,
+            cropStage = _currentCrop != null ? _currentCrop.StageIndex : 0,
+            cropHP = _currentCrop != null ? _currentCrop.CurrentHP : 0
+        };
+    }
+
+    public void LoadSaveData(TileSaveData data, CropData cropData)
+    {
+        if (_currentCrop != null)
+            Destroy(_currentCrop.gameObject);
+
+        _currentCrop = null;
+
+        if (data.state != TileState.Planted)
+        {
+            SetState(data.state);
+            return;
+        }
+
+        if (cropData == null || _cropPrefab == null)
+        {
+            SetState(TileState.Watered);
+            return;
+        }
+
+        var go = Instantiate(_cropPrefab, transform.position, Quaternion.identity);
+        _currentCrop = go.GetComponent<Crop>();
+        _currentCrop?.Restore(cropData, (CropStage)data.cropStage, data.cropHP, () => {
+            _currentCrop = null;
+            SetState(TileState.Empty);
+        });
+        SetState(_currentCrop != null ? TileState.Planted : TileState.Watered);
+    }
 }

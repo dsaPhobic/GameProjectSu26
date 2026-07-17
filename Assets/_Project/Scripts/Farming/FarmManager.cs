@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class FarmManager : MonoBehaviour
 {
@@ -88,5 +90,28 @@ public class FarmManager : MonoBehaviour
         }
 
         return nearest;
+    }
+
+    public List<TileSaveData> GetSaveData()
+    {
+        var data = new List<TileSaveData>();
+        foreach (var tile in _tiles)
+            data.Add(tile.GetSaveData());
+        return data;
+    }
+
+    public void LoadSaveData(List<TileSaveData> savedTiles)
+    {
+        if (savedTiles == null) return;
+
+        var cropLookup = Resources.LoadAll<CropData>("Crops").ToDictionary(crop => crop.cropType, crop => crop);
+        foreach (var tileData in savedTiles)
+        {
+            if (tileData.x < 0 || tileData.x >= _gridWidth || tileData.y < 0 || tileData.y >= _gridHeight)
+                continue;
+
+            cropLookup.TryGetValue(tileData.cropType, out var cropData);
+            _tiles[tileData.x, tileData.y].LoadSaveData(tileData, cropData);
+        }
     }
 }

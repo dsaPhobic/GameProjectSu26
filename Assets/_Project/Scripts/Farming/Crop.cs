@@ -11,6 +11,9 @@ public class Crop : MonoBehaviour, IDamageable, ISaveable
 
     public bool IsDead => _currentHP <= 0;
     public bool IsMature => _stage == CropStage.Mature;
+    public CropType CropType => _data != null ? _data.cropType : CropType.Wheat;
+    public int CurrentHP => _currentHP;
+    public int StageIndex => (int)_stage;
 
     private void Awake()
     {
@@ -19,14 +22,30 @@ public class Crop : MonoBehaviour, IDamageable, ISaveable
 
     private System.Action _onKilled;
 
-    public void Init(CropData data, System.Action onKilled = null)
+    public void Init(CropData data, System.Action onKilled = null, bool startGrowth = true)
     {
         _data = data;
         _currentHP = data.maxHP;
         _stage = CropStage.Seed;
         _onKilled = onKilled;
         UpdateSprite();
-        _growthCoroutine = StartCoroutine(GrowthCoroutine());
+        if (startGrowth)
+            _growthCoroutine = StartCoroutine(GrowthCoroutine());
+    }
+
+    public void Restore(CropData data, CropStage stage, int hp, System.Action onKilled = null)
+    {
+        if (_growthCoroutine != null)
+            StopCoroutine(_growthCoroutine);
+
+        _data = data;
+        _currentHP = Mathf.Clamp(hp, 1, data.maxHP);
+        _stage = stage;
+        _onKilled = onKilled;
+        UpdateSprite();
+
+        if (!IsMature)
+            _growthCoroutine = StartCoroutine(GrowthCoroutine());
     }
 
     private IEnumerator GrowthCoroutine()

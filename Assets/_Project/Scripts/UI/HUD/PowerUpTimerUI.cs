@@ -29,13 +29,18 @@ public class PowerUpTimerUI : MonoBehaviour
 
     public static void Show(PlayerStats owner, PowerUpData data)
     {
+        Show(owner, data, data != null ? data.duration : 0f);
+    }
+
+    public static void Show(PlayerStats owner, PowerUpData data, float remaining)
+    {
         if (owner == null || data == null || data.duration <= 0f) return;
 
         var timers = GetTimers(owner);
         var existing = timers.Find(timer => timer != null && timer._type == data.type);
         if (existing != null)
         {
-            existing.ResetTimer(data.duration, data.icon);
+            existing.ResetTimer(data.duration, data.icon, remaining);
             return;
         }
 
@@ -44,7 +49,7 @@ public class PowerUpTimerUI : MonoBehaviour
         timerObject.transform.SetParent(root.transform, false);
 
         var timer = timerObject.AddComponent<PowerUpTimerUI>();
-        timer.Init(owner, data);
+        timer.Init(owner, data, remaining);
         timers.Add(timer);
         Reposition(timers);
     }
@@ -98,12 +103,12 @@ public class PowerUpTimerUI : MonoBehaviour
         }
     }
 
-    private void Init(PlayerStats owner, PowerUpData data)
+    private void Init(PlayerStats owner, PowerUpData data, float remaining)
     {
         _owner = owner;
         _type = data.type;
         BuildUI(data.icon);
-        ResetTimer(data.duration, data.icon);
+        ResetTimer(data.duration, data.icon, remaining);
     }
 
     private void BuildUI(Sprite iconSprite)
@@ -161,8 +166,13 @@ public class PowerUpTimerUI : MonoBehaviour
 
     private void ResetTimer(float duration, Sprite iconSprite)
     {
+        ResetTimer(duration, iconSprite, duration);
+    }
+
+    private void ResetTimer(float duration, Sprite iconSprite, float remaining)
+    {
         _duration = Mathf.Max(0.1f, duration);
-        _remaining = _duration;
+        _remaining = Mathf.Clamp(remaining, 0f, _duration);
 
         if (_icon != null && iconSprite != null)
             _icon.sprite = iconSprite;

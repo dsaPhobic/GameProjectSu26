@@ -82,6 +82,12 @@ public class PlayerToolHandler : MonoBehaviour
         UpdateToolSprite();
     }
 
+    public void LoadTool(ToolType tool)
+    {
+        CurrentTool = tool;
+        UpdateToolSprite();
+    }
+
     public void FlipTool(bool facingLeft)
     {
         if (_toolRenderer == null) return;

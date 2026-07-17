@@ -1,12 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
     [SerializeField] private GameObject _settingsPanel;
+    private Button _continueButton;
 
     public void OnPlayPressed()
     {
         AudioManager.Instance?.PlaySFX("sfx_button_click");
+        GameSaveController.StartNewGame();
         SceneLoader.Instance?.LoadGameScene();
     }
 
@@ -14,6 +17,7 @@ public class MainMenuController : MonoBehaviour
     {
         if (!SaveSystem.HasSave()) return;
         AudioManager.Instance?.PlaySFX("sfx_button_click");
+        GameSaveController.ContinueGame();
         SceneLoader.Instance?.LoadGameScene();
     }
 
@@ -41,6 +45,8 @@ public class MainMenuController : MonoBehaviour
     private void Start()
     {
         EnsureSettingsMenu();
+        ResolveContinueButton();
+        RefreshContinueButton();
         AudioManager.Instance?.PlayBGM("bgm_main_menu");
     }
 
@@ -51,5 +57,25 @@ public class MainMenuController : MonoBehaviour
         var settingsMenu = _settingsPanel.GetComponent<SettingsMenu>();
         if (settingsMenu == null) settingsMenu = _settingsPanel.AddComponent<SettingsMenu>();
         settingsMenu.Initialize();
+    }
+
+    private void ResolveContinueButton()
+    {
+        if (_continueButton != null) return;
+
+        foreach (Button button in GetComponentsInChildren<Button>(true))
+        {
+            if (button.name == "Btn_Continue")
+            {
+                _continueButton = button;
+                return;
+            }
+        }
+    }
+
+    private void RefreshContinueButton()
+    {
+        if (_continueButton != null)
+            _continueButton.interactable = SaveSystem.HasSave();
     }
 }
