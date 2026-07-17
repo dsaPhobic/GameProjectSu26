@@ -52,6 +52,33 @@ public class PowerUpSpawner : MonoBehaviour
         Instantiate(prefab, pos, Quaternion.identity);
     }
 
+    public void SpawnSaved(PowerUpType type, Vector3 pos)
+    {
+        foreach (GameObject prefab in _powerUpPrefabs)
+        {
+            if (prefab == null) continue;
+            var powerUp = prefab.GetComponent<PowerUp>();
+            if (powerUp == null || powerUp.Type != type) continue;
+
+            Instantiate(prefab, pos, Quaternion.identity);
+            return;
+        }
+    }
+
+    public List<PowerUpData> GetPowerUpDataSet()
+    {
+        var dataSet = new List<PowerUpData>();
+        foreach (GameObject prefab in _powerUpPrefabs)
+        {
+            if (prefab == null) continue;
+            var powerUp = prefab.GetComponent<PowerUp>();
+            if (powerUp != null && powerUp.Data != null && !dataSet.Contains(powerUp.Data))
+                dataSet.Add(powerUp.Data);
+        }
+
+        return dataSet;
+    }
+
     private Vector3 GetRandomWorldPos()
     {
         return new Vector3(Random.Range(-8f, 8f), Random.Range(-4f, 4f), 0);

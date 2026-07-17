@@ -11,13 +11,54 @@ public class TileSaveData
     public TileState state;
     public CropType cropType;
     public int cropStage;
+    public int cropHP;
+}
+
+[Serializable]
+public class ActivePowerUpBuffSaveData
+{
+    public PowerUpType type;
+    public float remaining;
+    public float duration;
+    public float magnitude;
+    public int appliedIntAmount;
+    public float appliedFloatAmount;
+}
+
+[Serializable]
+public class DroppedPowerUpSaveData
+{
+    public PowerUpType type;
+    public float x;
+    public float y;
+    public float z;
+}
+
+[Serializable]
+public class EnemySaveData
+{
+    public EnemyType type;
+    public int hp;
+    public float x;
+    public float y;
+    public float z;
 }
 
 [Serializable]
 public class GameSaveData
 {
+    public bool hasPlayerPosition;
+    public float playerX;
+    public float playerY;
+    public float playerZ;
     public int playerHP;
     public int playerMaxHP;
+    public int playerDamage;
+    public float playerAttackSpeed;
+    public float playerMoveSpeed;
+    public float playerDashCooldown;
+    public bool hasCurrentTool;
+    public ToolType currentTool;
     public int playerLevel;
     public int playerXP;
     public int gold;
@@ -25,7 +66,14 @@ public class GameSaveData
     public bool hasDragonArmor;
     public bool hasDrone;
     public List<TileSaveData> tiles = new();
+    public List<ActivePowerUpBuffSaveData> activePowerUpBuffs = new();
+    public List<DroppedPowerUpSaveData> droppedPowerUps = new();
+    public List<EnemySaveData> enemies = new();
     public int currentDay;
+    public bool hasDayNightState;
+    public DayPhase currentPhase;
+    public int currentPhaseIndex;
+    public float phaseRemaining;
     public float dayTimer;
     public int totalEnemiesKilled;
     public int totalGoldEarned;

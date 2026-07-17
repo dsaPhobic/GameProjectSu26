@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: upgrade_drone
   displayName: Combat Drone
-  description: Unlock helper drone
+  description: Unlock helper drone that shoots enemies
   category: 2
   effect: 5
   value: 1

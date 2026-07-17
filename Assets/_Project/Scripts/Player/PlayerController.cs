@@ -249,6 +249,14 @@ public class PlayerController : Entity
         _sharedDashCooldown = _dashCooldown;
     }
 
+    public float DashCooldown => _dashCooldown;
+
+    public void LoadDashCooldown(float value)
+    {
+        _dashCooldown = Mathf.Max(0.1f, value);
+        _sharedDashCooldown = _dashCooldown;
+    }
+
     public void ActivateShield(float duration, Sprite shieldIcon)
     {
         if (_shieldCoroutine != null)
