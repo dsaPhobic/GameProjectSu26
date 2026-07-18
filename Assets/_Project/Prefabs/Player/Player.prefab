@@ -216,7 +216,7 @@ MonoBehaviour:
   _damage: 20
   _attackSpeed: 1
   _moveSpeed: 5
-  _startingGold: 25
+  _startingGold: 1000
   _xpPerLevel: 100
 --- !u!114 &2850059122322676201
 MonoBehaviour:

@@ -13,7 +13,7 @@ public class HUDController : MonoBehaviour
     private PlayerStats _stats;
 
     private Image _hpFill, _xpFill;
-    private TextMeshProUGUI _hpText, _xpText, _goldText, _dayText, _levelText;
+    private TextMeshProUGUI _hpText, _xpText, _goldText, _dayText, _levelText, _gunText;
 
     private static Sprite _whiteSprite;
     private static Sprite WhiteSprite
@@ -101,6 +101,7 @@ public class HUDController : MonoBehaviour
         GameEvents.OnGoldChanged += UpdateGold;
         GameEvents.OnDayChanged += UpdateDay;
         GameEvents.OnPlayerLevelUp += UpdateLevel;
+        GameEvents.OnGunEquipped += UpdateGun;
         GameEvents.OnSeedChanged += UpdateSeed;
 
         TryResolvePlayer();
@@ -116,6 +117,7 @@ public class HUDController : MonoBehaviour
         GameEvents.OnGoldChanged -= UpdateGold;
         GameEvents.OnDayChanged -= UpdateDay;
         GameEvents.OnPlayerLevelUp -= UpdateLevel;
+        GameEvents.OnGunEquipped -= UpdateGun;
         GameEvents.OnSeedChanged -= UpdateSeed;
     }
 
@@ -141,6 +143,10 @@ public class HUDController : MonoBehaviour
         if (toolHandler != null) UpdateSeed(toolHandler.SelectedSeed);
 
         RefreshAll();
+
+        var gunInventory = _stats.GetComponent<PlayerGunInventory>();
+        if (gunInventory != null)
+            UpdateGun(gunInventory.CurrentGun);
     }
 
     private void RefreshAll()
@@ -170,6 +176,11 @@ public class HUDController : MonoBehaviour
     private void UpdateGold(int gold) { if (_goldText != null) _goldText.text = $"Gold: {gold}"; }
     private void UpdateDay(int day) { if (_dayText != null) _dayText.text = $"Day {day}"; }
     private void UpdateLevel(int level) { if (_levelText != null) _levelText.text = $"Lv. {level}"; }
+    private void UpdateGun(GunData gun)
+    {
+        if (_gunText != null)
+            _gunText.text = gun != null ? $"Vũ khí: {gun.displayName}  [F]" : "Vũ khí: --";
+    }
 
     private void UpdateSeed(CropData seed)
     {
@@ -193,6 +204,8 @@ public class HUDController : MonoBehaviour
 
         _goldText = CreateText("HUD_Gold", new Vector2(20, -110), new Vector2(220, 28), 22, TextAlignmentOptions.Left, "Gold: 0");
         _dayText = CreateText("HUD_Day", new Vector2(20, -140), new Vector2(220, 28), 22, TextAlignmentOptions.Left, "Day 1");
+        _gunText = CreateText("HUD_Gun", new Vector2(20, -170), new Vector2(360, 28), 20,
+            TextAlignmentOptions.Left, "Vũ khí: Arcane Pistol  [F]");
 
         CreateSeedInventory();
         CreatePetEggInventory();
@@ -204,7 +217,7 @@ public class HUDController : MonoBehaviour
     {
         if (FindObjectOfType<SeedInventoryUI>() != null) return;
 
-        var rt = NewChild("HUD_SeedInventory", new Vector2(20, -190), new Vector2(64, 260));
+        var rt = NewChild("HUD_SeedInventory", new Vector2(20, -210), new Vector2(64, 260));
         rt.gameObject.AddComponent<SeedInventoryUI>();
     }
 

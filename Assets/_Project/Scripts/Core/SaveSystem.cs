@@ -59,6 +59,8 @@ public class GameSaveData
     public float playerDashCooldown;
     public bool hasCurrentTool;
     public ToolType currentTool;
+    public List<string> unlockedGunIds = new();
+    public string equippedGunId;
     public int playerLevel;
     public int playerXP;
     public int gold;

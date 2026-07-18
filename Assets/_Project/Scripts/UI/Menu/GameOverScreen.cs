@@ -61,6 +61,7 @@ public class GameOverScreen : MonoBehaviour
         PlayerController.ResetProgress();
         PlayerAnimator.ResetProgress();
         PlayerToolHandler.ResetProgress();
+        PlayerGunInventory.ResetProgress();
         PlayerPetInventory.ResetProgress();
         LevelPortalBootstrap.ResetProgress();
         GameManager.Instance?.StartGame();

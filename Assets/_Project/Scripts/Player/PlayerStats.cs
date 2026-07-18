@@ -31,7 +31,9 @@ public class PlayerStats : MonoBehaviour
     public float MoveSpeed => _moveSpeed;
     public int Level => _level;
     public int XP => _xp;
-    public int Gold => _gold;
+    // Gold is shared between Player instances when changing scenes. Always
+    // expose that authoritative value so shop UI and SpendGold cannot disagree.
+    public int Gold => _sharedGoldInitialized ? _sharedGold : _gold;
 
     [SerializeField] private int _xpPerLevel = 100;
 
@@ -161,6 +163,11 @@ public class PlayerStats : MonoBehaviour
         _gold = _sharedGold;
         GameEvents.RaiseGoldChanged(_gold);
         return true;
+    }
+
+    public bool CanAfford(int amount)
+    {
+        return amount <= 0 || Gold >= amount;
     }
 
     public void ModifyMaxHP(int delta) { _maxHP += delta; Heal(0); }
