@@ -13,20 +13,7 @@ public class SceneTransition : MonoBehaviour
     private static float _lastTransitionTime = -999f;
     private bool _isTransitioning;
 
-    public void Configure(string targetSceneName, string targetSpawnId = "", bool saveReturnPoint = false)
-    {
-        _targetSceneName = targetSceneName;
-        _targetSpawnId = targetSpawnId;
-        _saveReturnPoint = saveReturnPoint;
-        _returnToSavedScene = false;
-    }
-
-    private void Reset()
-    {
-        Collider2D trigger = GetComponent<Collider2D>();
-        trigger.isTrigger = true;
-    }
-
+ 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (_isTransitioning) return;
@@ -40,10 +27,6 @@ public class SceneTransition : MonoBehaviour
             {
                 sceneToLoad = SceneTransitionState.ReturnSceneName;
                 SceneTransitionState.RestoreSavedReturnPointOnNextLoad();
-            }
-            else
-            {
-                SceneTransitionState.TargetSpawnId = _targetSpawnId;
             }
         }
         else
