@@ -30,6 +30,6 @@ public class Beast : Enemy
     {
         if (_target == null) return;
         if (_target.TryGetComponent<IDamageable>(out var dmg))
-            dmg.TakeDamage(_data.damage);
+            dmg.TakeDamage(GetScaledDamage(_data.damage));
     }
 }

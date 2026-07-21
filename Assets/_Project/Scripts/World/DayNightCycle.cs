@@ -32,7 +32,6 @@ public class DayNightCycle : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "GameScene2")
         {
-            _currentDay = Mathf.Max(_currentDay, 5);
             _dayColor = new Color(0.72f, 0.86f, 1f);
             _dayDuration *= 0.75f;
             _nightDuration *= 1.25f;

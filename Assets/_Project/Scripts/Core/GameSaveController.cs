@@ -135,6 +135,7 @@ public class GameSaveController : MonoBehaviour
         var dayNightCycle = FindObjectOfType<DayNightCycle>();
         DayPhase savedPhase = ResolveSavedPhase(data);
         bool shouldStartNightWave = savedPhase != DayPhase.Night;
+        waveManager?.SetCurrentDay(data.currentDay);
         dayNightCycle?.LoadState(data.currentDay, savedPhase, data.phaseRemaining, shouldStartNightWave);
 
         RestoreEnemies(data, waveManager);
@@ -145,7 +146,7 @@ public class GameSaveController : MonoBehaviour
     private void SaveCurrentGameInternal()
     {
         string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != "GameScene" && sceneName != "ShopInterior")
+        if (!IsGameplayScene(sceneName) && sceneName != "ShopInterior")
             return;
 
         PlayerStats stats = FindObjectOfType<PlayerStats>();
@@ -181,6 +182,7 @@ public class GameSaveController : MonoBehaviour
         var savedEnemies = waveManager != null
             ? GetLivingEnemies()
             : existingData?.enemies ?? new List<EnemySaveData>();
+        EnsurePendingBossIsSaved(savedEnemies, waveManager, currentDay, currentPhase);
 
         bool preserveGameplayPosition = sceneName == "ShopInterior" && existingData != null;
         var data = new GameSaveData
@@ -219,11 +221,6 @@ public class GameSaveController : MonoBehaviour
         SaveSystem.Save(data);
     }
 
-    private static bool IsGameplayScene(string sceneName)
-    {
-        return sceneName == "GameScene" || sceneName == "GameScene2";
-    }
-
     private static DayPhase ResolveSavedPhase(GameSaveData data)
     {
         if (data.hasDayNightState)
@@ -250,6 +247,29 @@ public class GameSaveController : MonoBehaviour
             waveManager.SpawnSavedEnemy(saved.type, new Vector3(saved.x, saved.y, saved.z), saved.hp);
 
         waveManager.SetActiveEnemyCount(data.enemies.Count);
+    }
+
+    private static void EnsurePendingBossIsSaved(List<EnemySaveData> savedEnemies, WaveManager waveManager, int currentDay, DayPhase currentPhase)
+    {
+        if (savedEnemies == null || waveManager == null || currentPhase != DayPhase.Night)
+            return;
+
+        if (!waveManager.WaveContainsEnemy(currentDay, EnemyType.DemonBoss))
+            return;
+
+        foreach (var saved in savedEnemies)
+            if (saved.type == EnemyType.DemonBoss)
+                return;
+
+        Vector3 position = waveManager.GetRestoreSpawnPosition();
+        savedEnemies.Add(new EnemySaveData
+        {
+            type = EnemyType.DemonBoss,
+            hp = int.MaxValue,
+            x = position.x,
+            y = position.y,
+            z = position.z
+        });
     }
 
     private static void RestorePlayerPosition(GameSaveData data, PlayerController player)
@@ -347,5 +367,10 @@ public class GameSaveController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private static bool IsGameplayScene(string sceneName)
+    {
+        return sceneName == "GameScene" || sceneName == "GameScene2";
     }
 }

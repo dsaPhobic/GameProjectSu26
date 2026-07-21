@@ -43,6 +43,6 @@ public class GoblinArcher : Enemy
         if (myCol != null && arrowCol != null)
             Physics2D.IgnoreCollision(arrowCol, myCol);
         if (arrow.TryGetComponent<Bullet>(out var bullet))
-            bullet.Init(dir, _arrowDamage, fromEnemy: true);
+            bullet.Init(dir, GetScaledDamage(_arrowDamage), fromEnemy: true);
     }
 }
