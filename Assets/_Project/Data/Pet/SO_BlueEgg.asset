@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00dd6ae4033a083469abbb555938fff6, type: 3}
+  m_Name: SO_BlueEgg
+  m_EditorClassIdentifier: 
+  eggName: Blue Egg
+  eggSprite: {fileID: 1152282363, guid: b7ed85448a4fca240b947fec3aa43b25, type: 3}
+  hatchAnimatorController: {fileID: 9100000, guid: 9d865763b6fa67341bca5c5b401052c2, type: 2}
+  petPrefab: {fileID: 8780587746676173527, guid: c365db07b8d25d3419d9b9d94f639cbc, type: 3}
+  petAnimatorController: {fileID: 9100000, guid: 1e6466384d55df643a5c1d5272374d67, type: 2}
+  price: 25
+  hatchSeconds: 30

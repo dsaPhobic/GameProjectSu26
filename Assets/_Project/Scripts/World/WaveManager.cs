@@ -10,9 +10,12 @@ public class WaveManager : MonoBehaviour
 
     [SerializeField] private float _hpScalePerDay = 1.1f;
     [SerializeField] private float _countScalePerDay = 1.2f;
+    [SerializeField] private float _leftSpawnMinX = -16.2f;
+    [SerializeField] private float _topSpawnMaxY = 16.2f;
 
     private int _currentDay = 1;
     private int _activeEnemyCount;
+    public int CurrentDay => _currentDay;
 
     private void Awake()
     {
@@ -57,19 +60,68 @@ public class WaveManager : MonoBehaviour
 
     private void SpawnEnemy(EnemyType type)
     {
-        if (_spawnPoints.Count == 0) return;
-        var point = _spawnPoints[Random.Range(0, _spawnPoints.Count)];
+        var point = GetRandomSpawnPoint();
+        if (point == null) return;
+
         var prefab = GetPrefabForType(type);
         if (prefab == null) return;
-        Instantiate(prefab, point.transform.position, Quaternion.identity);
+
+        Instantiate(prefab, GetSafeSpawnPosition(point), Quaternion.identity);
         _activeEnemyCount++;
+    }
+
+    public void SpawnSavedEnemy(EnemyType type, Vector3 position, int hp)
+    {
+        var prefab = GetPrefabForType(type);
+        if (prefab == null) return;
+
+        var enemyObject = Instantiate(prefab, position, Quaternion.identity);
+        if (enemyObject.TryGetComponent<Enemy>(out var enemy))
+            enemy.LoadHealth(hp);
+
+        _activeEnemyCount++;
+    }
+
+    public void SetActiveEnemyCount(int count)
+    {
+        _activeEnemyCount = Mathf.Max(0, count);
+    }
+
+    private SpawnPoint GetRandomSpawnPoint()
+    {
+        if (_spawnPoints == null || _spawnPoints.Count == 0) return null;
+
+        _spawnPoints.RemoveAll(point => point == null);
+        if (_spawnPoints.Count == 0) return null;
+
+        return _spawnPoints[Random.Range(0, _spawnPoints.Count)];
+    }
+
+    private Vector3 GetSafeSpawnPosition(SpawnPoint point)
+    {
+        if (point == null) return transform.position;
+
+        Vector3 position = point.transform.position;
+
+        if (position.x < _leftSpawnMinX)
+            position.x = _leftSpawnMinX;
+
+        if (position.y > _topSpawnMaxY)
+            position.y = _topSpawnMaxY;
+
+        return position;
     }
 
     private EnemyWaveData GetWaveData(int day)
     {
         foreach (var wd in _waveDataList)
             if (wd.dayNumber == day) return wd;
-        return _waveDataList.Count > 0 ? _waveDataList[^1] : null;
+
+        // Higher days reuse the last configured wave, while enemy count and HP
+        // continue scaling from the actual day number.
+        return _waveDataList != null && _waveDataList.Count > 0
+            ? _waveDataList[^1]
+            : null;
     }
 
     private GameObject GetPrefabForType(EnemyType type)

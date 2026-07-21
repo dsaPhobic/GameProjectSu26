@@ -19,8 +19,10 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadMainMenu() => LoadScene("MainMenu");
     public void LoadGameScene() => LoadScene("GameScene");
+    public void LoadGameScene2() => LoadScene("GameScene2");
     public void LoadGameOver() => LoadScene("GameOver");
     public void LoadHubTown() => LoadScene("HubTown");
+    public void LoadShopInterior() => LoadScene("ShopInterior");
 
     public void LoadScene(string sceneName)
     {

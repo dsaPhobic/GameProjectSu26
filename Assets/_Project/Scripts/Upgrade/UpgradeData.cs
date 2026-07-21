@@ -8,7 +8,8 @@ public enum UpgradeEffect
     IncreaseMoveSpeed,
     UnlockDragonArmor,
     UnlockDrone,
-    ReduceCooldown
+    ReduceCooldown,
+    IncreaseDroneDamage
 }
 
 [CreateAssetMenu(fileName = "SO_Upgrade", menuName = "MagicFarm/Upgrade Data")]

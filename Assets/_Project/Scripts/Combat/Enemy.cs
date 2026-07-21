@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public enum EnemyState { Idle, Chase, Attack, Dead }
@@ -7,6 +6,8 @@ public enum EnemyState { Idle, Chase, Attack, Dead }
 public abstract class Enemy : Entity
 {
     [SerializeField] protected EnemyData _data;
+    [SerializeField] private float _bounceSpeed = 10f;
+    [SerializeField] private float _bounceAmount = 0.12f;
 
     protected Rigidbody2D _rb;
     protected Animator _animator;
@@ -14,6 +15,7 @@ public abstract class Enemy : Entity
     protected EnemyState _state = EnemyState.Idle;
     protected Transform _target;
     private float _attackTimer;
+    private Vector3 _baseScale;
 
     protected static readonly int AnimIsMoving = Animator.StringToHash("IsMoving");
     protected static readonly int AnimIsAttacking = Animator.StringToHash("IsAttacking");
@@ -25,7 +27,12 @@ public abstract class Enemy : Entity
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        if (_data != null) maxHP = _data.maxHP;
+        if (_data != null) { maxHP = _data.maxHP; _currentHP = maxHP; }
+        _baseScale = transform.localScale;
+        if (_data != null && _data.enemyType == EnemyType.DemonBoss)
+            gameObject.AddComponent<BossHealthBar>();
+        else
+            gameObject.AddComponent<EnemyHealthBar>();
     }
 
     private void Update()
@@ -33,11 +40,25 @@ public abstract class Enemy : Entity
         if (_state == EnemyState.Dead) return;
         _target = GetTarget();
         UpdateState();
+        UpdateBounce();
+    }
+
+    private void UpdateBounce()
+    {
+        if (_state == EnemyState.Chase)
+        {
+            float bounce = 1f + Mathf.Abs(Mathf.Sin(Time.time * _bounceSpeed)) * _bounceAmount;
+            transform.localScale = new Vector3(_baseScale.x, _baseScale.y * bounce, _baseScale.z);
+        }
+        else
+        {
+            transform.localScale = _baseScale;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (_state == EnemyState.Chase && _target != null)
+        if ((_state == EnemyState.Chase || ShouldMoveWhileAttacking()) && _target != null)
             MoveTowardTarget();
     }
 
@@ -57,7 +78,7 @@ public abstract class Enemy : Entity
                 AttackTarget();
             }
         }
-        else if (dist <= _data.detectionRange)
+        else if (CanChaseTarget(dist))
         {
             _state = EnemyState.Chase;
         }
@@ -67,6 +88,9 @@ public abstract class Enemy : Entity
         }
 
         _animator?.SetBool(AnimIsMoving, _state == EnemyState.Chase);
+        _animator?.SetBool(AnimIsAttacking, _state == EnemyState.Attack);
+        if (_animator != null)
+            _animator.speed = (_state == EnemyState.Idle) ? 0f : 1f;
     }
 
     protected virtual void MoveTowardTarget()
@@ -76,16 +100,28 @@ public abstract class Enemy : Entity
         if (_spriteRenderer != null) _spriteRenderer.flipX = dir.x < 0;
     }
 
+    protected virtual bool CanChaseTarget(float distanceToTarget)
+    {
+        return distanceToTarget <= _data.detectionRange;
+    }
+
+    protected virtual bool ShouldMoveWhileAttacking()
+    {
+        return false;
+    }
+
     protected abstract Transform GetTarget();
     protected abstract void AttackTarget();
 
     protected override void Die()
     {
         _state = EnemyState.Dead;
+        if (_animator != null) _animator.speed = 1f;
         _animator?.SetBool(AnimIsDead, true);
-        _rb.linearVelocity = Vector2.zero;
+        _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
         GetComponent<Collider2D>().enabled = false;
+        AudioManager.Instance?.PlaySFX("sfx_hit");
         GameEvents.RaiseEnemyDied(this);
         Destroy(gameObject, 1.5f);
     }

@@ -7,6 +7,8 @@ public abstract class Entity : MonoBehaviour, IDamageable
     protected int _currentHP;
 
     public bool IsDead => _currentHP <= 0;
+    public int CurrentHP => _currentHP;
+    public int MaxHP => maxHP;
 
     protected virtual void Awake()
     {
@@ -19,6 +21,11 @@ public abstract class Entity : MonoBehaviour, IDamageable
         _currentHP -= damage;
         OnDamaged(damage);
         if (IsDead) Die();
+    }
+
+    public void LoadHealth(int hp)
+    {
+        _currentHP = Mathf.Clamp(hp, 1, maxHP);
     }
 
     protected virtual void OnDamaged(int damage) { }

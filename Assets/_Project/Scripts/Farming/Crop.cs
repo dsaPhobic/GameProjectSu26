@@ -11,36 +11,71 @@ public class Crop : MonoBehaviour, IDamageable, ISaveable
 
     public bool IsDead => _currentHP <= 0;
     public bool IsMature => _stage == CropStage.Mature;
+    public CropType CropType => _data != null ? _data.cropType : CropType.Wheat;
+    public int CurrentHP => _currentHP;
+    public int StageIndex => (int)_stage;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Init(CropData data)
+    private System.Action _onKilled;
+
+    public void Init(CropData data, System.Action onKilled = null, bool startGrowth = true)
     {
         _data = data;
         _currentHP = data.maxHP;
         _stage = CropStage.Seed;
+        _onKilled = onKilled;
         UpdateSprite();
-        _growthCoroutine = StartCoroutine(GrowthCoroutine());
+        if (startGrowth)
+            _growthCoroutine = StartCoroutine(GrowthCoroutine());
+    }
+
+    public void Restore(CropData data, CropStage stage, int hp, System.Action onKilled = null)
+    {
+        if (_growthCoroutine != null)
+            StopCoroutine(_growthCoroutine);
+
+        _data = data;
+        _currentHP = Mathf.Clamp(hp, 1, data.maxHP);
+        _stage = stage;
+        _onKilled = onKilled;
+        UpdateSprite();
+
+        if (!IsMature)
+            _growthCoroutine = StartCoroutine(GrowthCoroutine());
     }
 
     private IEnumerator GrowthCoroutine()
     {
         float timePerStage = _data.growthTime / 3f;
         yield return new WaitForSeconds(timePerStage);
-        SetStage(CropStage.Sprout);
+        SetStageIfBehind(CropStage.Sprout);
         yield return new WaitForSeconds(timePerStage);
-        SetStage(CropStage.Growing);
+        SetStageIfBehind(CropStage.Growing);
         yield return new WaitForSeconds(timePerStage);
-        SetStage(CropStage.Mature);
+        SetStageIfBehind(CropStage.Mature);
     }
 
     private void SetStage(CropStage stage)
     {
         _stage = stage;
         UpdateSprite();
+    }
+
+    private void SetStageIfBehind(CropStage stage)
+    {
+        if ((int)_stage >= (int)stage) return;
+        SetStage(stage);
+    }
+
+    public void AdvanceStage()
+    {
+        if (IsDead || IsMature) return;
+
+        SetStage((CropStage)Mathf.Min((int)_stage + 1, (int)CropStage.Mature));
     }
 
     private void UpdateSprite()
@@ -61,6 +96,7 @@ public class Crop : MonoBehaviour, IDamageable, ISaveable
     private void OnDestroyed()
     {
         if (_growthCoroutine != null) StopCoroutine(_growthCoroutine);
+        _onKilled?.Invoke();
         Destroy(gameObject);
     }
 
