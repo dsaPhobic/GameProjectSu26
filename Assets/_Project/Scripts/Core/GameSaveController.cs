@@ -9,7 +9,8 @@ public class GameSaveController : MonoBehaviour
     private enum StartMode
     {
         NewGame,
-        LoadGame
+        LoadGame,
+        ResumeGame
     }
 
     private static GameSaveController _instance;
@@ -32,6 +33,11 @@ public class GameSaveController : MonoBehaviour
     public static void ContinueGame()
     {
         _nextStartMode = StartMode.LoadGame;
+    }
+
+    public static void ResumeGame()
+    {
+        _nextStartMode = StartMode.ResumeGame;
     }
 
     public static void SaveCurrentGame()
@@ -67,14 +73,15 @@ public class GameSaveController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "GameScene" && _nextStartMode == StartMode.LoadGame)
-        {
-            _nextStartMode = StartMode.NewGame;
-            StartCoroutine(LoadWhenSceneReady());
-        }
+        if (!IsGameplayScene(scene.name) || _nextStartMode == StartMode.NewGame)
+            return;
+
+        bool restorePlayerPosition = _nextStartMode == StartMode.LoadGame;
+        _nextStartMode = StartMode.NewGame;
+        StartCoroutine(LoadWhenSceneReady(restorePlayerPosition));
     }
 
-    private IEnumerator LoadWhenSceneReady()
+    private IEnumerator LoadWhenSceneReady(bool restorePlayerPosition)
     {
         GameSaveData data = SaveSystem.Load();
         if (data == null) yield break;
@@ -110,7 +117,8 @@ public class GameSaveController : MonoBehaviour
         float moveSpeed = data.playerMoveSpeed > 0f ? data.playerMoveSpeed : stats.MoveSpeed;
 
         stats.LoadState(data.playerMaxHP, data.playerHP, data.playerLevel, data.playerXP, data.gold, damage, attackSpeed, moveSpeed);
-        RestorePlayerPosition(data, player);
+        if (restorePlayerPosition)
+            RestorePlayerPosition(data, player);
 
         if (data.playerDashCooldown > 0f)
             player.LoadDashCooldown(data.playerDashCooldown);
@@ -174,14 +182,15 @@ public class GameSaveController : MonoBehaviour
             ? GetLivingEnemies()
             : existingData?.enemies ?? new List<EnemySaveData>();
 
+        bool preserveGameplayPosition = sceneName == "ShopInterior" && existingData != null;
         var data = new GameSaveData
         {
             playerHP = stats.CurrentHP,
             playerMaxHP = stats.MaxHP,
-            hasPlayerPosition = true,
-            playerX = player.transform.position.x,
-            playerY = player.transform.position.y,
-            playerZ = player.transform.position.z,
+            hasPlayerPosition = preserveGameplayPosition ? existingData.hasPlayerPosition : true,
+            playerX = preserveGameplayPosition ? existingData.playerX : player.transform.position.x,
+            playerY = preserveGameplayPosition ? existingData.playerY : player.transform.position.y,
+            playerZ = preserveGameplayPosition ? existingData.playerZ : player.transform.position.z,
             playerDamage = stats.Damage,
             playerAttackSpeed = stats.AttackSpeed,
             playerMoveSpeed = stats.MoveSpeed,
@@ -208,6 +217,11 @@ public class GameSaveController : MonoBehaviour
         };
 
         SaveSystem.Save(data);
+    }
+
+    private static bool IsGameplayScene(string sceneName)
+    {
+        return sceneName == "GameScene" || sceneName == "GameScene2";
     }
 
     private static DayPhase ResolveSavedPhase(GameSaveData data)
