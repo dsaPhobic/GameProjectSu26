@@ -4327,9 +4327,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _waveDataList:
-  - {fileID: 11400000, guid: f0ad68c3b7d942818dedb103379540ff, type: 2}
-  - {fileID: 11400000, guid: a9d79d1bdfd64f21bf0be148de3ad723, type: 2}
-  - {fileID: 11400000, guid: 48605903c3fa48c498cb8817b63bbc07, type: 2}
+  - {fileID: 11400000, guid: 6f1a6c1bd8a146caa9a9a01e8b2d5001, type: 2}
+  - {fileID: 11400000, guid: b7d97f65176f4f59b3e16bb213ed8a12, type: 2}
+  - {fileID: 11400000, guid: c87523ea506a43248ffeb7c4f3f42023, type: 2}
+  - {fileID: 11400000, guid: d93781d63e7f43c7b5ec94bc0cb014ee, type: 2}
+  - {fileID: 11400000, guid: e4b59733bff84151b37109785dd2887f, type: 2}
   _spawnPoints:
   - {fileID: 49917109}
   - {fileID: 1969368809}
@@ -4343,7 +4345,10 @@ MonoBehaviour:
   - {fileID: 1000001, guid: 54e63f3e5f9d39e43947a7e1c9c3ea7b, type: 3}
   - {fileID: 3000001, guid: 5e7e395d6d974e9c94f3ac1f880c0969, type: 3}
   - {fileID: 4000001, guid: 4ce1c31b4cde4518a9619bc3ce8d5758, type: 3}
-  _hpScalePerDay: 1.1
+  _baseHpMultiplier: 1.25
+  _baseDamageMultiplier: 1.2
+  _hpScalePerDay: 1.18
+  _damageScalePerDay: 1.08
   _countScalePerDay: 1.2
   _leftSpawnMinX: -16.2
   _topSpawnMaxY: 16.2

@@ -14,6 +14,7 @@ public abstract class Enemy : Entity
     protected SpriteRenderer _spriteRenderer;
     protected EnemyState _state = EnemyState.Idle;
     protected Transform _target;
+    protected float _damageMultiplier = 1f;
     private float _attackTimer;
     private Vector3 _baseScale;
 
@@ -108,6 +109,20 @@ public abstract class Enemy : Entity
     protected virtual bool ShouldMoveWhileAttacking()
     {
         return false;
+    }
+
+    public void ApplySpawnScaling(float hpMultiplier, float damageMultiplier)
+    {
+        if (_data != null)
+            maxHP = Mathf.Max(1, Mathf.RoundToInt(_data.maxHP * hpMultiplier));
+
+        _currentHP = maxHP;
+        _damageMultiplier = Mathf.Max(0.01f, damageMultiplier);
+    }
+
+    protected int GetScaledDamage(int baseDamage)
+    {
+        return Mathf.Max(1, Mathf.RoundToInt(baseDamage * _damageMultiplier));
     }
 
     protected abstract Transform GetTarget();
