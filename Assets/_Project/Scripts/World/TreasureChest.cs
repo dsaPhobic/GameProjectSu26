@@ -27,7 +27,7 @@ public class TreasureChest : MonoBehaviour, IInteractable
     [SerializeField] private string _openTriggerName = "Open";
     [SerializeField] private float _rewardRevealDelay = 0.15f;
     [SerializeField] private bool _opened;
-    [SerializeField] private bool _allowOpenAgain;
+    [SerializeField] private bool _allowOpenAgain = true;
 
     [Header("Interaction UI")]
     [SerializeField] private GameObject _promptRoot;
