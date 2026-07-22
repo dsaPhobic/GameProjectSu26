@@ -59,11 +59,18 @@ public class SceneTransition : MonoBehaviour
         _isTransitioning = true;
         _lastTransitionTime = Time.unscaledTime;
         GameSaveController.SaveCurrentGame();
+        if (_returnToSavedScene && IsGameplayScene(sceneToLoad))
+            GameSaveController.ResumeGame();
 
         if (SceneLoader.Instance != null)
             SceneLoader.Instance.LoadScene(sceneToLoad);
         else
             SceneManager.LoadScene(sceneToLoad);
+    }
+
+    private static bool IsGameplayScene(string sceneName)
+    {
+        return sceneName == "GameScene" || sceneName == "GameScene2";
     }
 
     private void OnDrawGizmos()

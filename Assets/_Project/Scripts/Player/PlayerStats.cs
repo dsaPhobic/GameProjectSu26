@@ -185,6 +185,7 @@ public class PlayerStats : MonoBehaviour
         _attackSpeed = Mathf.Max(0.1f, attackSpeed);
         _moveSpeed = Mathf.Max(0f, moveSpeed);
         _isDead = _currentHP <= 0;
+        SyncSharedProgress();
 
         _sharedGold = Mathf.Max(0, gold);
         _sharedGoldInitialized = true;

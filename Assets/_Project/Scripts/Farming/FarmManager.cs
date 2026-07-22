@@ -57,6 +57,16 @@ public class FarmManager : MonoBehaviour
         return count;
     }
 
+    /// <summary>
+    /// Called only when a crop reaches zero HP. Harvesting does not use this path,
+    /// so collecting the final crop cannot trigger Game Over.
+    /// </summary>
+    public void NotifyCropDestroyedByDamage()
+    {
+        if (CountLivingCrops() == 0)
+            GameEvents.RaiseAllCropsDestroyed();
+    }
+
     public int AdvanceAllCropsOneStage()
     {
         int advanced = 0;

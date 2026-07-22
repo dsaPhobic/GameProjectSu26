@@ -80,10 +80,7 @@ public class FarmTile : MonoBehaviour, IInteractable
         if (_pendingCropData == null || _cropPrefab == null) return;
         var go = Instantiate(_cropPrefab, transform.position, Quaternion.identity);
         _currentCrop = go.GetComponent<Crop>();
-        _currentCrop?.Init(_pendingCropData, () => {
-            _currentCrop = null;
-            SetState(TileState.Empty);
-        });
+        _currentCrop?.Init(_pendingCropData, HandleCropDestroyedByDamage);
         SetState(_currentCrop != null ? TileState.Planted : TileState.Watered);
     }
 
@@ -123,10 +120,14 @@ public class FarmTile : MonoBehaviour, IInteractable
 
         var go = Instantiate(_cropPrefab, transform.position, Quaternion.identity);
         _currentCrop = go.GetComponent<Crop>();
-        _currentCrop?.Restore(cropData, (CropStage)data.cropStage, data.cropHP, () => {
-            _currentCrop = null;
-            SetState(TileState.Empty);
-        });
+        _currentCrop?.Restore(cropData, (CropStage)data.cropStage, data.cropHP, HandleCropDestroyedByDamage);
         SetState(_currentCrop != null ? TileState.Planted : TileState.Watered);
+    }
+
+    private void HandleCropDestroyedByDamage()
+    {
+        _currentCrop = null;
+        SetState(TileState.Empty);
+        ServiceLocator.Get<FarmManager>()?.NotifyCropDestroyedByDamage();
     }
 }

@@ -8,13 +8,17 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private List<SpawnPoint> _spawnPoints;
     [SerializeField] private List<GameObject> _enemyPrefabs;
 
+    [SerializeField] private float _baseHpMultiplier = 1f;
+    [SerializeField] private float _baseDamageMultiplier = 1f;
     [SerializeField] private float _hpScalePerDay = 1.1f;
+    [SerializeField] private float _damageScalePerDay = 1f;
     [SerializeField] private float _countScalePerDay = 1.2f;
     [SerializeField] private float _leftSpawnMinX = -16.2f;
     [SerializeField] private float _topSpawnMaxY = 16.2f;
 
     private int _currentDay = 1;
     private int _activeEnemyCount;
+    private bool _waveCompletionRaised;
     public int CurrentDay => _currentDay;
 
     private void Awake()
@@ -36,8 +40,14 @@ public class WaveManager : MonoBehaviour
     public void StartWave(int day)
     {
         _currentDay = day;
+        _waveCompletionRaised = false;
         StartCoroutine(SpawnWave(day));
         GameEvents.RaiseWaveStarted(day);
+    }
+
+    public void SetCurrentDay(int day)
+    {
+        _currentDay = Mathf.Max(1, day);
     }
 
     private IEnumerator SpawnWave(int day)
@@ -45,20 +55,21 @@ public class WaveManager : MonoBehaviour
         EnemyWaveData waveData = GetWaveData(day);
         if (waveData == null) yield break;
 
-        float hpMult = Mathf.Pow(_hpScalePerDay, day - 1);
+        float hpMult = _baseHpMultiplier * Mathf.Pow(_hpScalePerDay, day - 1);
+        float damageMult = _baseDamageMultiplier * Mathf.Pow(_damageScalePerDay, day - 1);
 
         foreach (var entry in waveData.spawnEntries)
         {
-            int count = Mathf.RoundToInt(entry.count * Mathf.Pow(_countScalePerDay, day - 1));
+            int count = GetSpawnCount(entry, day);
             for (int i = 0; i < count; i++)
             {
-                SpawnEnemy(entry.enemyType);
+                SpawnEnemy(entry.enemyType, hpMult, damageMult);
                 yield return new WaitForSeconds(entry.spawnInterval);
             }
         }
     }
 
-    private void SpawnEnemy(EnemyType type)
+    private void SpawnEnemy(EnemyType type, float hpMultiplier, float damageMultiplier)
     {
         var point = GetRandomSpawnPoint();
         if (point == null) return;
@@ -66,7 +77,10 @@ public class WaveManager : MonoBehaviour
         var prefab = GetPrefabForType(type);
         if (prefab == null) return;
 
-        Instantiate(prefab, GetSafeSpawnPosition(point), Quaternion.identity);
+        var enemyObject = Instantiate(prefab, GetSafeSpawnPosition(point), Quaternion.identity);
+        if (enemyObject.TryGetComponent<Enemy>(out var enemy))
+            enemy.ApplySpawnScaling(hpMultiplier, damageMultiplier);
+
         _activeEnemyCount++;
     }
 
@@ -77,14 +91,59 @@ public class WaveManager : MonoBehaviour
 
         var enemyObject = Instantiate(prefab, position, Quaternion.identity);
         if (enemyObject.TryGetComponent<Enemy>(out var enemy))
+        {
+            float hpMult = _baseHpMultiplier * Mathf.Pow(_hpScalePerDay, _currentDay - 1);
+            float damageMult = _baseDamageMultiplier * Mathf.Pow(_damageScalePerDay, _currentDay - 1);
+            enemy.ApplySpawnScaling(hpMult, damageMult);
             enemy.LoadHealth(hp);
+        }
 
         _activeEnemyCount++;
+    }
+
+    public bool WaveContainsEnemy(int day, EnemyType type)
+    {
+        EnemyWaveData waveData = GetWaveData(day);
+        if (waveData == null) return false;
+
+        foreach (var entry in waveData.spawnEntries)
+            if (entry.enemyType == type && entry.count > 0)
+                return true;
+
+        return false;
+    }
+
+    public Vector3 GetRestoreSpawnPosition()
+    {
+        var point = GetRandomSpawnPoint();
+        return GetSafeSpawnPosition(point);
     }
 
     public void SetActiveEnemyCount(int count)
     {
         _activeEnemyCount = Mathf.Max(0, count);
+        _waveCompletionRaised = false;
+    }
+
+    /// <summary>
+    /// Ends the current boss encounter immediately. Remaining enemies are removed
+    /// without awarding kill rewards, and pending spawns are cancelled.
+    /// </summary>
+    public void FinishBossEncounter(Enemy defeatedBoss)
+    {
+        StopAllCoroutines();
+
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            if (enemy == null || enemy == defeatedBoss) continue;
+
+            // Hide immediately; Destroy is deferred until the end of the frame.
+            enemy.gameObject.SetActive(false);
+            Destroy(enemy.gameObject);
+        }
+
+        _activeEnemyCount = 0;
+        RaiseWaveCompletedOnce();
     }
 
     private SpawnPoint GetRandomSpawnPoint()
@@ -116,12 +175,15 @@ public class WaveManager : MonoBehaviour
     {
         foreach (var wd in _waveDataList)
             if (wd.dayNumber == day) return wd;
+        return null;
+    }
 
-        // Higher days reuse the last configured wave, while enemy count and HP
-        // continue scaling from the actual day number.
-        return _waveDataList != null && _waveDataList.Count > 0
-            ? _waveDataList[^1]
-            : null;
+    private int GetSpawnCount(EnemyWaveData.SpawnEntry entry, int day)
+    {
+        if (entry.enemyType == EnemyType.DemonBoss)
+            return entry.count;
+
+        return Mathf.RoundToInt(entry.count * Mathf.Pow(_countScalePerDay, day - 1));
     }
 
     private GameObject GetPrefabForType(EnemyType type)
@@ -138,6 +200,14 @@ public class WaveManager : MonoBehaviour
     {
         _activeEnemyCount = Mathf.Max(0, _activeEnemyCount - 1);
         if (_activeEnemyCount == 0)
-            GameEvents.RaiseWaveCompleted();
+            RaiseWaveCompletedOnce();
+    }
+
+    private void RaiseWaveCompletedOnce()
+    {
+        if (_waveCompletionRaised) return;
+
+        _waveCompletionRaised = true;
+        GameEvents.RaiseWaveCompleted();
     }
 }

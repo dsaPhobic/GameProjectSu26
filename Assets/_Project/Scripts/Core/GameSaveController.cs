@@ -9,7 +9,8 @@ public class GameSaveController : MonoBehaviour
     private enum StartMode
     {
         NewGame,
-        LoadGame
+        LoadGame,
+        ResumeGame
     }
 
     private static GameSaveController _instance;
@@ -32,6 +33,11 @@ public class GameSaveController : MonoBehaviour
     public static void ContinueGame()
     {
         _nextStartMode = StartMode.LoadGame;
+    }
+
+    public static void ResumeGame()
+    {
+        _nextStartMode = StartMode.ResumeGame;
     }
 
     public static void SaveCurrentGame()
@@ -67,14 +73,15 @@ public class GameSaveController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "GameScene" && _nextStartMode == StartMode.LoadGame)
-        {
-            _nextStartMode = StartMode.NewGame;
-            StartCoroutine(LoadWhenSceneReady());
-        }
+        if (!IsGameplayScene(scene.name) || _nextStartMode == StartMode.NewGame)
+            return;
+
+        bool restorePlayerPosition = _nextStartMode == StartMode.LoadGame;
+        _nextStartMode = StartMode.NewGame;
+        StartCoroutine(LoadWhenSceneReady(restorePlayerPosition));
     }
 
-    private IEnumerator LoadWhenSceneReady()
+    private IEnumerator LoadWhenSceneReady(bool restorePlayerPosition)
     {
         GameSaveData data = SaveSystem.Load();
         if (data == null) yield break;
@@ -110,7 +117,8 @@ public class GameSaveController : MonoBehaviour
         float moveSpeed = data.playerMoveSpeed > 0f ? data.playerMoveSpeed : stats.MoveSpeed;
 
         stats.LoadState(data.playerMaxHP, data.playerHP, data.playerLevel, data.playerXP, data.gold, damage, attackSpeed, moveSpeed);
-        RestorePlayerPosition(data, player);
+        if (restorePlayerPosition)
+            RestorePlayerPosition(data, player);
 
         if (data.playerDashCooldown > 0f)
             player.LoadDashCooldown(data.playerDashCooldown);
@@ -129,6 +137,7 @@ public class GameSaveController : MonoBehaviour
         var dayNightCycle = FindObjectOfType<DayNightCycle>();
         DayPhase savedPhase = ResolveSavedPhase(data);
         bool shouldStartNightWave = savedPhase != DayPhase.Night;
+        waveManager?.SetCurrentDay(data.currentDay);
         dayNightCycle?.LoadState(data.currentDay, savedPhase, data.phaseRemaining, shouldStartNightWave);
 
         RestoreEnemies(data, waveManager);
@@ -139,7 +148,7 @@ public class GameSaveController : MonoBehaviour
     private void SaveCurrentGameInternal()
     {
         string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != "GameScene" && sceneName != "ShopInterior")
+        if (!IsGameplayScene(sceneName) && sceneName != "ShopInterior")
             return;
 
         PlayerStats stats = FindObjectOfType<PlayerStats>();
@@ -175,15 +184,17 @@ public class GameSaveController : MonoBehaviour
         var savedEnemies = waveManager != null
             ? GetLivingEnemies()
             : existingData?.enemies ?? new List<EnemySaveData>();
+        EnsurePendingBossIsSaved(savedEnemies, waveManager, currentDay, currentPhase);
 
+        bool preserveGameplayPosition = sceneName == "ShopInterior" && existingData != null;
         var data = new GameSaveData
         {
             playerHP = stats.CurrentHP,
             playerMaxHP = stats.MaxHP,
-            hasPlayerPosition = true,
-            playerX = player.transform.position.x,
-            playerY = player.transform.position.y,
-            playerZ = player.transform.position.z,
+            hasPlayerPosition = preserveGameplayPosition ? existingData.hasPlayerPosition : true,
+            playerX = preserveGameplayPosition ? existingData.playerX : player.transform.position.x,
+            playerY = preserveGameplayPosition ? existingData.playerY : player.transform.position.y,
+            playerZ = preserveGameplayPosition ? existingData.playerZ : player.transform.position.z,
             playerDamage = stats.Damage,
             playerAttackSpeed = stats.AttackSpeed,
             playerMoveSpeed = stats.MoveSpeed,
@@ -241,6 +252,29 @@ public class GameSaveController : MonoBehaviour
             waveManager.SpawnSavedEnemy(saved.type, new Vector3(saved.x, saved.y, saved.z), saved.hp);
 
         waveManager.SetActiveEnemyCount(data.enemies.Count);
+    }
+
+    private static void EnsurePendingBossIsSaved(List<EnemySaveData> savedEnemies, WaveManager waveManager, int currentDay, DayPhase currentPhase)
+    {
+        if (savedEnemies == null || waveManager == null || currentPhase != DayPhase.Night)
+            return;
+
+        if (!waveManager.WaveContainsEnemy(currentDay, EnemyType.DemonBoss))
+            return;
+
+        foreach (var saved in savedEnemies)
+            if (saved.type == EnemyType.DemonBoss)
+                return;
+
+        Vector3 position = waveManager.GetRestoreSpawnPosition();
+        savedEnemies.Add(new EnemySaveData
+        {
+            type = EnemyType.DemonBoss,
+            hp = int.MaxValue,
+            x = position.x,
+            y = position.y,
+            z = position.z
+        });
     }
 
     private static void RestorePlayerPosition(GameSaveData data, PlayerController player)
@@ -338,5 +372,10 @@ public class GameSaveController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private static bool IsGameplayScene(string sceneName)
+    {
+        return sceneName == "GameScene" || sceneName == "GameScene2";
     }
 }
