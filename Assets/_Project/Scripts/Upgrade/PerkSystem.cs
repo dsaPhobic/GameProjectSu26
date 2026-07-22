@@ -23,7 +23,8 @@ public class PerkSystem : MonoBehaviour
 
     private static void EnsureExists(Scene scene)
     {
-        if (scene.name != "GameScene" && scene.name != "ShopInterior" && scene.name != "HubTown") return;
+        if (scene.name != "GameScene" && scene.name != "GameScene2" &&
+            scene.name != "ShopInterior" && scene.name != "HubTown") return;
         if (FindObjectOfType<PerkSystem>() != null) return;
 
         var root = new GameObject("UpgradeFlow");
