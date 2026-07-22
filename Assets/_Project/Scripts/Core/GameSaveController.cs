@@ -126,6 +126,8 @@ public class GameSaveController : MonoBehaviour
         if (data.hasCurrentTool)
             player.GetComponent<PlayerToolHandler>()?.LoadTool(data.currentTool);
 
+        player.GetComponent<PlayerGunInventory>()?.LoadState(data.unlockedGunIds, data.equippedGunId);
+
         var upgradeManager = ServiceLocator.Get<UpgradeManager>();
         if (upgradeManager == null) upgradeManager = FindObjectOfType<UpgradeManager>();
         upgradeManager?.LoadAppliedIds(data.appliedUpgradeIds, data.hasDragonArmor, data.hasDrone);
@@ -199,6 +201,9 @@ public class GameSaveController : MonoBehaviour
             playerDashCooldown = player.DashCooldown,
             hasCurrentTool = true,
             currentTool = player.GetComponent<PlayerToolHandler>()?.CurrentTool ?? ToolType.Gun,
+            unlockedGunIds = player.GetComponent<PlayerGunInventory>()?.GetUnlockedIds() ??
+                             new System.Collections.Generic.List<string>(),
+            equippedGunId = player.GetComponent<PlayerGunInventory>()?.GetEquippedId(),
             playerLevel = stats.Level,
             playerXP = stats.XP,
             gold = stats.Gold,

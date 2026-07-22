@@ -110,6 +110,15 @@ public class PlayerToolHandler : MonoBehaviour
         UpdateToolSprite();
     }
 
+    public void SetGunSprite(Sprite gunSprite)
+    {
+        if (gunSprite != null)
+            _gunSprite = gunSprite;
+
+        if (CurrentTool == ToolType.Gun)
+            UpdateToolSprite();
+    }
+
     public void LoadTool(ToolType tool)
     {
         CurrentTool = tool;

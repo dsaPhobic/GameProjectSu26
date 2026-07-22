@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11f75fd47a74ac3a74f9d9ecfa61c01, type: 3}
+  m_Name: SO_Gun_RuneShotgun
+  m_EditorClassIdentifier:
+  id: rune_shotgun
+  displayName: Rune Shotgun
+  description: Bắn chùm 6 viên, cực mạnh khi áp sát quái vật.
+  icon: {fileID: -864579181, guid: d4d0c696e77ae284ab86754993218bd1, type: 3}
+  price: 160
+  unlockedByDefault: 0
+  fireMode: 0
+  shotsPerSecond: 0.9
+  damageMultiplier: 0.55
+  pellets: 6
+  spreadAngle: 18
+  bulletScale: 0.8
+  allowChargedShot: 0

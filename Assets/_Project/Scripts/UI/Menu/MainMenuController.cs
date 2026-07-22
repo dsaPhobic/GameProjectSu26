@@ -12,6 +12,7 @@ public class MainMenuController : MonoBehaviour
         PlayerController.ResetProgress();
         PlayerAnimator.ResetProgress();
         PlayerToolHandler.ResetProgress();
+        PlayerGunInventory.ResetProgress();
         PlayerPetInventory.ResetProgress();
         LevelPortalBootstrap.ResetProgress();
         AudioManager.Instance?.PlaySFX("sfx_button_click");

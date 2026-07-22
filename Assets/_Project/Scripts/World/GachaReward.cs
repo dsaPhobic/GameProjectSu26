@@ -45,7 +45,7 @@ public class GachaReward
                 stats?.Heal(amount);
                 break;
             case RewardType.Gun:
-                Debug.Log($"Received gun reward: {displayName}");
+                GiveRandomLockedGun(player, stats);
                 break;
             case RewardType.PetEgg:
                 if (petEgg != null)
@@ -66,6 +66,32 @@ public class GachaReward
                 stats?.ModifyMaxHP(amount);
                 break;
         }
+    }
+
+    private void GiveRandomLockedGun(PlayerToolHandler player, PlayerStats stats)
+    {
+        PlayerGunInventory inventory = player != null
+            ? player.GetComponent<PlayerGunInventory>()
+            : null;
+        if (inventory == null) return;
+
+        var lockedGuns = new System.Collections.Generic.List<GunData>();
+        foreach (GunData gun in inventory.Catalog)
+        {
+            if (gun != null && !inventory.IsUnlocked(gun))
+                lockedGuns.Add(gun);
+        }
+
+        if (lockedGuns.Count == 0)
+        {
+            stats?.AddGold(50);
+            Debug.Log("All guns unlocked. Gun reward converted to 50 gold.");
+            return;
+        }
+
+        GunData reward = lockedGuns[UnityEngine.Random.Range(0, lockedGuns.Count)];
+        inventory.UnlockAndEquip(reward);
+        Debug.Log($"Unlocked gun reward: {reward.displayName}");
     }
 
     public string GetResultText()

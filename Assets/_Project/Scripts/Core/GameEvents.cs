@@ -7,6 +7,7 @@ public static class GameEvents
     public static event Action<int> OnPlayerXPChanged;
     public static event Action<int> OnGoldChanged;
     public static event Action<int> OnPlayerLevelUp;
+    public static event Action<GunData> OnGunEquipped;
     public static event Action OnPlayerDied;
 
     // Game phase events
@@ -30,6 +31,7 @@ public static class GameEvents
     public static void RaisePlayerXPChanged(int xp) => OnPlayerXPChanged?.Invoke(xp);
     public static void RaiseGoldChanged(int gold) => OnGoldChanged?.Invoke(gold);
     public static void RaisePlayerLevelUp(int level) => OnPlayerLevelUp?.Invoke(level);
+    public static void RaiseGunEquipped(GunData gun) => OnGunEquipped?.Invoke(gun);
     public static void RaisePlayerDied() => OnPlayerDied?.Invoke();
     public static void RaiseDayPhaseChanged(DayPhase phase) => OnDayPhaseChanged?.Invoke(phase);
     public static void RaiseDayChanged(int day) => OnDayChanged?.Invoke(day);

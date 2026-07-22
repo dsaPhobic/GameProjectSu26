@@ -18,8 +18,10 @@ public class PlayerController : Entity
     private PlayerStats _stats;
     private PlayerAnimator _animator;
     private PlayerToolHandler _toolHandler;
+    private PlayerGunInventory _gunInventory;
     private PlayerChargeBar _chargeBar;
     private Coroutine _shieldCoroutine;
+    private Coroutine _attackAnimationCoroutine;
     private GameObject _shieldVisualRoot;
 
     private bool _isDashing;
@@ -52,6 +54,9 @@ public class PlayerController : Entity
         _stats = GetComponent<PlayerStats>();
         _animator = GetComponent<PlayerAnimator>();
         _toolHandler = GetComponent<PlayerToolHandler>();
+        _gunInventory = GetComponent<PlayerGunInventory>();
+        if (_gunInventory == null)
+            _gunInventory = gameObject.AddComponent<PlayerGunInventory>();
         _chargeBar = GetComponent<PlayerChargeBar>();
         if (_chargeBar == null) _chargeBar = gameObject.AddComponent<PlayerChargeBar>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -83,8 +88,13 @@ public class PlayerController : Entity
         if (_input.DashPressed && _dashCooldownTimer <= 0 && !_isDashing)
             StartCoroutine(Dash());
 
-        if (_input.AttackPressed && !_isDashing && _attackCooldownTimer <= 0)
-            Shoot();
+        GunData gun = _gunInventory != null ? _gunInventory.CurrentGun : null;
+        bool wantsToShoot = gun != null && gun.fireMode == GunFireMode.Automatic
+            ? _input.AttackHeld
+            : _input.AttackPressed;
+
+        if (wantsToShoot && !_isDashing && _attackCooldownTimer <= 0)
+            ShootCurrentGun();
 
         HandleChargedShotInput();
 
@@ -94,8 +104,11 @@ public class PlayerController : Entity
         if (_input.ToolSwitchInput > 0)
             _toolHandler?.SwitchTool(_input.ToolSwitchInput);
 
-        if (_input.SeedCyclePressed)
+        if (_input.SeedCyclePressed && !ShopkeeperNPC.IsPlayerShopping)
             _toolHandler?.CycleSeed();
+
+        if (_input.WeaponSwitchPressed && !ShopkeeperNPC.IsPlayerShopping)
+            _gunInventory?.EquipNextUnlocked();
 
         FlipSprite(_input.AimDirection);
         _toolHandler?.AimTool(_input.AimDirection);
@@ -104,7 +117,9 @@ public class PlayerController : Entity
 
     private bool CanChargeShot()
     {
-        return _toolHandler != null && _toolHandler.CurrentTool == ToolType.Gun;
+        GunData gun = _gunInventory != null ? _gunInventory.CurrentGun : null;
+        return _toolHandler != null && _toolHandler.CurrentTool == ToolType.Gun &&
+               (gun == null || gun.allowChargedShot);
     }
 
     private void HandleChargedShotInput()
@@ -157,18 +172,33 @@ public class PlayerController : Entity
         _chargeBar?.Hide();
     }
 
-    private void Shoot()
+    private void ShootCurrentGun()
     {
         _toolHandler?.EquipGun();
         if (_bulletPrefab == null) return;
-        _attackCooldownTimer = 1f / Mathf.Max(_stats.AttackSpeed, 0.1f);
-        _animator?.SetAttacking(true);
-        Vector3 spawnPos = transform.position + (Vector3)(_input.AimDirection * 0.6f);
-        GameObject bullet = Instantiate(_bulletPrefab, spawnPos, Quaternion.identity);
-        if (bullet.TryGetComponent<Bullet>(out var b))
-            b.Init(_input.AimDirection, _stats.Damage);
+
+        GunData gun = _gunInventory != null ? _gunInventory.CurrentGun : null;
+        float shotsPerSecond = gun != null ? gun.shotsPerSecond : 1f;
+        _attackCooldownTimer = 1f /
+            Mathf.Max(shotsPerSecond * Mathf.Max(_stats.AttackSpeed, 0.1f), 0.1f);
+
+        int pellets = gun != null ? Mathf.Max(1, gun.pellets) : 1;
+        float totalSpread = gun != null ? gun.spreadAngle : 0f;
+        float bulletScale = gun != null ? gun.bulletScale : 1f;
+        float damageMultiplier = gun != null ? gun.damageMultiplier : 1f;
+        int damage = Mathf.Max(1, Mathf.RoundToInt(_stats.Damage * damageMultiplier));
+
+        for (int i = 0; i < pellets; i++)
+        {
+            float angle = pellets == 1
+                ? Random.Range(-totalSpread, totalSpread)
+                : Mathf.Lerp(-totalSpread, totalSpread, (float)i / (pellets - 1));
+            Vector3 rotated = Quaternion.Euler(0f, 0f, angle) * (Vector3)_input.AimDirection;
+            SpawnBullet(new Vector2(rotated.x, rotated.y), damage, bulletScale);
+        }
+
+        PlayAttackAnimation();
         AudioManager.Instance?.PlaySFX("sfx_attack");
-        StartCoroutine(ResetAttack());
     }
 
     private void ShootBurst()
@@ -211,10 +241,20 @@ public class PlayerController : Entity
             b.Init(direction, damage);
     }
 
+    private void PlayAttackAnimation()
+    {
+        if (_attackAnimationCoroutine != null)
+            StopCoroutine(_attackAnimationCoroutine);
+
+        _animator?.SetAttacking(true);
+        _attackAnimationCoroutine = StartCoroutine(ResetAttack());
+    }
+
     private IEnumerator ResetAttack()
     {
         yield return new WaitForSeconds(0.3f);
         _animator?.SetAttacking(false);
+        _attackAnimationCoroutine = null;
     }
 
     private void FixedUpdate()

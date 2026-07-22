@@ -176,7 +176,7 @@ MonoBehaviour:
   _animator: {fileID: 807412970}
   _openTriggerName: Open
   _opened: 0
-  _allowOpenAgain: 0
+  _allowOpenAgain: 1
 --- !u!95 &807412970
 Animator:
   serializedVersion: 5

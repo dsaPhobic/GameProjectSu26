@@ -18,6 +18,7 @@ public class WaveManager : MonoBehaviour
 
     private int _currentDay = 1;
     private int _activeEnemyCount;
+    private bool _waveCompletionRaised;
     public int CurrentDay => _currentDay;
 
     private void Awake()
@@ -39,6 +40,7 @@ public class WaveManager : MonoBehaviour
     public void StartWave(int day)
     {
         _currentDay = day;
+        _waveCompletionRaised = false;
         StartCoroutine(SpawnWave(day));
         GameEvents.RaiseWaveStarted(day);
     }
@@ -120,6 +122,28 @@ public class WaveManager : MonoBehaviour
     public void SetActiveEnemyCount(int count)
     {
         _activeEnemyCount = Mathf.Max(0, count);
+        _waveCompletionRaised = false;
+    }
+
+    /// <summary>
+    /// Ends the current boss encounter immediately. Remaining enemies are removed
+    /// without awarding kill rewards, and pending spawns are cancelled.
+    /// </summary>
+    public void FinishBossEncounter(Enemy defeatedBoss)
+    {
+        StopAllCoroutines();
+
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            if (enemy == null || enemy == defeatedBoss) continue;
+
+            // Hide immediately; Destroy is deferred until the end of the frame.
+            enemy.gameObject.SetActive(false);
+            Destroy(enemy.gameObject);
+        }
+
+        _activeEnemyCount = 0;
+        RaiseWaveCompletedOnce();
     }
 
     private SpawnPoint GetRandomSpawnPoint()
@@ -176,6 +200,14 @@ public class WaveManager : MonoBehaviour
     {
         _activeEnemyCount = Mathf.Max(0, _activeEnemyCount - 1);
         if (_activeEnemyCount == 0)
-            GameEvents.RaiseWaveCompleted();
+            RaiseWaveCompletedOnce();
+    }
+
+    private void RaiseWaveCompletedOnce()
+    {
+        if (_waveCompletionRaised) return;
+
+        _waveCompletionRaised = true;
+        GameEvents.RaiseWaveCompleted();
     }
 }
