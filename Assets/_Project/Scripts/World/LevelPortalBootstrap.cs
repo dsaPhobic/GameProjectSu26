@@ -7,7 +7,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LevelPortalBootstrap : MonoBehaviour
 {
+    private const string PortalResourcePath = "LevelPortal";
     private static Sprite _portalSprite;
+    private static bool _hasCustomPortalSprite;
     private static bool _levelOneBossDefeated;
     private string _label;
     private bool _listenForBoss;
@@ -18,6 +20,7 @@ public class LevelPortalBootstrap : MonoBehaviour
     {
         _levelOneBossDefeated = false;
         _portalSprite = null;
+        _hasCustomPortalSprite = false;
     }
 
     public static void ResetProgress() => _levelOneBossDefeated = false;
@@ -64,20 +67,34 @@ public class LevelPortalBootstrap : MonoBehaviour
         PlayerController player = FindObjectOfType<PlayerController>();
         Vector3 origin = player != null ? player.transform.position : Vector3.zero;
 
-        GameObject portal = new GameObject("LevelPortal");
+        GameObject portalPrefab = Resources.Load<GameObject>(PortalResourcePath);
+        GameObject portal = portalPrefab != null
+            ? Instantiate(portalPrefab)
+            : new GameObject("LevelPortal");
+        portal.name = "LevelPortal";
         portal.transform.position = origin + Vector3.right * 4f;
 
-        BoxCollider2D trigger = portal.AddComponent<BoxCollider2D>();
+        BoxCollider2D trigger = portal.GetComponent<BoxCollider2D>();
+        if (trigger == null)
+            trigger = portal.AddComponent<BoxCollider2D>();
         trigger.isTrigger = true;
-        trigger.size = new Vector2(1.2f, 1.8f);
 
-        SpriteRenderer renderer = portal.AddComponent<SpriteRenderer>();
-        renderer.sprite = GetPortalSprite();
-        renderer.color = new Color(0.2f, 0.75f, 1f, 0.8f);
-        renderer.sortingOrder = 20;
-        portal.transform.localScale = new Vector3(1.2f, 1.8f, 1f);
+        if (portalPrefab == null)
+        {
+            trigger.size = new Vector2(1.2f, 1.8f);
 
-        SceneTransition transition = portal.AddComponent<SceneTransition>();
+            SpriteRenderer renderer = portal.AddComponent<SpriteRenderer>();
+            renderer.sprite = GetPortalSprite();
+            renderer.color = _hasCustomPortalSprite
+                ? Color.white
+                : new Color(0.2f, 0.75f, 1f, 0.8f);
+            renderer.sortingOrder = 20;
+            portal.transform.localScale = new Vector3(1.2f, 1.8f, 1f);
+        }
+
+        SceneTransition transition = portal.GetComponent<SceneTransition>();
+        if (transition == null)
+            transition = portal.AddComponent<SceneTransition>();
         transition.Configure("GameScene2");
 
         LevelPortalBootstrap display = portal.AddComponent<LevelPortalBootstrap>();
@@ -100,16 +117,38 @@ public class LevelPortalBootstrap : MonoBehaviour
         if (enemy == null || enemy.Data == null || enemy.Data.enemyType != EnemyType.DemonBoss) return;
 
         _levelOneBossDefeated = true;
+        WaveManager waveManager = ServiceLocator.Get<WaveManager>();
+        if (waveManager != null)
+            waveManager.FinishBossEncounter(enemy);
+        else
+            RemoveRemainingEnemies(enemy);
+
         CreatePortal();
+    }
+
+    private static void RemoveRemainingEnemies(Enemy defeatedBoss)
+    {
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            if (enemy == null || enemy == defeatedBoss) continue;
+
+            enemy.gameObject.SetActive(false);
+            Destroy(enemy.gameObject);
+        }
     }
 
     private static Sprite GetPortalSprite()
     {
         if (_portalSprite == null)
         {
-            Texture2D texture = Texture2D.whiteTexture;
-            _portalSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
-                new Vector2(0.5f, 0.5f), 1f);
+            _portalSprite = Resources.Load<Sprite>(PortalResourcePath);
+            _hasCustomPortalSprite = _portalSprite != null;
+            if (_portalSprite == null)
+            {
+                Texture2D texture = Texture2D.whiteTexture;
+                _portalSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f), 1f);
+            }
         }
 
         return _portalSprite;
